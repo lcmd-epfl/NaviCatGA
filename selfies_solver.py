@@ -1,40 +1,67 @@
 from typing import Sequence
-
+import logging
 import numpy as np
 
 from genetic_algorithm_base import GenAlgSolver
 from utils.helpers import get_input_dimensions
-from chemistry.evo import sanitize_multiple_smiles, encode_smiles, get_selfie_chars
+from chemistry.evo import (
+    sanitize_multiple_smiles,
+    encode_smiles,
+    get_selfie_chars,
+    check_selfie_chars,
+    sc2mol_structure,
+    mol_structure2depictions,
+)
 from selfies import get_alphabet_from_selfies
+from fitness_functions_selfies import fitness_function_selfies
+from rdkit import rdBase
+
+
+logger = logging.getLogger(__name__)
 
 
 class SelfiesGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
         n_genes: int,
-        starting_smiles: list = ["c1ccccc1"],
+        starting_selfies: list = "[C]",
         alphabet_list: list = [
-            "[C][=C][C][=C][C][=C][Ring1][Branch1_2]",
-            "[F][C][F]",
-            "[O][=O]",
-            "[C][N][C][Branch3][epsilon][C][C][C][=C][C][C][Branch3][=O][=C][Ring][#N][O][C][O][Ring][#N]",
-            "[C][C][O][C][C]",
-            "[N][#N]",
-            "[C][O][C]",
+            "[epsilon]",
+            "[C]",
+            "[=C]",
+            "[#C]",
+            "[O]",
+            "[=O]",
+            "[N]",
+            "[=N]",
+            "[#N]",
+            "[S]",
+            "[=S]",
+            "[P]",
+            "[=P]",
+            "[F]",
+            "[Cl]",
+            "[Br]",
+            "[I]",
+            "[Ring1]",
+            "[Ring2]",
+            "[Branch1_1]",
         ],
         fitness_function=None,
-        max_gen: int = 1000,
+        max_gen: int = 500,
         pop_size: int = 100,
-        mutation_rate: float = 0.5,
-        selection_rate: float = 0.15,
-        selection_strategy: str = "roulette_wheel",
-        verbose: bool = False,
+        mutation_rate: float = 0.45,
+        selection_rate: float = 0.25,
+        selection_strategy: str = "tournament",
+        verbose: bool = True,
         show_stats: bool = False,
         plot_results: bool = False,
         excluded_genes: Sequence = None,
         variables_limits=(-10, 10),
         problem_type=str,
         n_crossover_points: int = 1,
+        branching: bool = False,
+        max_counter: int = 10,
         random_state: int = None,
     ):
         """
@@ -79,12 +106,23 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         if get_input_dimensions(variables_limits) == 1:
             variables_limits = [variables_limits for _ in range(n_genes)]
 
+        alphabet = get_alphabet_from_selfies(alphabet_list)
+        alphabet.add("[nop]")
+        self.branching = branching
+        if self.branching:
+            tuples = [
+                (i + 1, j + 1) for i in range(self.n_genes) for j in range(self.n_genes)
+            ]
+            for i in tuples:
+                if i[0] == i[1]:
+                    pass
+                else:
+                    alphabet.add("[Branch{0}_{1}]".format(i[0], i[1]))
+        self.alphabet = list(sorted(alphabet))
         self.variables_limits = variables_limits
         self.problem_type = problem_type
-        self.starting_smiles = starting_smiles
-        alphabet = get_alphabet_from_selfies(alphabet_list)
-        alphabet.add('[nop]')
-        self.alphabet = list(sorted(alphabet))
+        self.starting_selfies = starting_selfies
+        self.max_counter = int(max_counter)
 
     def initialize_population(self):
         """
@@ -95,16 +133,10 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         """
 
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype="object")
-        sanitized_smiles = sanitize_multiple_smiles(self.starting_smiles)
-        sanitized_selfies = encode_smiles(sanitized_smiles)
-        chromosomes = [get_selfie_chars(i, self.n_genes) for i in sanitized_selfies]
-        if self.pop_size > len(chromosomes):
-            for j in range(self.pop_size):
-                population[j, :] = chromosomes[j % len(chromosomes)]
-        else:  # The user gave too many initial stuff, we wont use all
-            for j in range(self.pop_size):
-                population[j, :] = chromosomes[j]
-
+        chromosome = get_selfie_chars(self.starting_selfies, self.n_genes)
+        assert check_selfie_chars(chromosome)
+        for i in range(self.pop_size):
+            population[i][:] = chromosome[0 : self.n_genes]
         return population
 
     def get_crossover_points(self):
@@ -123,40 +155,91 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         self, first_parent, sec_parent, crossover_pt, offspring_number
     ):
         """
-        Creates an offspring from 2 parents. It performs the crossover
-        according the following rule:
-        p_new = first_parent[crossover_pt] + beta * (first_parent[crossover_pt] - sec_parent[crossover_pt])
-        offspring = [first_parent[:crossover_pt], p_new, sec_parent[crossover_pt + 1:]
-        where beta is a random number between 0 and 1, and can be either positive or negative
-        depending on if it's the first or second offspring
-        http://index-of.es/z0ro-Repository-3/Genetic-Algorithm/R.L.Haupt,%20S.E.Haupt%20-%20Practical%20Genetic%20Algorithms.pdf
-        :param first_parent: first parent's chromosome
-        :param sec_parent: second parent's chromosome
-        :param crossover_pt: point(s) at which to perform the crossover
-        :param offspring_number: whether it's the first or second offspring from a pair of parents.
-        Important if there's different logic to be applied to each case.
-        :return: the resulting offspring.
+        Creates an offspring from 2 parents.
         """
-
-        crossover_pt = crossover_pt[0]
-
         beta = np.random.rand(1)[0]
-        if beta > 0.5:
-            if offspring_number == "first":
-                sec_parent = sec_parent[::-1]
-                p_new = first_parent[crossover_pt]
-            if offspring_number == "second":
-                first_parent = first_parent[::-1]
-                p_new = sec_parent[crossover_pt]
-        else:
-            if offspring_number == "first":
-                p_new = sec_parent[crossover_pt]
-            if offspring_number == "second":
-                p_new = first_parent[crossover_pt]
+        gamma = np.random.rand(1)[0]
+        backup_sec_parent = sec_parent
+        backup_first_parent = first_parent
+        if self.allowed_mutation_genes is not None:
+            mask_allowed = np.zeros(first_parent.size, dtype=bool)
+            mask_forbidden = np.ones(first_parent.size, dtype=bool)
+            mask_allowed[self.allowed_mutation_genes] = True
+            mask_forbidden[self.allowed_mutation_genes] = False
+            full_offspring = np.empty_like(first_parent, dtype=object)
+            full_offspring[mask_forbidden] = first_parent[mask_forbidden]
+            first_parent = first_parent[mask_allowed]
+            sec_parent = sec_parent[mask_allowed]
 
-        return np.hstack(
-            (first_parent[:crossover_pt], p_new, sec_parent[crossover_pt + 1 :])
-        )
+        offspring = np.empty_like(first_parent, dtype=object)
+        valid_smiles = False
+
+        if beta < 0.5:
+            first_parent = first_parent[::-1]
+        if gamma > 0.5:
+            sec_parent = sec_parent[::-1]
+
+        if offspring_number == "first":
+            while not valid_smiles:
+                counter = 0
+                c = int(0)
+                offspring[c : crossover_pt[0]] = first_parent[c : crossover_pt[0]]
+                offspring[crossover_pt[0] :] = sec_parent[crossover_pt[0] :]
+                for ci, cj in zip(crossover_pt[::2], crossover_pt[1::2]):
+                    offspring[c:ci] = first_parent[c:ci]
+                    offspring[ci:] = sec_parent[ci:]
+                    c = cj
+                if self.allowed_mutation_genes is not None:
+                    full_offspring[mask_allowed] = offspring[:]
+                    offspring = full_offspring
+                logger.debug(
+                    "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
+                )
+                valid_smiles = check_selfie_chars(offspring)
+                crossover_pt = self.get_crossover_points()
+                counter += 1
+                if counter > self.max_counter:
+                    logger.debug(
+                        "Counter in create offspring exceeded {0}, using default.".format(
+                            self.max_counter
+                        )
+                    )
+                    valid_smiles = True
+                    offspring = backup_first_parent
+            logger.debug("Final offspring chromosome: {0}".format(offspring))
+            return offspring
+
+        if offspring_number == "second":
+            while not valid_smiles:
+                counter = 0
+                c = int(0)
+                offspring[c : crossover_pt[0]] = sec_parent[c : crossover_pt[0]]
+                offspring[crossover_pt[0] :] = first_parent[crossover_pt[0] :]
+                for ci, cj in zip(crossover_pt[::2], crossover_pt[1::2]):
+                    if not ci:
+                        ci = crossover_pt[0]
+                    offspring[c:ci] = sec_parent[c:ci]
+                    offspring[ci:] = first_parent[ci:]
+                    c = cj
+                if self.allowed_mutation_genes is not None:
+                    full_offspring[mask_allowed] = offspring[:]
+                    offspring = full_offspring
+                logger.debug(
+                    "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
+                )
+                valid_smiles = check_selfie_chars(offspring)
+                crossover_pt = self.get_crossover_points()
+                counter += 1
+                if counter > self.max_counter:
+                    logger.debug(
+                        "Counter in create offspring exceeded {0}, using default.".format(
+                            self.max_counter
+                        )
+                    )
+                    valid_smiles = True
+                    offspring = backup_sec_parent
+            logger.debug("Final offspring chromosome: {0}".format(offspring))
+            return offspring
 
     def mutate_population(self, population, n_mutations):
         """
@@ -167,12 +250,46 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         :return: the mutated population
         """
 
+        valid_smiles = False
         mutation_rows, mutation_cols = super(
             SelfiesGenAlgSolver, self
         ).mutate_population(population, n_mutations)
-
-        population[mutation_rows, mutation_cols] = np.random.choice(
-            self.alphabet, size=1
-        )[0]
+        for i, j in zip(mutation_rows, mutation_cols):
+            counter = 0
+            while not valid_smiles:
+                backup_gene = population[i, j]
+                population[i, j] = np.random.choice(self.alphabet, size=1)[0]
+                logger.debug(
+                    "Mutated chromosome attempt {0}: {1}".format(
+                        counter, population[i, :]
+                    )
+                )
+                valid_smiles = check_selfie_chars(population[i, :])
+                counter += 1
+                if counter > self.max_counter:
+                    logger.debug(
+                        "Counter in mutate exceeded {0}, using default.".format(
+                            self.max_counter
+                        )
+                    )
+                    population[i, j] = backup_gene
+                    valid_smiles = True
+            valid_smiles = False
 
         return population
+
+
+if __name__ == "__main__":
+    print("rdkit version is : {0}".format(rdBase.rdkitVersion))
+    starting_selfies = "[C][C=][C][C=][C][C=][Ring1][Branch1_2]"
+
+    solver = SelfiesGenAlgSolver(
+        n_genes=16,
+        fitness_function=fitness_function_selfies(2),
+        starting_selfies=starting_selfies,
+        excluded_genes=[0, 1, 2, 3, 4, 5, 6, 7, 8],
+    )
+    solver.solve()
+    print(solver.best_fitness_)
+    mol_structure = sc2mol_structure(solver.best_individual_)
+    mol_structure2depictions(mol_structure, root_name="substituted_benzene")

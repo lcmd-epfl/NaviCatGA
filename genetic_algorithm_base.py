@@ -14,6 +14,10 @@ from utils.logger import configure_logger
 
 allowed_selection_strategies = {"roulette_wheel", "two_by_two", "random", "tournament"}
 
+logger = configure_logger(
+    logger_file="output.log", logger_level="INFO", to_stdout=True, to_file=True
+)
+
 
 class GenAlgSolver:
     def __init__(
@@ -25,7 +29,7 @@ class GenAlgSolver:
         mutation_rate: float = 0.15,
         selection_rate: float = 0.5,
         selection_strategy: str = "roulette_wheel",
-        verbose: bool = False,
+        verbose: bool = True,
         show_stats: bool = False,
         plot_results: bool = False,
         excluded_genes: Sequence = None,
@@ -51,8 +55,6 @@ class GenAlgSolver:
 
         if isinstance(random_state, int):
             np.random.seed(random_state)
-
-        configure_logger()
 
         self.n_genes = n_genes
         self.allowed_mutation_genes = np.arange(self.n_genes)
@@ -151,8 +153,12 @@ class GenAlgSolver:
             gen_n += 1
 
             if self.verbose and gen_n % gen_interval == 0:
-                logging.info(f"Iteration: {gen_n}")
-                logging.info(f"Best fitness: {fitness[0]}")
+                logger.info(f"Iteration: {gen_n}")
+                logger.info(f"Best fitness: {fitness[0]}")
+                logger.info(f"Best individual: {population[0,:]}")
+                logger.debug(
+                    "Population at generation: {0}: {1}".format(gen_n, population)
+                )
 
             mean_fitness = np.append(mean_fitness, fitness.mean())
             max_fitness = np.append(max_fitness, fitness[0])
@@ -352,7 +358,9 @@ class GenAlgSolver:
         """
         return np.sort(
             np.random.choice(
-                np.arange(self.n_genes + 1), self.n_crossover_points, replace=False
+                np.arange(len(self.allowed_mutation_genes)),
+                self.n_crossover_points,
+                replace=False,
             )
         )
 
@@ -383,17 +391,17 @@ class GenAlgSolver:
         :return: None
         """
 
-        logging.info("\n#############################")
-        logging.info("#           STATS           #")
-        logging.info("#############################\n\n")
-        logging.info(f"Total running time: {time_str}\n\n")
-        logging.info(f"Population size: {self.pop_size}")
-        logging.info(f"Number variables: {self.n_genes}")
-        logging.info(f"Selection rate: {self.selection_rate}")
-        logging.info(f"Mutation rate: {self.mutation_rate}")
-        logging.info(f"Number Generations: {self.generations_}\n")
-        logging.info(f"Best fitness: {self.best_fitness_}")
-        logging.info(f"Best individual: {self.best_individual_}")
+        logger.info("\n#############################")
+        logger.info("#           STATS           #")
+        logger.info("#############################\n\n")
+        logger.info(f"Total running time: {time_str}\n\n")
+        logger.info(f"Population size: {self.pop_size}")
+        logger.info(f"Number variables: {self.n_genes}")
+        logger.info(f"Selection rate: {self.selection_rate}")
+        logger.info(f"Mutation rate: {self.mutation_rate}")
+        logger.info(f"Number Generations: {self.generations_}\n")
+        logger.info(f"Best fitness: {self.best_fitness_}")
+        logger.info(f"Best individual: {self.best_individual_}")
 
     @abstractmethod
     def initialize_population(self):

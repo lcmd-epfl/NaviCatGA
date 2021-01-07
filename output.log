@@ -1,0 +1,79 @@
+Iteration: 50
+Best fitness: 8.145800000000001
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[=P]' '[P]' '[=P]' '[P]' '[=P]' '[nop]' '[Branch1_1]' '[Br]'
+ '[Br]' '[Branch1_1]' '[N]' '[#N]' '[N]' '[Ring1]' '[nop]' '[I]' '[I]'
+ '[=C]' '[P]' '[N]' '[Cl]' '[S]' '[P]' '[=P]' '[=O]']
+Iteration: 100
+Best fitness: 8.145800000000001
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[=P]' '[P]' '[=P]' '[P]' '[=P]' '[nop]' '[Branch1_1]' '[Br]'
+ '[Br]' '[Branch1_1]' '[N]' '[#N]' '[N]' '[Ring1]' '[nop]' '[I]' '[I]'
+ '[=C]' '[P]' '[N]' '[Cl]' '[S]' '[P]' '[=P]' '[=O]']
+Iteration: 150
+Best fitness: 9.515999999999993
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[nop]' '[P]' '[=P]' '[P]' '[=P]' '[Ring1]' '[#C]' '[=P]' '[P]'
+ '[C]' '[=P]' '[Ring2]' '[C]' '[=P]' '[Ring2]' '[Br]' '[Ring1]' '[=P]'
+ '[=S]' '[#C]' '[=P]' '[P]' '[=N]' '[P]' '[Ring1]']
+Iteration: 200
+Best fitness: 9.515999999999993
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[nop]' '[P]' '[=P]' '[P]' '[=P]' '[Ring1]' '[#C]' '[=P]' '[P]'
+ '[C]' '[=P]' '[Ring2]' '[C]' '[=P]' '[Ring2]' '[Br]' '[Ring1]' '[=P]'
+ '[=S]' '[#C]' '[=P]' '[P]' '[=N]' '[P]' '[Ring1]']
+Iteration: 250
+Best fitness: 9.515999999999993
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[nop]' '[P]' '[=P]' '[P]' '[=P]' '[Ring1]' '[#C]' '[=P]' '[P]'
+ '[C]' '[=P]' '[Ring2]' '[C]' '[=P]' '[Ring2]' '[Br]' '[Ring1]' '[=P]'
+ '[=S]' '[#C]' '[=P]' '[P]' '[=N]' '[P]' '[Ring1]']
+Iteration: 300
+Best fitness: 10.507599999999995
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[S]' '[P]' '[=P]' '[P]' '[=P]' '[Ring1]' '[#C]' '[=P]' '[P]' '[C]'
+ '[=P]' '[Branch1_1]' '[C]' '[=P]' '[Ring2]' '[C]' '[Ring1]' '[=P]' '[S]'
+ '[#C]' '[=P]' '[P]' '[S]' '[P]' '[Ring1]']
+Iteration: 350
+Best fitness: 10.507599999999995
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[S]' '[P]' '[=P]' '[P]' '[=P]' '[Ring1]' '[#C]' '[=P]' '[P]' '[C]'
+ '[=P]' '[Branch1_1]' '[C]' '[=P]' '[Ring2]' '[C]' '[Ring1]' '[=P]' '[S]'
+ '[#C]' '[=P]' '[P]' '[S]' '[P]' '[Ring1]']
+Iteration: 400
+Best fitness: 10.507599999999995
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[S]' '[P]' '[=P]' '[P]' '[=P]' '[Ring1]' '[#C]' '[=P]' '[P]' '[C]'
+ '[=P]' '[Branch1_1]' '[C]' '[=P]' '[Ring2]' '[C]' '[Ring1]' '[=P]' '[S]'
+ '[#C]' '[=P]' '[P]' '[S]' '[P]' '[Ring1]']
+Iteration: 450
+Best fitness: 10.507599999999995
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[S]' '[P]' '[=P]' '[P]' '[=P]' '[Ring1]' '[#C]' '[=P]' '[P]' '[C]'
+ '[=P]' '[Branch1_1]' '[C]' '[=P]' '[Ring2]' '[C]' '[Ring1]' '[=P]' '[S]'
+ '[#C]' '[=P]' '[P]' '[S]' '[P]' '[Ring1]']
+'NoneType' object has no attribute 'GetAtoms'
+Traceback (most recent call last):
+  File "/home/ruben/Projects/GA_selfies/chemistry/evo.py", line 32, in sanitize_smiles
+    if has_transition_metals(mol):
+  File "/home/ruben/Projects/GA_selfies/chemistry/evo.py", line 230, in has_transition_metals
+    if any([is_transition_metal(at) for at in mol.GetAtoms()]):
+AttributeError: 'NoneType' object has no attribute 'GetAtoms'
