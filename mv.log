@@ -1,0 +1,94 @@
+Iteration: 1
+Best fitness: 220.66400000000004
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]'
+ '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]'
+ '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]']
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCC3C1=C[NH]C2=C1C=C(C=C2)OC#CS3=PS=P=N
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C3[NH]C2=C1C=C(C=C2)OCS3=PCl
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCC3C1=C[NH]C2=C1C=C(C=C2)OC3=S=NN=CF
+Iteration: 2
+Best fitness: 328.6480000000001
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[S]' '[C]' '[=C]' '[#C]' '[=P]' '[nop]' '[=P]' '[F]' '[nop]'
+ '[=S]' '[Ring1]' '[N]' '[nop]' '[Ring2]' '[N]' '[#C]' '[P]' '[Cl]' '[Br]'
+ '[#N]' '[C]' '[nop]' '[nop]' '[nop]' '[nop]']
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCC3C1=C[NH]C2=C1C=C(C=C2)OCN3OSI
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCC3C1=C[NH]C2=C1C=C(C=C2)OC3C=SO
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCC3C1=C[NH]C2=C1C=C(C=C2)OC3I
+Iteration: 3
+Best fitness: 379.2960000000001
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[=S]' '[O]' '[C]' '[O]' '[#C]' '[nop]' '[nop]' '[#C]' '[C]' '[O]'
+ '[#N]' '[#C]' '[P]' '[N]' '[epsilon]' '[#C]' '[nop]' '[N]' '[=N]' '[=S]'
+ '[S]' '[#N]' '[Ring1]' '[nop]' '[=S]']
+Iteration: 4
+Best fitness: 379.2960000000001
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[=S]' '[O]' '[C]' '[O]' '[#C]' '[nop]' '[nop]' '[#C]' '[C]' '[O]'
+ '[#N]' '[#C]' '[P]' '[N]' '[epsilon]' '[#C]' '[nop]' '[N]' '[=N]' '[=S]'
+ '[S]' '[#N]' '[Ring1]' '[nop]' '[=S]']
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C23)OCN3SOO
+Fitness could not be evaluated for chromosome. SMILES : C4C(=O)NCCC1=C[NH]C2=C1C=C(C3=C2)OC3P4=P=CNF
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C23)OC3CBr
+Iteration: 5
+Best fitness: 379.2960000000001
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[=S]' '[O]' '[C]' '[O]' '[#C]' '[nop]' '[nop]' '[#C]' '[C]' '[O]'
+ '[#N]' '[#C]' '[P]' '[N]' '[epsilon]' '[#C]' '[nop]' '[N]' '[=N]' '[=S]'
+ '[S]' '[#N]' '[Ring1]' '[nop]' '[=S]']
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)N3CCC1=C[NH]C2=C1C=C(C=C2)OC3=CI
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C23)OC3Cl
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NC3CC1=C[NH]C2=C1C=C(C=C2)OCP3P(SSC)
+Iteration: 6
+Best fitness: 434.8400000000001
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[Branch1_1]' '[=S]' '[N]' '[O]' '[P]' '[#C]' '[=N]' '[=P]' '[P]'
+ '[Ring1]' '[#C]' '[Ring1]' '[epsilon]' '[=S]' '[S]' '[Ring2]' '[=N]'
+ '[=P]' '[#C]' '[S]' '[=S]' '[Ring2]' '[N]' '[F]' '[=C]']
+Iteration: 7
+Best fitness: 434.8400000000001
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[Branch1_1]' '[=S]' '[N]' '[O]' '[P]' '[#C]' '[=N]' '[=P]' '[P]'
+ '[Ring1]' '[#C]' '[Ring1]' '[epsilon]' '[=S]' '[S]' '[Ring2]' '[=N]'
+ '[=P]' '[#C]' '[S]' '[=S]' '[Ring2]' '[N]' '[F]' '[=C]']
+Iteration: 8
+Best fitness: 445.94400000000013
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[=S]' '[#C]' '[S]' '[=S]' '[S]' '[S]' '[C]' '[P]' '[=P]' '[O]'
+ '[=C]' '[=S]' '[#N]' '[=S]' '[Branch1_1]' '[#C]' '[P]' '[=C]' '[S]'
+ '[nop]' '[N]' '[#C]' '[Cl]' '[Branch1_1]' '[=C]']
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NC3CC1=C[NH]C2=C1C=C(C=C2)OC3N=CS(C)P=O
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)N3CCC1=C[NH]C2=C1C=C(C=C2)OC3=PCl
+Iteration: 9
+Best fitness: 445.94400000000013
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[=S]' '[#C]' '[S]' '[=S]' '[S]' '[S]' '[C]' '[P]' '[=P]' '[O]'
+ '[=C]' '[=S]' '[#N]' '[=S]' '[Branch1_1]' '[#C]' '[P]' '[=C]' '[S]'
+ '[nop]' '[N]' '[#C]' '[Cl]' '[Branch1_1]' '[=C]']
+Iteration: 10
+Best fitness: 445.94400000000013
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[=S]' '[#C]' '[S]' '[=S]' '[S]' '[S]' '[C]' '[P]' '[=P]' '[O]'
+ '[=C]' '[=S]' '[#N]' '[=S]' '[Branch1_1]' '[#C]' '[P]' '[=C]' '[S]'
+ '[nop]' '[N]' '[#C]' '[Cl]' '[Branch1_1]' '[=C]']

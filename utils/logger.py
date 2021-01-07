@@ -32,3 +32,9 @@ def configure_logger(
         logger.addHandler(handler_1)
 
     return logger
+
+
+def close_logger(logger):
+    for handler in logger.handlers[:]:
+        handler.close()
+        logger.removeHandler(handler)

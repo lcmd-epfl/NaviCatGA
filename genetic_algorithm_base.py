@@ -9,14 +9,10 @@ import matplotlib.pyplot as plt
 from utils.exceptions import NoFitnessFunction, InvalidInput
 from utils.exception_messages import exception_messages
 from utils.helpers import get_elapsed_time
-from utils.logger import configure_logger
+from utils.logger import configure_logger, close_logger
 
 
 allowed_selection_strategies = {"roulette_wheel", "two_by_two", "random", "tournament"}
-
-logger = configure_logger(
-    logger_file="output.log", logger_level="INFO", to_stdout=True, to_file=True
-)
 
 
 class GenAlgSolver:
@@ -35,6 +31,10 @@ class GenAlgSolver:
         excluded_genes: Sequence = None,
         n_crossover_points: int = 1,
         random_state: int = None,
+        logger_file: str = "output.log",
+        logger_level: str = "INFO",
+        to_stdout: bool = True,
+        to_file: bool = True,
     ):
         """
         :param fitness_function: can either be a fitness function or
@@ -56,6 +56,9 @@ class GenAlgSolver:
         if isinstance(random_state, int):
             np.random.seed(random_state)
 
+        self.logger = configure_logger(
+            logger_file=logger_file, logger_level=logger_level, to_stdout=to_stdout, to_file=to_file
+        )
         self.n_genes = n_genes
         self.allowed_mutation_genes = np.arange(self.n_genes)
 
@@ -153,10 +156,10 @@ class GenAlgSolver:
             gen_n += 1
 
             if self.verbose and gen_n % gen_interval == 0:
-                logger.info(f"Iteration: {gen_n}")
-                logger.info(f"Best fitness: {fitness[0]}")
-                logger.info(f"Best individual: {population[0,:]}")
-                logger.debug(
+                self.logger.info(f"Iteration: {gen_n}")
+                self.logger.info(f"Best fitness: {fitness[0]}")
+                self.logger.info(f"Best individual: {population[0,:]}")
+                self.logger.debug(
                     "Population at generation: {0}: {1}".format(gen_n, population)
                 )
 
@@ -203,10 +206,10 @@ class GenAlgSolver:
 
         if self.show_stats:
             end_time = datetime.datetime.now()
-
             time_str = get_elapsed_time(start_time, end_time)
-
             self.print_stats(time_str)
+
+        close_logger(self.logger)
 
     def calculate_fitness(self, population):
         """
@@ -391,17 +394,17 @@ class GenAlgSolver:
         :return: None
         """
 
-        logger.info("\n#############################")
-        logger.info("#           STATS           #")
-        logger.info("#############################\n\n")
-        logger.info(f"Total running time: {time_str}\n\n")
-        logger.info(f"Population size: {self.pop_size}")
-        logger.info(f"Number variables: {self.n_genes}")
-        logger.info(f"Selection rate: {self.selection_rate}")
-        logger.info(f"Mutation rate: {self.mutation_rate}")
-        logger.info(f"Number Generations: {self.generations_}\n")
-        logger.info(f"Best fitness: {self.best_fitness_}")
-        logger.info(f"Best individual: {self.best_individual_}")
+        self.logger.info("\n#############################")
+        self.logger.info("#           STATS           #")
+        self.logger.info("#############################\n\n")
+        self.logger.info(f"Total running time: {time_str}\n\n")
+        self.logger.info(f"Population size: {self.pop_size}")
+        self.logger.info(f"Number variables: {self.n_genes}")
+        self.logger.info(f"Selection rate: {self.selection_rate}")
+        self.logger.info(f"Mutation rate: {self.mutation_rate}")
+        self.logger.info(f"Number Generations: {self.generations_}\n")
+        self.logger.info(f"Best fitness: {self.best_fitness_}")
+        self.logger.info(f"Best individual: {self.best_individual_}")
 
     @abstractmethod
     def initialize_population(self):

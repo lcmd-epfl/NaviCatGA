@@ -75,12 +75,13 @@ def sc2mv(chromosome):
     try:
         mol = sc2mol_structure(chromosome)
         mv = AllChem.ComputeMolVolume(mol)
-    except:
+    except Exception as m:
         logger.warning(
             "Fitness could not be evaluated for chromosome. SMILES : {0}".format(
                 decoder("".join(x for x in list(chromosome)))
             )
         )
+        logger.debug(m)
         mv = -1e6
     return mv
 
@@ -111,6 +112,6 @@ def fitness_function_selfies(function_number):
 
         return lambda chromosome: sc2mwilogp(chromosome)
 
-    if function_number == 6: # sc2mv molecular volume
+    if function_number == 6:  # sc2mv molecular volume
 
         return lambda chromosome: sc2mv(chromosome)

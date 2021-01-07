@@ -17,15 +17,16 @@ RDLogger.DisableLog("rdApp.*")
 
 
 def sanitize_smiles(smiles):
-    """Return a canonical smile representation of smi
+    """Return a canonical smile representation of smi.
+    If there are metals, it will try to fix the bonds as dative.
 
     Parameters:
     smi (string) : smile string to be canonicalized
 
     Returns:
-    mol (rdkit.Chem.rdchem.Mol) : RdKit mol object                          (None if invalid smile string smi)
-    smi_canon (string)          : Canonicalized smile representation of smi (None if invalid smile string smi)
-    conversion_successful (bool): True/False to indicate if conversion was  successful
+    mol (rdkit.Chem.rdchem.Mol) : rdkit mol object, None if exception caught.
+    smi_canon (string)          : Canonicalized smile representation of smi, None if exception caught.
+    conversion_successful (bool): True if no exception caught, False if exception caught.
     """
     try:
         mol = smi2mol(smiles, sanitize=False)
@@ -40,16 +41,25 @@ def sanitize_smiles(smiles):
 
 
 def sanitize_multiple_smiles(smiles_list):
+    """Calls sanitize_smiles for every item in a list.
+
+    Parameters:
+    smiles_list (list) : list of smile strings to be sanitized.
+
+    Returns:
+    sanitized_smiles (list) : list of sanitized smile strings with None in errors.
+    """
     sanitized_smiles = []
     for smi in smiles_list:
         smi_converted = sanitize_smiles(smi)
         sanitized_smiles.append(smi_converted[1])
-        if smi_converted[2] == False:
+        if not smi_converted[2]:
             logger.exception("Invalid SMILES encountered. Value =", smi)
     return sanitized_smiles
 
 
-def encode_smiles(smiles_list):
+def encode_smiles_list(smiles_list):
+    """Encode a list of smiles to a list of selfies using selfies.encoder."""
     selfies_list = []
     for smi in smiles_list:
         selfie = encoder(smi)
@@ -57,7 +67,8 @@ def encode_smiles(smiles_list):
     return selfies_list
 
 
-def timed_decoder(selfie):  # This is basically a wrapper around selfies.decoder
+def timed_decoder(selfie):
+    """Decode a selfies string to smiles using selfies.decoder, call exception and return None if decoder takes more than 90 seconds to run. """
     timer_alarm(
         90, handler
     )  # If this does not finish within 90 seconds, exception pops
@@ -65,11 +76,19 @@ def timed_decoder(selfie):  # This is basically a wrapper around selfies.decoder
         selfie = selfie.replace("[nop]", "")
         smiles = decoder(selfie)
     except:
-        smiles = selfie  # Will lead to a crash later on...
+        smiles = None
     return smiles
 
 
 def check_selfie_chars(chromosome):
+    """Check if a list of selfies characters leads to a valid smiles string. Uses sanitize_smiles to check the smiles string from selfies.decoder.
+
+    Parameters:
+    chromosome (list) : list of selfie characters.
+
+    Returns:
+    True if the smiles string is deemed valid by sanitize_smiles, False otherwise.
+    """
     selfie = "".join(x for x in list(chromosome))
     smiles = timed_decoder(selfie)
     logger.debug(
@@ -80,17 +99,18 @@ def check_selfie_chars(chromosome):
 
 def get_selfie_chars(selfie, maxchars):
     """Obtain an ordered list of all selfie characters in string selfie
-    padded to maxchars with [nop]s
+    padded to maxchars with [nop]s.
 
     Parameters:
-    selfie (string) : A selfie string - representing a molecule
+    selfie (string) : A selfie string - representing a molecule.
+    maxchars (int) : Maximum number of elements in the list.
 
     Example:
     >>> get_selfie_chars('[C][=C][C][=C][C][=C][Ring1][Branch1_1]')
     ['[C]', '[=C]', '[C]', '[=C]', '[C]', '[=C]', '[Ring1]', '[Branch1_1]']
 
     Returns:
-    chars_selfie: list of selfie characters present in molecule selfie
+    chars_selfie (list): list of selfie characters present in molecule selfie.
     """
     chars_selfie = []  # A list of all SELFIE sybols from string selfie
     while selfie != "":
@@ -104,28 +124,16 @@ def get_selfie_chars(selfie, maxchars):
 
 
 def count_selfie_chars(selfie):
-    chars_selfie = []  # A list of all SELFIE sybols from string selfie
+    """Count the number of selfie characters in a selfie string. Returns the number."""
+    chars_selfie = []
     while selfie != "":
         chars_selfie.append(selfie[selfie.find("[") : selfie.find("]") + 1])
         selfie = selfie[selfie.find("]") + 1 :]
     return len(chars_selfie)
 
 
-def sc2depictions(chromosone, root_name="output", lot=0):
-    mol_structure = sc2mol_structure(chromosome, lot=lot)
-    mol2pdb(mol_structure, "{0}.pdb".format(root_name))
-    mol2xyz(mol_structure, "{0}.xyz".format(root_name))
-    Draw.MolToFile(mol_structure, "{0}.png".format(root_name))
-    logger.info("Generated depictions with root name {0}".format(root_name))
-
-
-def mol_structure2depictions(mol_structure, root_name="output"):
-    mol2pdb(mol_structure, "{0}.pdb".format(root_name))
-    mol2xyz(mol_structure, "{0}.xyz".format(root_name))
-    Draw.MolToFile(mol_structure, "{0}.png".format(root_name))
-
-
 def sc2smiles(chromosome):
+    """Generate a canonical smiles string from a list of selfies characters."""
     selfie = "".join(x for x in list(chromosome))
     smiles = timed_decoder(selfie)
     mol, smi_canon, check = sanitize_smiles(smiles)
@@ -135,7 +143,24 @@ def sc2smiles(chromosome):
         return None
 
 
+def sc2depictions(chromosome, root_name="output", lot=0):
+    """Generate 2D and 3D depictions from a list of selfies characters."""
+    mol_structure = sc2mol_structure(chromosome, lot=lot)
+    mol2pdb(mol_structure, "{0}.pdb".format(root_name))
+    mol2xyz(mol_structure, "{0}.xyz".format(root_name))
+    Draw.MolToFile(mol_structure, "{0}.png".format(root_name))
+    logger.info("Generated depictions with root name {0}".format(root_name))
+
+
+def mol_structure2depictions(mol_structure, root_name="output"):
+    """Generate 2D and 3D depictions from an rdkit.mol object with 3D coordinates."""
+    mol2pdb(mol_structure, "{0}.pdb".format(root_name))
+    mol2xyz(mol_structure, "{0}.xyz".format(root_name))
+    Draw.MolToFile(mol_structure, "{0}.png".format(root_name))
+
+
 def sc2mol_structure(chromosome, lot=0):
+    """Generates a rdkit.mol object with 3D coordinates from a list of selfies characters."""
     selfie = "".join(x for x in list(chromosome))
     smiles = timed_decoder(selfie)
     mol, smi_canon, check = sanitize_smiles(smiles)
@@ -148,6 +173,19 @@ def sc2mol_structure(chromosome, lot=0):
 
 
 def get_structure_ff(mol, n_confs):
+    """Generates a reasonable set of 3D structures
+    using forcefields for a given rdkit.mol object.
+    It will try several 3D generation approaches in rdkit.
+    It will try to sample several conformations and get the minima.
+
+    Parameters:
+    mol (rdkit.mol) : An rdkit mol object.
+    n_confs (int) : The number of conformations to sample.
+
+    Returns:
+    mol_structure (rdkit.mol) : The same rdkit mol with 3D coordinates.
+
+    """
     Chem.SanitizeMol(mol)
     mol = Chem.AddHs(mol)
     mol_structure = Chem.Mol(mol)
@@ -210,23 +248,26 @@ def get_structure_ff(mol, n_confs):
         energies = AllChem.MMFFOptimizeMoleculeConfs(
             mol, maxIters=250, nonBondedThresh=15.0
         )
+        energies_list = [e[1] for e in energies]
+        min_e_index = energies_list.index(min(energies_list))
+        mol_structure.AddConformer(mol.GetConformer(min_e_index))
     elif Chem.rdForceFieldHelpers.UFFHasAllMoleculeParams(mol):
         energies = AllChem.UFFOptimizeMoleculeConfs(mol, maxIters=250, vdwThresh=15.0)
+        energies_list = [e[1] for e in energies]
+        min_e_index = energies_list.index(min(energies_list))
+        mol_structure.AddConformer(mol.GetConformer(min_e_index))
     else:
-        logger.exception(
+        logger.warning(
             "Could not generate structures using FF and rdkit typing. SMILES {0}".format(
                 mol2smi(mol)
             )
         )
 
-    energies_list = [e[1] for e in energies]
-    min_e_index = energies_list.index(min(energies_list))
-    mol_structure.AddConformer(mol.GetConformer(min_e_index))
-
     return mol_structure
 
 
 def has_transition_metals(mol):
+    """Returns True if the rdkit.mol object passed as argument has a (transition)-metal atom, False if else."""
     if any([is_transition_metal(at) for at in mol.GetAtoms()]):
         return True
     else:
@@ -234,11 +275,13 @@ def has_transition_metals(mol):
 
 
 def is_transition_metal(at):
+    """Returns True if the rdkit.Atom object passed as argument is a transition metal, False if else."""
     n = at.GetAtomicNum()
     return (n >= 22 and n <= 29) or (n >= 40 and n <= 47) or (n >= 72 and n <= 79)
 
 
 def set_dative_bonds(mol, fromAtoms=(7, 8, 15, 16)):
+    """Tries to replace bonds with metal atoms by dative bonds, while keeping valence rules enforced. Adapted from G. Landrum."""
     pt = Chem.GetPeriodicTable()
     rwmol = Chem.RWMol(mol)
     rwmol.UpdatePropertyCache(strict=False)
@@ -259,6 +302,7 @@ def set_dative_bonds(mol, fromAtoms=(7, 8, 15, 16)):
 
 
 def diagnose_mol(mol):
+    """Tries to identify and print to logger whatever was or is wrong with the chemistry of an rdkit.mol object."""
     problems = Chem.DetectChemistryProblems(mol)
     if len(problems) >= 1:
         for problem in problems:

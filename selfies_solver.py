@@ -6,7 +6,6 @@ from genetic_algorithm_base import GenAlgSolver
 from utils.helpers import get_input_dimensions
 from chemistry.evo import (
     sanitize_multiple_smiles,
-    encode_smiles,
     get_selfie_chars,
     check_selfie_chars,
     sc2mol_structure,
@@ -63,6 +62,10 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         branching: bool = False,
         max_counter: int = 10,
         random_state: int = None,
+        logger_file: str = "output.log",
+        logger_level: str = "INFO",
+        to_stdout: bool = True,
+        to_file: bool = True,
     ):
         """
         :param fitness_function: can either be a fitness function or
@@ -97,6 +100,10 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             excluded_genes=excluded_genes,
             n_crossover_points=n_crossover_points,
             random_state=random_state,
+            logger_file=logger_file,
+            logger_level=logger_level,
+            to_stdout=to_stdout,
+            to_file=to_file,
         )
 
         if not variables_limits:  # TBC
