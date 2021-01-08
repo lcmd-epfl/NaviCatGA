@@ -57,7 +57,10 @@ class GenAlgSolver:
             np.random.seed(random_state)
 
         self.logger = configure_logger(
-            logger_file=logger_file, logger_level=logger_level, to_stdout=to_stdout, to_file=to_file
+            logger_file=logger_file,
+            logger_level=logger_level,
+            to_stdout=to_stdout,
+            to_file=to_file,
         )
         self.n_genes = n_genes
         self.allowed_mutation_genes = np.arange(self.n_genes)

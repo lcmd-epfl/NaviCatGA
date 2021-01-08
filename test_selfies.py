@@ -109,7 +109,7 @@ def test_selfies():
             6
         ),  # See fitness_functions_selfies, this is mv
         max_gen=10,  # This is a simple test and this run is more expensive
-        pop_size=50, # So we reduce the size of everything
+        pop_size=50,  # So we reduce the size of everything
         logger_file="mv.log",
         verbose=True,
     )
