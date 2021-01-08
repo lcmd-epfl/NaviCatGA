@@ -78,6 +78,7 @@ def test_levenshtein():
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="levenshtein")
 
+
 if __name__ == "__main__":
     test_tanimoto()
     test_levenshtein()

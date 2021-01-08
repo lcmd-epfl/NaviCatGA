@@ -30,13 +30,17 @@ def sanitize_smiles(smiles):
     """
     try:
         mol = smi2mol(smiles, sanitize=False)
-        if has_transition_metals(mol):
-            mol = set_dative_bonds(mol)
-        smi_canon = mol2smi(mol, isomericSmiles=False, canonical=True)
-        mol = smi2mol(smi_canon, sanitize=True)
-        return (mol, smi_canon, True)
+        if mol is not None:
+            if has_transition_metals(mol):
+                mol = set_dative_bonds(mol)
+            smi_canon = mol2smi(mol, isomericSmiles=False, canonical=True)
+            mol = smi2mol(smi_canon, sanitize=True)
+            return (mol, smi_canon, True)
+        else :
+            logger.debug("Smiles {0} could not be understood by rdkit.".format(smiles))
+            return (None, None, False)
     except Exception as m:
-        logger.exception(m)
+        logger.debug("Smiles {0} could not be understood by rdkit. Exception :\n {1}".format(smiles, m))
         return (None, None, False)
 
 

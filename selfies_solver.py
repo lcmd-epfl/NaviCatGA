@@ -11,7 +11,11 @@ from chemistry.evo import (
     sc2mol_structure,
     mol_structure2depictions,
 )
-from selfies import get_alphabet_from_selfies
+from selfies import (
+    get_alphabet_from_selfies,
+    get_semantic_robust_alphabet,
+    set_semantic_constraints,
+)
 from fitness_functions_selfies import fitness_function_selfies
 from rdkit import rdBase
 
@@ -23,31 +27,9 @@ class SelfiesGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
         n_genes: int,
-        starting_selfies: list = "[C]",
-        alphabet_list: list = [
-            "[epsilon]",
-            "[C]",
-            "[=C]",
-            "[#C]",
-            "[O]",
-            "[=O]",
-            "[NHexpl]",
-            "[N]",
-            "[=N]",
-            "[#N]",
-            "[S]",
-            "[=S]",
-            "[P]",
-            "[=P]",
-            "[F]",
-            "[Cl]",
-            "[Br]",
-            "[I]",
-            "[Ring1]",
-            "[Ring2]",
-            "[Branch1_1]",
-            "[Branch1_2]",
-        ],
+        starting_selfies: str = "[nop]",
+        starting_random: bool = False,
+        alphabet_list: list = list(get_semantic_robust_alphabet()),
         fitness_function=None,
         max_gen: int = 500,
         pop_size: int = 100,
@@ -58,7 +40,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         show_stats: bool = False,
         plot_results: bool = False,
         excluded_genes: Sequence = None,
-        variables_limits=(-10, 10),
+        variables_limits: dict = None,
         problem_type=str,
         n_crossover_points: int = 1,
         branching: bool = False,
@@ -69,23 +51,6 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         to_stdout: bool = True,
         to_file: bool = True,
     ):
-        """
-        :param fitness_function: can either be a fitness function or
-        a class implementing a fitness function + methods to override
-        the default ones: create_offspring, mutate_population, initialize_population
-        :param n_genes: number of genes (variables) to have in each chromosome
-        :param max_gen: maximum number of generations to perform the optimization
-        :param pop_size: population size
-        :param mutation_rate: rate at which random mutations occur
-        :param selection_rate: percentage of the population to be selected for crossover
-        :param selection_strategy: strategy to use for selection
-        :param verbose: whether to print iterations status
-        :param show_stats: whether to print stats at the end
-        :param plot_results: whether to plot results of the run at the end
-        :param variables_limits: limits for each variable [(x1_min, x1_max), (x2_min, x2_max), ...].
-        If only one tuple is provided, then it is assumed the same for every variable
-        :param problem_type: whether problem is of float or integer type
-        """
 
         GenAlgSolver.__init__(
             self,
@@ -108,15 +73,9 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             to_file=to_file,
         )
 
-        if not variables_limits:  # TBC
-            min_max = np.iinfo(np.int64)
-            variables_limits = [(min_max.min, min_max.max) for _ in range(n_genes)]
+        if variables_limits is not None:
+            get_semantic_constraints(variable_limits)
 
-        if get_input_dimensions(variables_limits) == 1:
-            variables_limits = [variables_limits for _ in range(n_genes)]
-
-        alphabet = get_alphabet_from_selfies(alphabet_list)
-        alphabet.add("[nop]")
         self.branching = branching
         if self.branching:
             tuples = [
@@ -126,10 +85,15 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 if i[0] == i[1]:
                     pass
                 else:
-                    alphabet.add("[Branch{0}_{1}]".format(i[0], i[1]))
-        self.alphabet = list(sorted(alphabet))
-        self.variables_limits = variables_limits
+                    # alphabet.add("[Branch{0}_{1}]".format(i[0], i[1]))
+                    pass
+        self.alphabet = list(sorted(alphabet_list))
         self.problem_type = problem_type
+
+        if starting_random:
+            starting_selfies = ""
+            for i in range(random.randint(1, n_genes)):
+                starting_selfies += np.random.choice(alphabet, size=1)[0]
         self.starting_selfies = starting_selfies
         self.max_counter = int(max_counter)
 
@@ -190,6 +154,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
 
         if offspring_number == "first":
             while not valid_smiles:
+                offspring = np.empty_like(first_parent, dtype=object)
                 counter = 0
                 c = int(0)
                 offspring[c : crossover_pt[0]] = first_parent[c : crossover_pt[0]]
@@ -220,6 +185,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
 
         if offspring_number == "second":
             while not valid_smiles:
+                offspring = np.empty_like(first_parent, dtype=object)
                 counter = 0
                 c = int(0)
                 offspring[c : crossover_pt[0]] = sec_parent[c : crossover_pt[0]]
@@ -294,11 +260,16 @@ if __name__ == "__main__":
 
     solver = SelfiesGenAlgSolver(
         n_genes=16,
+        pop_size=100,
+        max_gen=50,
         fitness_function=fitness_function_selfies(2),
         starting_selfies=starting_selfies,
         excluded_genes=[0, 1, 2, 3, 4, 5, 6, 7, 8],
+        logger_level="INFO",
+        to_file=False,
+        to_stdout=True,
     )
     solver.solve()
-    print(solver.best_fitness_)
-    mol_structure = sc2mol_structure(solver.best_individual_)
-    mol_structure2depictions(mol_structure, root_name="substituted_benzene")
+    # print(solver.best_fitness_)
+    # mol_structure = sc2mol_structure(solver.best_individual_)
+    # mol_structure2depictions(mol_structure, root_name="substituted_benzene")
