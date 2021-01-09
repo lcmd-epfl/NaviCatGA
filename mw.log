@@ -1,83 +1,98 @@
-Iteration: 20
-Best fitness: 716.0
-Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
- '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
- '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[=S]' '[S]' '[=P]' '[Branch1_1]' '[I]' '[Branch1_2]' '[=S]'
- '[NHexpl]' '[=S]' '[=S]' '[Ring1]' '[Ring2]' '[Branch1_2]' '[Branch1_2]'
- '[=P]' '[P]' '[=N]' '[Br]' '[O]' '[=C]' '[I]' '[F]' '[C]' '[Branch1_2]'
- '[=C]']
-Iteration: 40
-Best fitness: 716.0
-Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
- '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
- '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[=S]' '[S]' '[=P]' '[Branch1_1]' '[I]' '[Branch1_2]' '[=S]'
- '[NHexpl]' '[=S]' '[=S]' '[Ring1]' '[Ring2]' '[Branch1_2]' '[Branch1_2]'
- '[=P]' '[P]' '[=N]' '[Br]' '[O]' '[=C]' '[I]' '[F]' '[C]' '[Branch1_2]'
- '[=C]']
-Iteration: 60
-Best fitness: 716.0
-Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
- '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
- '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[=S]' '[S]' '[=P]' '[Branch1_1]' '[I]' '[Branch1_2]' '[=S]'
- '[NHexpl]' '[=S]' '[=S]' '[Ring1]' '[Ring2]' '[Branch1_2]' '[Branch1_2]'
- '[=P]' '[P]' '[=N]' '[Br]' '[O]' '[=C]' '[I]' '[F]' '[C]' '[Branch1_2]'
- '[=C]']
-Iteration: 80
+Iteration: 10
 Best fitness: 718.0
 Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
  '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
  '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[=P]' '[P]' '[Branch1_1]' '[Br]' '[S]' '[#C]' '[Branch1_2]' '[C]'
- '[Ring1]' '[O]' '[Branch1_2]' '[=S]' '[=P]' '[S]' '[=S]' '[S]' '[NHexpl]'
- '[NHexpl]' '[N]' '[S]' '[N]' '[N]' '[N]' '[NHexpl]' '[I]']
+ '[C]' '[#N+1expl]' '[#C]' '[Branch1_2]' '[C+1expl]' '[O]' '[=P+1expl]'
+ '[P-1expl]' '[P]' '[=N]' '[=P]' '[S]' '[C+1expl]' '[#S]' '[Expl=Ring2]'
+ '[#S]' '[#C]' '[=P+1expl]' '[C]' '[#P]' '[#P-1expl]' '[N]' '[I]'
+ '[N+1expl]' '[N-1expl]' '[Expl=Ring1]']
+Iteration: 20
+Best fitness: 718.0
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[#N+1expl]' '[#C]' '[Branch1_2]' '[C+1expl]' '[O]' '[=P+1expl]'
+ '[P-1expl]' '[P]' '[=N]' '[=P]' '[S]' '[C+1expl]' '[#S]' '[Expl=Ring2]'
+ '[#S]' '[#C]' '[=P+1expl]' '[C]' '[#P]' '[#P-1expl]' '[N]' '[I]'
+ '[N+1expl]' '[N-1expl]' '[Expl=Ring1]']
+Iteration: 30
+Best fitness: 731.0
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[C-1expl]' '[S-1expl]' '[P-1expl]' '[P]' '[=P+1expl]' '[=S+1expl]'
+ '[Branch3_3]' '[S]' '[Branch3_2]' '[C]' '[#S-1expl]' '[Branch1_2]'
+ '[Branch2_2]' '[=S+1expl]' '[P-1expl]' '[Expl=Ring2]' '[=N]'
+ '[Branch3_3]' '[#S]' '[=P+1expl]' '[Branch2_3]' '[=O]' '[#N+1expl]'
+ '[P-1expl]' '[I]']
+Iteration: 40
+Best fitness: 815.0
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[#P+1expl]' '[#S-1expl]' '[#P]' '[=S-1expl]' '[#S+1expl]'
+ '[#N+1expl]' '[=P+1expl]' '[S-1expl]' '[=C-1expl]' '[#C-1expl]'
+ '[#P+1expl]' '[C-1expl]' '[S]' '[=N+1expl]' '[#O+1expl]' '[=N-1expl]'
+ '[=P]' '[#P]' '[=S+1expl]' '[I]' '[Ring1]' '[=S+1expl]' '[=N-1expl]'
+ '[=N-1expl]' '[Branch3_2]']
+Iteration: 50
+Best fitness: 815.0
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[#P+1expl]' '[#S-1expl]' '[#P]' '[=S-1expl]' '[#S+1expl]'
+ '[#N+1expl]' '[=P+1expl]' '[S-1expl]' '[=C-1expl]' '[#C-1expl]'
+ '[#P+1expl]' '[C-1expl]' '[S]' '[=N+1expl]' '[#O+1expl]' '[=N-1expl]'
+ '[=P]' '[#P]' '[=S+1expl]' '[I]' '[Ring1]' '[=S+1expl]' '[=N-1expl]'
+ '[=N-1expl]' '[Branch3_2]']
+Iteration: 60
+Best fitness: 815.0
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[#P+1expl]' '[#S-1expl]' '[#P]' '[=S-1expl]' '[#S+1expl]'
+ '[#N+1expl]' '[=P+1expl]' '[S-1expl]' '[=C-1expl]' '[#C-1expl]'
+ '[#P+1expl]' '[C-1expl]' '[S]' '[=N+1expl]' '[#O+1expl]' '[=N-1expl]'
+ '[=P]' '[#P]' '[=S+1expl]' '[I]' '[Ring1]' '[=S+1expl]' '[=N-1expl]'
+ '[=N-1expl]' '[Branch3_2]']
+Iteration: 70
+Best fitness: 815.0
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[#P+1expl]' '[#S-1expl]' '[#P]' '[=S-1expl]' '[#S+1expl]'
+ '[#N+1expl]' '[=P+1expl]' '[S-1expl]' '[=C-1expl]' '[#C-1expl]'
+ '[#P+1expl]' '[C-1expl]' '[S]' '[=N+1expl]' '[#O+1expl]' '[=N-1expl]'
+ '[=P]' '[#P]' '[=S+1expl]' '[I]' '[Ring1]' '[=S+1expl]' '[=N-1expl]'
+ '[=N-1expl]' '[Branch3_2]']
+Iteration: 80
+Best fitness: 815.0
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[#P+1expl]' '[#S-1expl]' '[#P]' '[=S-1expl]' '[#S+1expl]'
+ '[#N+1expl]' '[=P+1expl]' '[S-1expl]' '[=C-1expl]' '[#C-1expl]'
+ '[#P+1expl]' '[C-1expl]' '[S]' '[=N+1expl]' '[#O+1expl]' '[=N-1expl]'
+ '[=P]' '[#P]' '[=S+1expl]' '[I]' '[Ring1]' '[=S+1expl]' '[=N-1expl]'
+ '[=N-1expl]' '[Branch3_2]']
+Iteration: 90
+Best fitness: 815.0
+Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
+ '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
+ '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
+ '[C]' '[#P+1expl]' '[#S-1expl]' '[#P]' '[=S-1expl]' '[#S+1expl]'
+ '[#N+1expl]' '[=P+1expl]' '[S-1expl]' '[=C-1expl]' '[#C-1expl]'
+ '[#P+1expl]' '[C-1expl]' '[S]' '[=N+1expl]' '[#O+1expl]' '[=N-1expl]'
+ '[=P]' '[#P]' '[=S+1expl]' '[I]' '[Ring1]' '[=S+1expl]' '[=N-1expl]'
+ '[=N-1expl]' '[Branch3_2]']
 Iteration: 100
-Best fitness: 735.0
+Best fitness: 815.0
 Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
  '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
  '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[Branch1_2]' '[N]' '[=C]' '[#N]' '[N]' '[P]' '[Branch1_2]'
- '[epsilon]' '[I]' '[I]' '[=N]' '[Ring1]' '[nop]' '[=N]' '[#C]' '[=S]'
- '[O]' '[=N]' '[C]' '[NHexpl]' '[#N]' '[Br]' '[=S]' '[Branch1_2]' '[I]']
-Iteration: 120
-Best fitness: 735.0
-Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
- '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
- '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[Branch1_2]' '[N]' '[=C]' '[#N]' '[N]' '[P]' '[Branch1_2]'
- '[epsilon]' '[I]' '[I]' '[=N]' '[Ring1]' '[nop]' '[=N]' '[#C]' '[=S]'
- '[O]' '[=N]' '[C]' '[NHexpl]' '[#N]' '[Br]' '[=S]' '[Branch1_2]' '[I]']
-Iteration: 140
-Best fitness: 735.0
-Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
- '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
- '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[Branch1_2]' '[N]' '[=C]' '[#N]' '[N]' '[P]' '[Branch1_2]'
- '[epsilon]' '[I]' '[I]' '[=N]' '[Ring1]' '[nop]' '[=N]' '[#C]' '[=S]'
- '[O]' '[=N]' '[C]' '[NHexpl]' '[#N]' '[Br]' '[=S]' '[Branch1_2]' '[I]']
-Iteration: 160
-Best fitness: 735.0
-Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
- '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
- '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[Branch1_2]' '[N]' '[=C]' '[#N]' '[N]' '[P]' '[Branch1_2]'
- '[epsilon]' '[I]' '[I]' '[=N]' '[Ring1]' '[nop]' '[=N]' '[#C]' '[=S]'
- '[O]' '[=N]' '[C]' '[NHexpl]' '[#N]' '[Br]' '[=S]' '[Branch1_2]' '[I]']
-Iteration: 180
-Best fitness: 735.0
-Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
- '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
- '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[Branch1_2]' '[N]' '[=C]' '[#N]' '[N]' '[P]' '[Branch1_2]'
- '[epsilon]' '[I]' '[I]' '[=N]' '[Ring1]' '[nop]' '[=N]' '[#C]' '[=S]'
- '[O]' '[=N]' '[C]' '[NHexpl]' '[#N]' '[Br]' '[=S]' '[Branch1_2]' '[I]']
-Iteration: 200
-Best fitness: 735.0
-Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
- '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
- '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[Branch1_2]' '[N]' '[=C]' '[#N]' '[N]' '[P]' '[Branch1_2]'
- '[epsilon]' '[I]' '[I]' '[=N]' '[Ring1]' '[nop]' '[=N]' '[#C]' '[=S]'
- '[O]' '[=N]' '[C]' '[NHexpl]' '[#N]' '[Br]' '[=S]' '[Branch1_2]' '[I]']
+ '[C]' '[#P+1expl]' '[#S-1expl]' '[#P]' '[=S-1expl]' '[#S+1expl]'
+ '[#N+1expl]' '[=P+1expl]' '[S-1expl]' '[=C-1expl]' '[#C-1expl]'
+ '[#P+1expl]' '[C-1expl]' '[S]' '[=N+1expl]' '[#O+1expl]' '[=N-1expl]'
+ '[=P]' '[#P]' '[=S+1expl]' '[I]' '[Ring1]' '[=S+1expl]' '[=N-1expl]'
+ '[=N-1expl]' '[Branch3_2]']
