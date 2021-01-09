@@ -1,15 +1,13 @@
 from typing import Sequence
 import logging
+import random
 import numpy as np
 
 from genetic_algorithm_base import GenAlgSolver
-from utils.helpers import get_input_dimensions
 from chemistry.evo import (
     sanitize_multiple_smiles,
     get_selfie_chars,
     check_selfie_chars,
-    sc2mol_structure,
-    mol_structure2depictions,
 )
 from selfies import (
     get_alphabet_from_selfies,
@@ -50,6 +48,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         logger_level: str = "INFO",
         to_stdout: bool = True,
         to_file: bool = True,
+        progress_bars: bool = False,
     ):
 
         GenAlgSolver.__init__(
@@ -71,10 +70,11 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             logger_level=logger_level,
             to_stdout=to_stdout,
             to_file=to_file,
+            progress_bars=progress_bars,
         )
 
         if variables_limits is not None:
-            get_semantic_constraints(variable_limits)
+            set_semantic_constraints(variables_limits)
 
         self.branching = branching
         if self.branching:
@@ -254,22 +254,24 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         return population
 
 
-if __name__ == "__main__":
-    print("rdkit version is : {0}".format(rdBase.rdkitVersion))
+def test_benzene():
     starting_selfies = "[C][C=][C][C=][C][C=][Ring1][Branch1_2]"
-
     solver = SelfiesGenAlgSolver(
         n_genes=16,
-        pop_size=100,
-        max_gen=50,
+        pop_size=25,
+        max_gen=100,
         fitness_function=fitness_function_selfies(2),
         starting_selfies=starting_selfies,
         excluded_genes=[0, 1, 2, 3, 4, 5, 6, 7, 8],
         logger_level="INFO",
+        n_crossover_points=2,
+        verbose=False,
+        progress_bars=True,
         to_file=False,
         to_stdout=True,
     )
     solver.solve()
-    # print(solver.best_fitness_)
-    # mol_structure = sc2mol_structure(solver.best_individual_)
-    # mol_structure2depictions(mol_structure, root_name="substituted_benzene")
+
+
+if __name__ == "__main__":
+    test_benzene()

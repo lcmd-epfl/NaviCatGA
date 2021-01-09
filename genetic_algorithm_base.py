@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 from utils.exceptions import NoFitnessFunction, InvalidInput
 from utils.exception_messages import exception_messages
+from utils.progress_bars import set_progress_bars
 from utils.helpers import get_elapsed_time
 from utils.logger import configure_logger, close_logger
 
@@ -35,6 +36,7 @@ class GenAlgSolver:
         logger_level: str = "INFO",
         to_stdout: bool = True,
         to_file: bool = True,
+        progress_bars: bool = False,
     ):
         """
         :param fitness_function: can either be a fitness function or
@@ -95,6 +97,9 @@ class GenAlgSolver:
         self.best_fitness_ = 0
         self.population_ = None
         self.fitness_ = None
+
+        if progress_bars:
+            set_progress_bars(self)
 
     def check_input_base(
         self, fitness_function, selection_strategy, pop_size, excluded_genes
@@ -212,7 +217,7 @@ class GenAlgSolver:
             time_str = get_elapsed_time(start_time, end_time)
             self.print_stats(time_str)
 
-        close_logger(self.logger)
+        self.close_solve_logger()
 
     def calculate_fitness(self, population):
         """
@@ -452,3 +457,6 @@ class GenAlgSolver:
         )
 
         return mutation_rows, mutation_cols
+
+    def close_solve_logger(self):
+        close_logger(self.logger)

@@ -9,7 +9,8 @@ from rdkit.Chem import MolToSmiles as mol2smi
 from rdkit.DataStructs.cDataStructs import TanimotoSimilarity
 from selfies import decoder
 
-from chemistry.evo import sanitize_smiles, get_selfie_chars, sc2mol_structure
+from chemistry.evo import sanitize_smiles, get_selfie_chars
+from chemistry.wrappers import sc2mol_structure
 
 
 logger = logging.getLogger(__name__)

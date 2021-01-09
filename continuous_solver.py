@@ -4,6 +4,7 @@ import numpy as np
 
 from genetic_algorithm_base import GenAlgSolver
 from utils.helpers import get_input_dimensions
+from fitness_functions_float import fitness_function_float
 
 
 class ContinuousGenAlgSolver(GenAlgSolver):
@@ -24,6 +25,11 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         problem_type=float,
         n_crossover_points: int = 1,
         random_state: int = None,
+        logger_file: str = "output.log",
+        logger_level: str = "INFO",
+        to_stdout: bool = True,
+        to_file: bool = True,
+        progress_bars: bool = False,
     ):
         """
         :param fitness_function: can either be a fitness function or
@@ -58,6 +64,11 @@ class ContinuousGenAlgSolver(GenAlgSolver):
             excluded_genes=excluded_genes,
             n_crossover_points=n_crossover_points,
             random_state=random_state,
+            logger_file=logger_file,
+            logger_level=logger_level,
+            to_stdout=to_stdout,
+            to_file=to_file,
+            progress_bars=progress_bars,
         )
 
         if not variables_limits:
@@ -162,3 +173,24 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         ]
 
         return population
+
+
+def test_bohachevsky():
+    solver = ContinuousGenAlgSolver(
+        n_genes=2,
+        pop_size=100,
+        max_gen=250,
+        mutation_rate=0.10,
+        selection_rate=0.15,
+        variables_limits=(-100, 100),
+        fitness_function=fitness_function_float(7),
+        selection_strategy="random",
+        to_file=False,
+        progress_bars=True,
+        verbose=True,
+    )
+    solver.solve()
+
+
+if __name__ == "__main__":
+    test_bohachevsky()

@@ -1,14 +1,10 @@
-import numpy as np
 import logging
 from utils.timeout import handler, timer_alarm
-from selfies import decoder, encoder, split_selfies
+from selfies import decoder, encoder
 from rdkit import Chem, RDLogger
-from rdkit.Chem import AllChem, Draw, rdDistGeom
+from rdkit.Chem import AllChem
 from rdkit.Chem.rdmolfiles import MolToSmiles as mol2smi
 from rdkit.Chem.rdmolfiles import MolFromSmiles as smi2mol
-from rdkit.Chem.rdmolfiles import MolToPDBFile as mol2pdb
-from rdkit.Chem.rdmolfiles import MolToXYZFile as mol2xyz
-import rdkit.DistanceGeometry as DG
 
 logger = logging.getLogger(__name__)
 lg = RDLogger.logger()
@@ -16,7 +12,7 @@ lg.setLevel(RDLogger.ERROR)
 RDLogger.DisableLog("rdApp.*")
 
 
-def sanitize_smiles(smiles):
+def sanitize_smiles(smiles): # Problems with C1C=CC=CC=1[P-1]=[P-1][P-1] for instance
     """Return a canonical smile representation of smi.
     If there are metals, it will try to fix the bonds as dative.
 
@@ -28,20 +24,7 @@ def sanitize_smiles(smiles):
     smi_canon (string)          : Canonicalized smile representation of smi, None if exception caught.
     conversion_successful (bool): True if no exception caught, False if exception caught.
     """
-    try:
-        mol = smi2mol(smiles, sanitize=False)
-        if mol is not None:
-            if has_transition_metals(mol):
-                mol = set_dative_bonds(mol)
-            smi_canon = mol2smi(mol, isomericSmiles=False, canonical=True)
-            mol = smi2mol(smi_canon, sanitize=True)
-            return (mol, smi_canon, True)
-        else :
-            logger.debug("Smiles {0} could not be understood by rdkit.".format(smiles))
-            return (None, None, False)
-    except Exception as m:
-        logger.debug("Smiles {0} could not be understood by rdkit. Exception :\n {1}".format(smiles, m))
-        return (None, None, False)
+    return timed_sanitizer(smiles)
 
 
 def sanitize_multiple_smiles(smiles_list):
@@ -71,10 +54,33 @@ def encode_smiles_list(smiles_list):
     return selfies_list
 
 
-def timed_decoder(selfie):
-    """Decode a selfies string to smiles using selfies.decoder, call exception and return None if decoder takes more than 90 seconds to run. """
+def timed_sanitizer(smiles):
+    """Convert smiles string to rdkit.mol, call exception and return None if it takes more than 10 seconds to run. """
     timer_alarm(
-        90, handler
+        10, handler
+    )  # If this does not finish within 90 seconds, exception pops
+    try:
+        mol = smi2mol(smiles, sanitize=False)
+        if mol is not None:
+            if has_transition_metals(mol):
+                mol = set_dative_bonds(mol)
+            smi_canon = mol2smi(mol, isomericSmiles=False, canonical=True)
+            mol = smi2mol(smi_canon, sanitize=True)
+            return (mol, smi_canon, True)
+        else:
+            logger.debug("Smiles {0} could not be understood by rdkit.".format(smiles))
+            return (None, None, False)
+    except:
+        logger.debug(
+            "Smiles {0} probably became stuck in rdkit smi2mol.".format(smiles)
+        )
+        return (None, None, False)
+
+
+def timed_decoder(selfie):
+    """Decode a selfies string to smiles using selfies.decoder, call exception and return None if decoder takes more than 10 seconds to run. """
+    timer_alarm(
+        10, handler
     )  # If this does not finish within 90 seconds, exception pops
     try:
         selfie = selfie.replace("[nop]", "")
@@ -134,46 +140,6 @@ def count_selfie_chars(selfie):
         chars_selfie.append(selfie[selfie.find("[") : selfie.find("]") + 1])
         selfie = selfie[selfie.find("]") + 1 :]
     return len(chars_selfie)
-
-
-def sc2smiles(chromosome):
-    """Generate a canonical smiles string from a list of selfies characters."""
-    selfie = "".join(x for x in list(chromosome))
-    smiles = timed_decoder(selfie)
-    mol, smi_canon, check = sanitize_smiles(smiles)
-    if check:
-        return smi_canon
-    else:
-        return None
-
-
-def sc2depictions(chromosome, root_name="output", lot=0):
-    """Generate 2D and 3D depictions from a list of selfies characters."""
-    mol_structure = sc2mol_structure(chromosome, lot=lot)
-    mol2pdb(mol_structure, "{0}.pdb".format(root_name))
-    mol2xyz(mol_structure, "{0}.xyz".format(root_name))
-    Draw.MolToFile(mol_structure, "{0}.png".format(root_name))
-    logger.info("Generated depictions with root name {0}".format(root_name))
-
-
-def mol_structure2depictions(mol_structure, root_name="output"):
-    """Generate 2D and 3D depictions from an rdkit.mol object with 3D coordinates."""
-    mol2pdb(mol_structure, "{0}.pdb".format(root_name))
-    mol2xyz(mol_structure, "{0}.xyz".format(root_name))
-    Draw.MolToFile(mol_structure, "{0}.png".format(root_name))
-
-
-def sc2mol_structure(chromosome, lot=0):
-    """Generates a rdkit.mol object with 3D coordinates from a list of selfies characters."""
-    selfie = "".join(x for x in list(chromosome))
-    smiles = timed_decoder(selfie)
-    mol, smi_canon, check = sanitize_smiles(smiles)
-    if not check:
-        logger.exception("SMILES {0} cannot be sanitized".format(smiles))
-    if lot == 0:
-        return get_structure_ff(mol, n_confs=5)
-    if lot == 1:
-        exit()
 
 
 def get_structure_ff(mol, n_confs):
