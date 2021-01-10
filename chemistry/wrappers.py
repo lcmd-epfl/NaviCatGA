@@ -1,7 +1,8 @@
 import logging
+import numpy as np
 from chemistry.evo import sanitize_smiles, timed_decoder, get_structure_ff
 from rdkit import Chem, RDLogger
-from rdkit.Chem import AllChem, Draw
+from rdkit.Chem import AllChem, Draw, Descriptors
 from rdkit.Chem.rdmolfiles import MolToPDBFile as mol2pdb
 from rdkit.Chem.rdmolfiles import MolToXYZFile as mol2xyz
 
@@ -49,3 +50,78 @@ def sc2mol_structure(chromosome, lot=0):
         return get_structure_ff(mol, n_confs=5)
     if lot == 1:
         exit()
+
+
+def sc2logp(chromosome):
+    selfie = "".join(x for x in list(chromosome))
+    smiles = timed_decoder(selfie)
+    mol, smiles_canon, done = sanitize_smiles(smiles)
+    if smiles_canon == "" or not done or mol is None:
+        return -1e6
+    logp = Descriptors.MolLogP(mol)
+    return logp
+
+
+def sc2ilogp(chromosome):
+    selfie = "".join(x for x in list(chromosome))
+    smiles = timed_decoder(selfie)
+    tol = 1e-6
+    mol, smiles_canon, done = sanitize_smiles(smiles)
+    if smiles_canon == "" or not done or mol is None:
+        return -1e6
+    logp = Descriptors.MolLogP(mol)
+    ilogp = 1 / (logp + tol)
+    return ilogp
+
+
+def sc2mw(chromosome):
+    selfie = "".join(x for x in list(chromosome))
+    smiles = timed_decoder(selfie)
+    mol, smiles_canon, done = sanitize_smiles(smiles)
+    if smiles_canon == "" or not done or mol is None:
+        return -1e6
+    mw = np.round(Descriptors.HeavyAtomMolWt(mol))
+    return mw
+
+
+def sc2nmw(chromosome):
+    selfie = "".join(x for x in list(chromosome))
+    smiles = timed_decoder(selfie)
+    mol, smiles_canon, done = sanitize_smiles(smiles)
+    if smiles_canon == "" or not done or mol is None:
+        return -1e6
+    mw = np.round(Descriptors.HeavyAtomMolWt(mol))
+    nmw = -mw
+    return nmw
+
+
+def sc2mwilogp(chromosome):
+    selfie = "".join(x for x in list(chromosome))
+    smiles = timed_decoder(selfie)
+    tol = 1e-6
+    mol, smiles_canon, done = sanitize_smiles(smiles)
+    if smiles_canon == "" or not done or mol is None:
+        return -1e6
+    logp = Descriptors.MolLogP(mol)
+    mw = np.round(Descriptors.HeavyAtomMolWt(mol))
+    mwilogp = mw / (np.abs(logp) + tol)
+    return mwilogp
+
+
+def sc2mv(chromosome):
+    try:
+        mol = sc2mol_structure(chromosome)
+        mv = AllChem.ComputeMolVolume(mol, lot=0)
+    except Exception as m:
+        logger.warning(
+            "Fitness could not be evaluated for chromosome. SMILES : {0}".format(
+                timed_decoder("".join(x for x in list(chromosome)))
+            )
+        )
+        logger.debug(m)
+        mv = -1e6
+    return mv
+
+
+def sc2krr(chromosome):
+    return 50

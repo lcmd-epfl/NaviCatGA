@@ -16,88 +16,84 @@ Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]'
  '[C]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]'
  '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]'
  '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]' '[nop]']
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[S+1]=[O+1][H]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC([N-1])=[P-1]CS(C[S-1]=N)([H])
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCBr
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCI
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#CN=[C-1][P+1]#S(#[S+1])
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[S+1][S-1][H]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=[S+1][P+1]=P#[S-1]Cl
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[O-1]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=O
+Fitness could not be evaluated for chromosome. SMILES : C3C(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC3=[S+1](#N)
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCC[H]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC(O[P+1]=S[P+1]=[N+1][N+1]=NI)
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[C-1]=[S-1]C#[C+1]=[C-1]SS(S)N[O-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=NI
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCF
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCS[N-1]SC(S)[H]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCC#S[H]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCOC([N+1])([O+1])[P+1]I
 Iteration: 2
 Best fitness: -1000000.0
 Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
  '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
  '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[nop]' '[=O]' '[nop]' '[nop]' '[nop]' '[=S-1expl]' '[nop]'
- '[Branch1_1]' '[nop]' '[nop]' '[Hexpl]' '[Branch1_3]' '[=P+1expl]' '[=C]'
- '[nop]' '[Branch1_2]' '[O-1expl]' '[=S-1expl]' '[Branch3_1]' '[nop]'
- '[nop]' '[nop]' '[nop]' '[C-1expl]' '[=N+1expl]']
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC([P-1]#[C+1][S-1]([N+1])=C[P+1]I)
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=S(C[C+1]=[S-1]([O+1])[N-1][O-1])
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCC=O
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=[N+1][C-1]=SI
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=[C-1][C-1][O+1]=[S-1]=[C-1][H]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=[N+1]=[S+1][H]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[P-1]([O+1]=[O+1][S-1][O-1])
-Could not generate structures using FF and rdkit typing. SMILES [H]C(=[C+]#[C+]=PS[S+][C-]=C([H])Oc1c([H])c([H])c2c(c1[H])c(C([H])([H])C([H])([H])N([H])C(=O)C([H])([H])[H])c([H])n2[H])[S-]=N[C-]=[P+]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=[C-1][S+1](SP=[C+1]#[C+1]=C[S-1]=N[C-1]=[P+1])
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCBr
+ '[C]' '[nop]' '[O]' '[=C]' '[nop]' '[Branch2_1]' '[#S+1expl]'
+ '[#P-1expl]' '[nop]' '[nop]' '[=N+1expl]' '[nop]' '[Branch3_1]'
+ '[#O+1expl]' '[nop]' '[nop]' '[N-1expl]' '[=O+1expl]' '[O+1expl]'
+ '[#P+1expl]' '[nop]' '[I]' '[nop]' '[Expl=Ring3]' '[=P-1expl]' '[#P]']
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[O-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[C-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=[P-1]=[N-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[C-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[O+1]N=O
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=S#[N+1][N+1]#[O+1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=[P-1]=[P-1]Br
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC([N-1])Br
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=N[P+1]#N
 Iteration: 3
 Best fitness: -1000000.0
 Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
  '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
  '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[Br]' '[F]' '[#S]' '[nop]' '[Expl=Ring3]' '[=N-1expl]' '[I]'
- '[Branch1_2]' '[=S-1expl]' '[C+1expl]' '[Branch1_1]' '[=C]' '[C-1expl]'
- '[=C]' '[Branch3_2]' '[Branch2_3]' '[I]' '[Branch2_2]' '[O+1expl]'
- '[Ring2]' '[Br]' '[O-1expl]' '[#N+1expl]' '[Hexpl]' '[=P+1expl]']
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCP#[C+1]=[C+1]#P([C+1][P-1]#[S-1]=C(OBr))
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#C[O+1]=[P+1]=O
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[P-1]=[C-1](N=O)
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[C-1]=[O+1][O+1][N-1][S+1][O-1]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=S#[O+1]
+ '[C]' '[=N]' '[#P+1expl]' '[nop]' '[nop]' '[nop]' '[#N]' '[C+1expl]'
+ '[C]' '[N]' '[nop]' '[#N+1expl]' '[#C-1expl]' '[S+1expl]' '[=N+1expl]'
+ '[#C+1expl]' '[#N]' '[=P-1expl]' '[#O+1expl]' '[Hexpl]' '[#P]'
+ '[#P+1expl]' '[Hexpl]' '[=O]' '[=P+1expl]' '[#C+1expl]']
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC(Cl)Br
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=[C-1][P+1]#N
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[C+1]=[P+1]=[C+1]#P[H]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC([N-1])[P+1]#N
+Fitness could not be evaluated for chromosome. SMILES : C3C(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#C[P+1]3#CN=[P-1][N+1][H]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[S-1]#[S+1](=[O+1][P-1]=[P-1]#N)
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=NSCl
 Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[C-1]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#CP=C=[S+1](#[S-1])C#[P-1]I
-Could not generate structures using FF and rdkit typing. SMILES [H]c1c(OC#[C+]=[P-]([S-])=[O+][O+]=C([P+])I)c([H])c2c(C([H])([H])C([H])([H])N([H])C(=O)C([H])([H])[H])c([H])n([H])c2c1[H]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[C+1]=[P-1]([S-1])=[O+1][O+1]=C([P+1])I
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCS([O-1])
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[P+1][O-1]
 Iteration: 4
 Best fitness: -1000000.0
 Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
  '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
  '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[nop]' '[S]' '[nop]' '[Branch3_1]' '[=N]' '[#N]' '[P+1expl]'
- '[Branch2_2]' '[O-1expl]' '[#C+1expl]' '[=C-1expl]' '[Branch2_2]'
- '[=P+1expl]' '[Branch3_2]' '[#S-1expl]' '[nop]' '[Branch3_1]' '[S-1expl]'
- '[#S+1expl]' '[#O+1expl]' '[Expl=Ring3]' '[N]' '[N+1expl]' '[#P+1expl]'
- '[I]']
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=NN=[C-1][S-1]S[O+1]F
-Could not generate structures using FF and rdkit typing. SMILES [H]C(=[S-]P([H])[S-][N+]#[O+])N([H])[S+]#[P+]=[O+]C([H])([H])Oc1c([H])c([H])c2c(c1[H])c(C([H])([H])C([H])([H])N([H])C(=O)C([H])([H])[H])c([H])n2[H]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[O+1]=[P+1]#[S+1]NC=[S-1]P[S-1]([N+1]#[O+1])
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC([O-1])[O+1]=[S+1]#[S-1]OCl
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[P-1]#[S-1]=CS=[N-1]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCCl
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#C[O+1]=[P+1]#[C+1]=S=[C-1][P+1]=[C-1][S+1]=P=[N-1]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[S-1]O[C+1]Cl
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCI
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=SC=O
+ '[C]' '[#P+1expl]' '[O-1expl]' '[P]' '[#P-1expl]' '[=N+1expl]'
+ '[Branch2_2]' '[Br]' '[C+1expl]' '[Branch3_2]' '[=P-1expl]' '[C]' '[F]'
+ '[I]' '[Br]' '[Branch3_3]' '[Ring1]' '[=C]' '[Branch2_1]' '[Expl=Ring3]'
+ '[#P+1expl]' '[Hexpl]' '[nop]' '[S+1expl]' '[S]' '[nop]']
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[C-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[N+1][P+1]C[O+1]N(N=O)C#[P+1]Cl
+Fitness could not be evaluated for chromosome. SMILES : C3C(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC3Br
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[S-1]=C=[O+1]P=[P-1]#N
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC(N)[N+1]C=NS([N+1])#[S-1]=[C-1]P=S[S-1]C#[O+1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#C[S+1][N+1]#S=[N+1]=[P+1]#[S-1][O-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[C+1]=[P+1]([O+1])#[N+1]N=[S-1]=N[C+1]=[O+1][C-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCS#[C-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC([O-1])
 Iteration: 5
 Best fitness: -1000000.0
 Best individual: ['[C]' '[C]' '[Branch1_2]' '[C]' '[=O]' '[N]' '[C]' '[C]' '[C]' '[=C]'
  '[NHexpl]' '[C]' '[=C]' '[Ring1]' '[Branch1_1]' '[C]' '[=C]'
  '[Branch1_1]' '[Branch1_1]' '[C]' '[=C]' '[Ring1]' '[Branch1_2]' '[O]'
- '[C]' '[=S]' '[C]' '[=O]' '[Branch2_1]' '[Branch3_1]' '[#P-1expl]' '[N]'
- '[#N]' '[#P]' '[Branch2_1]' '[Hexpl]' '[Expl=Ring2]' '[=P+1expl]' '[O]'
- '[F]' '[Branch1_3]' '[O+1expl]' '[#C]' '[=C]' '[=O+1expl]' '[#S-1expl]'
- '[#P+1expl]' '[O-1expl]' '[#O+1expl]' '[I]']
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCS=[N+1]=[S-1]Cl
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=SC=[O+1][P+1]NI
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[O-1]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[P-1]Br
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[O+1]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[P-1]([O+1]=[P-1]I)=[P+1]=[O+1]
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCCl
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[P+1]Cl
-Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCCl
+ '[C]' '[Branch3_1]' '[=C]' '[#S]' '[=P]' '[O-1expl]' '[F]' '[#C]' '[=S]'
+ '[F]' '[=C+1expl]' '[C-1expl]' '[Branch3_1]' '[I]' '[Branch1_3]'
+ '[C-1expl]' '[N+1expl]' '[#N]' '[C+1expl]' '[=P-1expl]' '[Branch1_3]'
+ '[Branch2_2]' '[Branch2_3]' '[Hexpl]' '[#N+1expl]' '[=O]']
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=O
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[C+1]=C=[P-1]#[C-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC([S+1][O+1]=[C-1]N=[S-1]=[P-1]=[S+1]=[N+1]F)
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=[S-1]=[N-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#C[S+1]C#S=[S-1][O-1]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC=[C+1]=S[N+1]#S#N
+Fitness could not be evaluated for chromosome. SMILES : C3C(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC[C-1]=[P+1]3(=[P-1])#SC[N+1]#P[C+1][H]
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OC#[N+1][O+1]I
+Fitness could not be evaluated for chromosome. SMILES : CC(=O)NCCC1=C[NH]C2=C1C=C(C=C2)OCS=[S+1]#CN[S-1]#[N+1][C-1]=CC=[O+1][P+1]C=[N+1][C+1]F

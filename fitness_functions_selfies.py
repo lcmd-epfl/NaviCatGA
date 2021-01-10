@@ -3,14 +3,19 @@ import logging
 
 from rdkit import Chem
 from rdkit.Chem import AllChem
-from rdkit.Chem import Draw, Descriptors
-from rdkit.Chem import MolFromSmiles as smi2mol
-from rdkit.Chem import MolToSmiles as mol2smi
 from rdkit.DataStructs.cDataStructs import TanimotoSimilarity
 from selfies import decoder
 
 from chemistry.evo import sanitize_smiles, get_selfie_chars
-from chemistry.wrappers import sc2mol_structure
+from chemistry.wrappers import (
+    sc2logp,
+    sc2ilogp,
+    sc2mw,
+    sc2mv,
+    sc2nmw,
+    sc2mwilogp,
+    sc2krr,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -18,81 +23,6 @@ logger = logging.getLogger(__name__)
 
 def get_ECFP4(mol):
     return AllChem.GetMorganFingerprint(mol, 2)
-
-
-def sc2logp(chromosome):
-    selfie = "".join(x for x in list(chromosome))
-    smiles = decoder(selfie)
-    mol, smiles_canon, done = sanitize_smiles(smiles)
-    if smiles_canon == "" or not done or mol is None:
-        return -1e6
-    logp = Descriptors.MolLogP(mol)
-    return logp
-
-
-def sc2ilogp(chromosome):
-    selfie = "".join(x for x in list(chromosome))
-    smiles = decoder(selfie)
-    tol = 1e-6
-    mol, smiles_canon, done = sanitize_smiles(smiles)
-    if smiles_canon == "" or not done or mol is None:
-        return -1e6
-    logp = Descriptors.MolLogP(mol)
-    ilogp = 1 / (logp + tol)
-    return ilogp
-
-
-def sc2mw(chromosome):
-    selfie = "".join(x for x in list(chromosome))
-    smiles = decoder(selfie)
-    mol, smiles_canon, done = sanitize_smiles(smiles)
-    if smiles_canon == "" or not done or mol is None:
-        return -1e6
-    mw = np.round(Descriptors.HeavyAtomMolWt(mol))
-    return mw
-
-
-def sc2nmw(chromosome):
-    selfie = "".join(x for x in list(chromosome))
-    smiles = decoder(selfie)
-    mol, smiles_canon, done = sanitize_smiles(smiles)
-    if smiles_canon == "" or not done or mol is None:
-        return -1e6
-    mw = np.round(Descriptors.HeavyAtomMolWt(mol))
-    nmw = -mw
-    return nmw
-
-
-def sc2mwilogp(chromosome):
-    selfie = "".join(x for x in list(chromosome))
-    smiles = decoder(selfie)
-    tol = 1e-6
-    mol, smiles_canon, done = sanitize_smiles(smiles)
-    if smiles_canon == "" or not done or mol is None:
-        return -1e6
-    logp = Descriptors.MolLogP(mol)
-    mw = np.round(Descriptors.HeavyAtomMolWt(mol))
-    mwilogp = mw / (np.abs(logp) + tol)
-    return mwilogp
-
-
-def sc2mv(chromosome):
-    try:
-        mol = sc2mol_structure(chromosome)
-        mv = AllChem.ComputeMolVolume(mol, lot=0)
-    except Exception as m:
-        logger.warning(
-            "Fitness could not be evaluated for chromosome. SMILES : {0}".format(
-                decoder("".join(x for x in list(chromosome)))
-            )
-        )
-        logger.debug(m)
-        mv = -1e6
-    return mv
-
-
-def sc2krr(chromosome):
-    return 50
 
 
 def levenshtein(chromosome, target_selfie):

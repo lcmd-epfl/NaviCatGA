@@ -12,7 +12,7 @@ lg.setLevel(RDLogger.ERROR)
 RDLogger.DisableLog("rdApp.*")
 
 
-def sanitize_smiles(smiles): # Problems with C1C=CC=CC=1[P-1]=[P-1][P-1] for instance
+def sanitize_smiles(smiles):  # Problems with C1C=CC=CC=1[P-1]=[P-1][P-1] for instance
     """Return a canonical smile representation of smi.
     If there are metals, it will try to fix the bonds as dative.
 
