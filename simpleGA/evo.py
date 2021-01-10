@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 from simpleGA.timeout import timeout
 from selfies import decoder, encoder
 from rdkit import Chem, RDLogger
@@ -136,7 +137,7 @@ def count_selfie_chars(selfie):
     return len(chars_selfie)
 
 
-def get_structure_ff(mol, n_confs):
+def get_structure_ff(mol, n_confs=5):
     """Generates a reasonable set of 3D structures
     using forcefields for a given rdkit.mol object.
     It will try several 3D generation approaches in rdkit.
@@ -152,7 +153,6 @@ def get_structure_ff(mol, n_confs):
     """
     Chem.SanitizeMol(mol)
     mol = Chem.AddHs(mol)
-    mol_structure = Chem.Mol(mol)
     coordinates_added = False
     if not coordinates_added:
         try:
@@ -161,7 +161,7 @@ def get_structure_ff(mol, n_confs):
                 numConfs=n_confs,
                 useExpTorsionAnglePrefs=True,
                 useBasicKnowledge=True,
-                pruneRmsThresh=1.5,
+                pruneRmsThresh=1.25,
                 enforceChirality=True,
             )
         except:
@@ -191,7 +191,7 @@ def get_structure_ff(mol, n_confs):
                 useRandomCoords=True,
                 useBasicKnowledge=True,
                 maxAttempts=250,
-                pruneRmsThresh=1.5,
+                pruneRmsThresh=1.25,
                 ignoreSmoothingFailures=True,
             )
         except:
@@ -207,16 +207,27 @@ def get_structure_ff(mol, n_confs):
         logger.exception(
             "Could not embed the molecule. SMILES {0}".format(mol2smi(mol))
         )
+        return mol
+    else:
+        mol_structure = get_confs_ff(mol, maxiters=250)
+        return mol_structure
 
+
+def get_confs_ff(mol, maxiters=250):
+    mol_structure = Chem.Mol(mol)
+    mol_structure.RemoveAllConformers()
     if Chem.rdForceFieldHelpers.MMFFHasAllMoleculeParams(mol):
+        AllChem.MMFFSanitizeMolecule(mol)
         energies = AllChem.MMFFOptimizeMoleculeConfs(
-            mol, maxIters=250, nonBondedThresh=15.0
+            mol, maxIters=maxiters, nonBondedThresh=15.0
         )
         energies_list = [e[1] for e in energies]
         min_e_index = energies_list.index(min(energies_list))
         mol_structure.AddConformer(mol.GetConformer(min_e_index))
     elif Chem.rdForceFieldHelpers.UFFHasAllMoleculeParams(mol):
-        energies = AllChem.UFFOptimizeMoleculeConfs(mol, maxIters=250, vdwThresh=15.0)
+        energies = AllChem.UFFOptimizeMoleculeConfs(
+            mol, maxIters=maxiters, vdwThresh=15.0
+        )
         energies_list = [e[1] for e in energies]
         min_e_index = energies_list.index(min(energies_list))
         mol_structure.AddConformer(mol.GetConformer(min_e_index))
@@ -226,8 +237,43 @@ def get_structure_ff(mol, n_confs):
                 mol2smi(mol)
             )
         )
-
     return mol_structure
+
+
+def prune_mol_conformers(mol, energies_list):
+    if mol.GetNumConformers() <= 1:
+        return mol
+    energies = np.asarray(energies_list, dtype=float)
+    rmsd = get_conformer_rmsd(mol)
+    sort = np.argsort(energies)
+    keep = []
+    for i in sort:
+        if len(keep) == 0:
+            keep.append(i)
+            continue
+        this_rmsd = rmsd[i][np.asarray(keep, dtype=int)]
+        if np.all(this_rmsd >= 1.25):
+            keep.append(i)
+    mol_structure = Chem.Mol(mol)
+    mol_structure.RemoveAllConformers()
+    conf_ids = [conf.GetId() for conf in mol.GetConformers()]
+    for i in keep:
+        conf = mol.GetConformer(conf_ids[i])
+        mol_structure.AddConformer(conf, assignId=True)
+    return mol_structure
+
+
+def get_conformer_rmsd(mol):
+    rmsd = np.zeros((mol.GetNumConformers(), mol.GetNumConformers()), dtype=float)
+    for i, ref_conf in enumerate(mol.GetConformers()):
+        for j, fit_conf in enumerate(mol.GetConformers()):
+            if i >= j:
+                continue
+            rmsd[i, j] = AllChem.GetBestRMS(
+                mol, mol, ref_conf.GetId(), fit_conf.GetId()
+            )
+            rmsd[j, i] = rmsd[i, j]
+    return rmsd
 
 
 def has_transition_metals(mol):

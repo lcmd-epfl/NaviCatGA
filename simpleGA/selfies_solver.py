@@ -31,7 +31,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         fitness_function=None,
         max_gen: int = 500,
         pop_size: int = 100,
-        mutation_rate: float = 0.5,
+        mutation_rate: float = 0.25,
         selection_rate: float = 0.25,
         selection_strategy: str = "tournament",
         verbose: bool = True,
@@ -93,7 +93,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         if starting_random:
             starting_selfies = ""
             for i in range(random.randint(1, n_genes)):
-                starting_selfies += np.random.choice(alphabet, size=1)[0]
+                starting_selfies += np.random.choice(self.alphabet, size=1)[0]
         self.starting_selfies = starting_selfies
         self.max_counter = int(max_counter)
 
