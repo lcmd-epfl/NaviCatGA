@@ -1,5 +1,3 @@
-import multiprocessing.pool
-import functools
 import signal
 import logging
 

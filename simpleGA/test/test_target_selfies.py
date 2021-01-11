@@ -21,7 +21,7 @@ def test_tanimoto_methane():
     )
 
     solver = SelfiesGenAlgSolver(
-        starting_selfies="[C]",
+        starting_selfies=["[C]"],
         n_genes=30,
         fitness_function=fitness_function_target_selfies(
             target_selfies, function_number=1
@@ -95,7 +95,7 @@ def test_levenshtein_methane():
     )
 
     solver = SelfiesGenAlgSolver(
-        starting_selfies="[C]",
+        starting_selfies=["[C]"],
         n_genes=30,
         fitness_function=fitness_function_target_selfies(
             target_selfies, function_number=2

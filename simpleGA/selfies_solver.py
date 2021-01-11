@@ -25,7 +25,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
         n_genes: int,
-        starting_selfies: str = "[nop]",
+        starting_selfies: list = ["[nop]"],
         starting_random: bool = False,
         alphabet_list: list = list(get_semantic_robust_alphabet()),
         fitness_function=None,
@@ -90,10 +90,14 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         self.alphabet = list(sorted(alphabet_list))
         self.problem_type = problem_type
 
+        if len(starting_selfies) < self.pop_size:
+            n_patch = self.pop_size - len(starting_selfies)
+            starting_selfies.extend(np.random.choice(starting_selfies, size=n_patch))
         if starting_random:
-            starting_selfies = ""
-            for i in range(random.randint(1, n_genes)):
-                starting_selfies += np.random.choice(self.alphabet, size=1)[0]
+            starting_selfies = list([""] * self.pop_size)
+            for i in range(self.pop_size):
+                for j in range(random.randint(1, self.n_genes)):
+                    starting_selfies[i] += (np.random.choice(self.alphabet, size=1)[0])
         self.starting_selfies = starting_selfies
         self.max_counter = int(max_counter)
 
@@ -106,10 +110,12 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         """
 
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype="object")
-        chromosome = get_selfie_chars(self.starting_selfies, self.n_genes)
-        assert check_selfie_chars(chromosome)
         for i in range(self.pop_size):
+            print("Getting selfie chars from {0}".format(self.starting_selfies[i]))
+            chromosome = get_selfie_chars(self.starting_selfies[i], self.n_genes)
+            assert check_selfie_chars(chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
+        self.logger.debug("Initial population: {0}".format(population))
         return population
 
     def get_crossover_points(self):

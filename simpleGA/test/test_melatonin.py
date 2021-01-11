@@ -16,8 +16,8 @@ from simpleGA.wrappers import (
 def test_melatonin():
 
     starting_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
-    starting_selfies = encoder(starting_smiles)
-    n_starting_genes = count_selfie_chars(starting_selfies)
+    starting_selfies = [encoder(starting_smiles)]
+    n_starting_genes = count_selfie_chars(starting_selfies[0])
     print(
         "This test attempts to modify melatonin to improve a given property. \n The starting SMILES is : {0} \n The starting SELFIES is : {1} \n The number of genes required is : {2}".format(
             starting_smiles, starting_selfies, n_starting_genes

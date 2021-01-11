@@ -12,6 +12,12 @@ lg.setLevel(RDLogger.ERROR)
 RDLogger.DisableLog("rdApp.*")
 
 
+def sc2selfies(chromosome):
+    """Generate a selfies string from a list of selfies characters."""
+    selfie = "".join(x for x in list(chromosome))
+    return selfie
+
+
 def sc2smiles(chromosome):
     """Generate a canonical smiles string from a list of selfies characters."""
     selfie = "".join(x for x in list(chromosome))
