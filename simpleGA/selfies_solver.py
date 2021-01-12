@@ -97,7 +97,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             starting_selfies = list([""] * self.pop_size)
             for i in range(self.pop_size):
                 for j in range(random.randint(1, self.n_genes)):
-                    starting_selfies[i] += (np.random.choice(self.alphabet, size=1)[0])
+                    starting_selfies[i] += np.random.choice(self.alphabet, size=1)[0]
         self.starting_selfies = starting_selfies
         self.max_counter = int(max_counter)
 

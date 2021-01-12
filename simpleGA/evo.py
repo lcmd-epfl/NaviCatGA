@@ -276,6 +276,20 @@ def get_conformer_rmsd(mol):
     return rmsd
 
 
+def get_interatomic_distances(conf):
+    n_atoms = conf.GetNumAtoms()
+    coords = [conf.GetAtomPosition(i) for i in range(n_atoms)]
+    d = np.zeros((n_atoms, n_atoms), dtype=float)
+    for i in range(n_atoms):
+        for j in range(n_atoms):
+            if i < j:
+                d[i, j] = coords[i].Distance(coords[j])
+                d[j, i] = d[i, j]
+            else:
+                continue
+    return d
+
+
 def has_transition_metals(mol):
     """Returns True if the rdkit.mol object passed as argument has a (transition)-metal atom, False if else."""
     if any([is_transition_metal(at) for at in mol.GetAtoms()]):

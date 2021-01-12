@@ -1,6 +1,11 @@
 import logging
 import numpy as np
-from simpleGA.evo import sanitize_smiles, timed_decoder, get_structure_ff
+from simpleGA.evo import (
+    sanitize_smiles,
+    timed_decoder,
+    get_structure_ff,
+    get_interatomic_distances,
+)
 from rdkit import Chem, RDLogger
 from rdkit.Chem import AllChem, Draw, Descriptors
 from rdkit.Chem.rdmolfiles import MolToPDBFile as mol2pdb
@@ -127,6 +132,43 @@ def sc2mv(chromosome):
         logger.debug(m)
         mv = -1e6
     return mv
+
+
+def sc2cm(chromosome, order="C"):
+    try:
+        mol = sc2mol_structure(chromosome)
+        m = mol_structure2cm(mol)
+        if order == "C":
+            cm = m.flatten(order="C")
+        elif order == "F":
+            cm = m.flatten(order="F")
+    except Exception as m:
+        logger.warning(
+            "Fitness could not be evaluated for chromosome. SMILES : {0}".format(
+                timed_decoder("".join(x for x in list(chromosome)))
+            )
+        )
+        logger.debug(m)
+        cm = None
+    return cm
+
+
+def mol_structure2cm(chromosome):
+    n_atoms = mol.GetNumAtoms()
+    z = [atom.GetAtomicNum() for atom in mol.GetAtoms()]
+    d = get_interatomic_distances(mol)
+    m = np.zeros((n_atoms, n_atoms))
+    for mol_structure in mol.GetConformers():
+        for i in range(mol.GetNumAtoms()):
+            for j in range(mol.GetNumAtoms()):
+                if i == j:
+                    m[i, j] = 0.5 * z[i] ** 2.4
+                elif i < j:
+                    m[i, j] = (z[i] * z[j]) / d[i, j]
+                    m[j, i] = m[i, j]
+                else:
+                    continue
+    return m
 
 
 def sc2krr(chromosome):
