@@ -10,9 +10,11 @@ def test_target_property():
         n_genes=10,
         pop_size=50,
         max_gen=100,
-        fitness_function=fitness_function_target_property(function_number=1,target=0.5), # logp target
+        fitness_function=fitness_function_target_property(
+            function_number=1, target=0.5
+        ),  # logp target
         starting_selfies=starting_selfies,
-        excluded_genes=[0,1],
+        excluded_genes=[0, 1],
         random_state=66,
         logger_level="INFO",
         n_crossover_points=1,

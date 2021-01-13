@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from selfies import decoder, encoder
+from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_target_selfies
 from simpleGA.wrappers import (
@@ -29,8 +29,9 @@ def test_target_multistep():
                 target_selfies, function_number=2
             ),  # See fitness_function_target_selfies
             max_gen=100,
-            pop_size=50,
-            n_crossover_points=2,
+            pop_size=25,
+            selection_strategy="random",
+            n_crossover_points=1,
             to_file=False,
             verbose=False,
         )
@@ -50,8 +51,9 @@ def test_target_multistep():
             target_selfies, function_number=1
         ),  # See fitness_function_target_selfies
         max_gen=100,
+        selection_strategy="tournament",
         pop_size=50,
-        n_crossover_points=2,
+        n_crossover_points=3,
         logger_file="multistep.log",
         verbose=False,
         to_file=True,

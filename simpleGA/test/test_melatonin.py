@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
 
-from selfies import decoder, encoder
+from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_selfies
-from simpleGA.evo import (
-    count_selfie_chars,
-)
-from simpleGA.wrappers import (
-    sc2smiles,
-    sc2mol_structure,
-    mol_structure2depictions,
-)
+from simpleGA.chemistry import count_selfie_chars
+from simpleGA.wrappers import sc2smiles, sc2mol_structure, mol_structure2depictions
 
 
 def test_melatonin():
@@ -33,7 +27,7 @@ def test_melatonin():
         ),  # We do not modify the melatonin molecule
         fitness_function=fitness_function_selfies(1),  # See fitness_functions_selfies
         max_gen=50,  # This is a simple test
-        logger_file="logp.log",
+        logger_file="melatonin_logp.log",
         verbose=True,
     )
     solver.solve()
@@ -46,9 +40,9 @@ def test_melatonin():
         "The corresponding SMILES is : {0}".format(sc2smiles(solver.best_individual_))
     )
     mol = sc2mol_structure(solver.best_individual_)
-    mol_structure2depictions(mol, root_name="logp")
+    mol_structure2depictions(mol, root_name="melatonin_logp")
 
-    # We will not maximize 1/logp
+    # We will now maximize 1/logp
     solver = SelfiesGenAlgSolver(
         starting_selfies=starting_selfies,  # We start the run from the melatonin molecule
         n_genes=int(n_starting_genes * 2),  # We need at least n_starting_genes
@@ -59,7 +53,7 @@ def test_melatonin():
             2
         ),  # See fitness_functions_selfies, this is inverse logp
         max_gen=50,  # This is a simple test
-        logger_file="ilogp.log",
+        logger_file="melatonin_ilogp.log",
         verbose=True,
     )
     solver.solve()
@@ -72,9 +66,9 @@ def test_melatonin():
         "The corresponding SMILES is : {0}".format(sc2smiles(solver.best_individual_))
     )
     mol = sc2mol_structure(solver.best_individual_)
-    mol_structure2depictions(mol, root_name="ilogp")
+    mol_structure2depictions(mol, root_name="melatonin_ilogp")
 
-    # We will not maximize molecular weight
+    # We will now maximize molecular weight
     solver = SelfiesGenAlgSolver(
         starting_selfies=starting_selfies,  # We start the run from the melatonin molecule
         n_genes=int(n_starting_genes * 2),  # We need at least n_starting_genes
@@ -85,7 +79,7 @@ def test_melatonin():
             3
         ),  # See fitness_functions_selfies, this is mw
         max_gen=50,  # This is a simple test
-        logger_file="mw.log",
+        logger_file="melatonin_mw.log",
         verbose=True,
     )
     solver.solve()
@@ -98,9 +92,9 @@ def test_melatonin():
         "The corresponding SMILES is : {0}".format(sc2smiles(solver.best_individual_))
     )
     mol = sc2mol_structure(solver.best_individual_)
-    mol_structure2depictions(mol, root_name="mw")
+    mol_structure2depictions(mol, root_name="melatonin_mw")
 
-    # We will not maximize molecular volume
+    # We will now maximize molecular volume
     solver = SelfiesGenAlgSolver(
         starting_selfies=starting_selfies,  # We start the run from the melatonin molecule
         n_genes=int(n_starting_genes * 2),  # We need at least n_starting_genes
@@ -112,7 +106,7 @@ def test_melatonin():
         ),  # See fitness_functions_selfies, this is mv
         max_gen=10,  # This is a simple test and this run is more expensive
         pop_size=10,  # So we reduce the size of everything
-        logger_file="mv.log",
+        logger_file="melatonin_mv.log",
         verbose=True,
     )
     solver.solve()
@@ -125,7 +119,7 @@ def test_melatonin():
         "The corresponding SMILES is : {0}".format(sc2smiles(solver.best_individual_))
     )
     mol = sc2mol_structure(solver.best_individual_)
-    mol_structure2depictions(mol, root_name="mv")
+    mol_structure2depictions(mol, root_name="melatonin_mv")
 
 
 if __name__ == "__main__":

@@ -3,11 +3,7 @@
 from selfies import decoder, encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_target_selfies
-from simpleGA.wrappers import (
-    sc2smiles,
-    sc2mol_structure,
-    mol_structure2depictions,
-)
+from simpleGA.wrappers import sc2smiles, sc2mol_structure, mol_structure2depictions
 
 
 def test_tanimoto_methane():
