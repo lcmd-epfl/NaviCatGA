@@ -9,11 +9,7 @@ from selfies import (
     set_semantic_constraints,
 )
 from simpleGA.genetic_algorithm_base import GenAlgSolver
-from simpleGA.evo import (
-    sanitize_multiple_smiles,
-    get_selfie_chars,
-    check_selfie_chars,
-)
+from simpleGA.evo import sanitize_multiple_smiles, get_selfie_chars, check_selfie_chars
 from simpleGA.fitness_functions_selfies import fitness_function_selfies
 from rdkit import rdBase
 
@@ -111,7 +107,9 @@ class SelfiesGenAlgSolver(GenAlgSolver):
 
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype="object")
         for i in range(self.pop_size):
-            print("Getting selfie chars from {0}".format(self.starting_selfies[i]))
+            logger.debug(
+                "Getting selfie chars from {0}".format(self.starting_selfies[i])
+            )
             chromosome = get_selfie_chars(self.starting_selfies[i], self.n_genes)
             assert check_selfie_chars(chromosome)
             population[i][:] = chromosome[0 : self.n_genes]

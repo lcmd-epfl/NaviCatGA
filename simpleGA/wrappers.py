@@ -4,10 +4,13 @@ from simpleGA.evo import (
     sanitize_smiles,
     timed_decoder,
     get_structure_ff,
+    get_selfie_chars,
     get_interatomic_distances,
+    get_ECFP4,
 )
 from rdkit import Chem, RDLogger
 from rdkit.Chem import AllChem, Draw, Descriptors
+from rdkit.DataStructs.cDataStructs import TanimotoSimilarity
 from rdkit.Chem.rdmolfiles import MolToPDBFile as mol2pdb
 from rdkit.Chem.rdmolfiles import MolToXYZFile as mol2xyz
 
@@ -125,13 +128,43 @@ def sc2mv(chromosome):
         mv = AllChem.ComputeMolVolume(mol, lot=0)
     except Exception as m:
         logger.warning(
-            "Fitness could not be evaluated for chromosome. SMILES : {0}".format(
+            "Molecular Volume not be evaluated for chromosome. SMILES : {0}".format(
                 timed_decoder("".join(x for x in list(chromosome)))
             )
         )
         logger.debug(m)
         mv = -1e6
     return mv
+
+
+def sc2levenshtein_to_target(chromosome, target_selfie):
+    reward = 0
+    sc1 = chromosome
+    l1 = len(sc1)
+    sc2 = get_selfie_chars(target_selfie, maxchars=l1)
+    l2 = len(sc2)
+    iterations = max(l1, l2)
+
+    for i in range(iterations):
+
+        if i + 1 > len(sc1) or i + 1 > len(sc2):
+            return reward
+
+        if sc1[i] == sc2[i]:
+            reward += 1
+
+    return reward
+
+
+def sc2tanimoto_to_target(chromosome, target_selfie):
+    selfie = "".join(x for x in list(chromosome))
+    smi1 = timed_decoder(selfie)
+    smi2 = timed_decoder(target_selfie)
+    mol1, smi_canon1, done1 = sanitize_smiles(smi1)
+    mol2, smi_canon2, done2 = sanitize_smiles(smi2)
+    fp1 = get_ECFP4(mol1)
+    fp2 = get_ECFP4(mol2)
+    return TanimotoSimilarity(fp1, fp2)
 
 
 def sc2cm(chromosome, order="C"):
@@ -153,7 +186,7 @@ def sc2cm(chromosome, order="C"):
     return cm
 
 
-def mol_structure2cm(chromosome):
+def mol_structure2cm(mol):
     n_atoms = mol.GetNumAtoms()
     z = [atom.GetAtomicNum() for atom in mol.GetAtoms()]
     d = get_interatomic_distances(mol)

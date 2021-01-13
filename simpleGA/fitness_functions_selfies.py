@@ -1,12 +1,6 @@
-import numpy as np
 import logging
 
-from rdkit import Chem
-from rdkit.Chem import AllChem
-from rdkit.DataStructs.cDataStructs import TanimotoSimilarity
-from selfies import decoder
-
-from simpleGA.evo import sanitize_smiles, get_selfie_chars
+from simpleGA.score_modifiers import score_modifier
 from simpleGA.wrappers import (
     sc2logp,
     sc2ilogp,
@@ -14,6 +8,8 @@ from simpleGA.wrappers import (
     sc2mv,
     sc2nmw,
     sc2mwilogp,
+    sc2levenshtein_to_target,
+    sc2tanimoto_to_target,
     sc2krr,
 )
 
@@ -21,58 +17,38 @@ from simpleGA.wrappers import (
 logger = logging.getLogger(__name__)
 
 
-def get_ECFP4(mol):
-    return AllChem.GetMorganFingerprint(mol, 2)
+def fitness_function_target_property(
+    target, function_number=1, score_modifier_number=1, parameter=1
+):
 
+    if function_number == 1:  # sc2logp logp
 
-def levenshtein(chromosome, target_selfie):
-    reward = 0
-    sc1 = chromosome
-    l1 = len(sc1)
-    sc2 = get_selfie_chars(target_selfie, maxchars=l1)
-    l2 = len(sc2)
-    iterations = max(l1, l2)
+        return lambda chromosome: score_modifier(
+            sc2logp(chromosome), target, score_modifier_number, parameter
+        )
 
-    for i in range(iterations):
+    if function_number == 3:  # sc2mw molecular weight
 
-        if i + 1 > len(sc1) or i + 1 > len(sc2):
-            return reward
+        return lambda chromosome: score_modifier(
+            sc2mw(chromosome), target, score_modifier_number, parameter
+        )
 
-        if sc1[i] == sc2[i]:
-            reward += 1
+    if function_number == 6:  # sc2mv molecular volume
 
-    return reward
-
-
-def tanimoto(chromosome, target_selfie):
-    selfie = "".join(x for x in list(chromosome))
-    smi1 = decoder(selfie)
-    smi2 = decoder(target_selfie)
-    mol1, smi_canon1, done1 = sanitize_smiles(smi1)
-    mol2, smi_canon2, done2 = sanitize_smiles(smi2)
-    fp1 = get_ECFP4(mol1)
-    fp2 = get_ECFP4(mol2)
-    return TanimotoSimilarity(fp1, fp2)
-
-
-def GaussianModifier(score, target, sigma):
-    try:
-        score = np.exp(-0.5 * np.power((score - target) / sigma, 2.0))
-    except:
-        score = 0.0
-
-    return score
+        return lambda chromosome: score_modifier(
+            sc2mv(chromosome), target, score_modifier_number, parameter
+        )
 
 
 def fitness_function_target_selfies(target_selfie, function_number=1):
 
     if function_number == 1:  # Tanimoto distance
 
-        return lambda chromosome: tanimoto(chromosome, target_selfie)
+        return lambda chromosome: sc2tanimoto_to_target(chromosome, target_selfie)
 
     if function_number == 2:  # Levenshtein distance
 
-        return lambda chromosome: levenshtein(chromosome, target_selfie)
+        return lambda chromosome: sc2levenshtein_to_target(chromosome, target_selfie)
 
 
 def fitness_function_selfies(function_number=1):

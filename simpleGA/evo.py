@@ -290,6 +290,10 @@ def get_interatomic_distances(conf):
     return d
 
 
+def get_ECFP4(mol):
+    return AllChem.GetMorganFingerprint(mol, 2)
+
+
 def has_transition_metals(mol):
     """Returns True if the rdkit.mol object passed as argument has a (transition)-metal atom, False if else."""
     if any([is_transition_metal(at) for at in mol.GetAtoms()]):
