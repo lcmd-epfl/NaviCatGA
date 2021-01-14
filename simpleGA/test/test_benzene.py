@@ -13,7 +13,7 @@ def test_benzene():
         fitness_function=fitness_function_selfies(2),
         starting_selfies=starting_selfies,
         excluded_genes=[0, 1, 2, 3, 4, 5, 6, 7, 8],
-        random_state=66,
+        random_state=420,
         logger_level="INFO",
         n_crossover_points=2,
         verbose=True,

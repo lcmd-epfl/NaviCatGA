@@ -49,7 +49,7 @@ def sanitize_multiple_smiles(smiles_list):
         smi_converted = sanitize_smiles(smi)
         sanitized_smiles.append(smi_converted[1])
         if not smi_converted[2]:
-            logger.exception("Invalid SMILES encountered. Value =", smi)
+            logger.exception("Invalid SMILES encountered : ", smi)
     return sanitized_smiles
 
 
@@ -60,6 +60,15 @@ def encode_smiles_list(smiles_list):
         selfie = encoder(smi)
         selfies_list.append(selfie)
     return selfies_list
+
+
+def decode_selfies_list(selfies_list):
+    """Decode a list of smiles to a list of selfies using timed_decoder."""
+    smiles_list = []
+    for selfie in selfies_list:
+        smi = timed_decoder(selfie)
+        smiles_list.append(smi)
+    return smiles_list
 
 
 def timed_sanitizer(smiles):
@@ -122,7 +131,11 @@ def get_selfie_chars(selfie, maxchars):
         chars_selfie.append(selfie[selfie.find("[") : selfie.find("]") + 1])
         selfie = selfie[selfie.find("]") + 1 :]
     if len(chars_selfie) > maxchars:
-        raise Exception("Very long SELFIES produced. Value =", chars_selfie)
+        logger.warning(
+            "Exceedingly long SELFIES produced. Will be truncated. Value :",
+            chars_selfie,
+        )
+        chars_selfie = chars_selfie[0 : maxchars - 1]
     if len(chars_selfie) < maxchars:
         chars_selfie += ["[nop]"] * (maxchars - len(chars_selfie))
     return chars_selfie
@@ -336,3 +349,23 @@ def diagnose_mol(mol):
         for problem in problems:
             logger.warning(problem.GetType())
             logger.warning(problem.Message())
+
+
+def randomize_smiles(mol):
+    if not mol:
+        return None
+
+    Chem.Kekulize(mol)
+    return mol2smi(
+        mol, canonical=False, doRandom=True, isomericSmiles=False, kekuleSmiles=True
+    )
+
+
+def randomize_selfies(selfies, num_random=1):
+    if num_random < 1:
+        return None
+    smiles = timed_decoder(selfies)
+    mol = timed_sanitizer(smiles)[0]
+    random_smiles = [randomize_smiles(mol) for _ in range(num_random)]
+    random_selfies = encode_smiles_list(random_smiles)
+    return random_selfies

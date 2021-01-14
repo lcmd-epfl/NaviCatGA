@@ -32,6 +32,7 @@ def test_target_multistep():
             pop_size=25,
             selection_strategy="random",
             n_crossover_points=1,
+            random_state=420,
             to_file=False,
             verbose=False,
         )
@@ -55,6 +56,7 @@ def test_target_multistep():
         pop_size=50,
         n_crossover_points=3,
         logger_file="multistep.log",
+        random_state=666,
         verbose=False,
         to_file=True,
         progress_bars=True,

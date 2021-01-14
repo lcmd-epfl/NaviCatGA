@@ -1,5 +1,4 @@
 import datetime
-import logging
 from abc import abstractmethod
 from typing import Sequence
 
@@ -83,7 +82,6 @@ class GenAlgSolver:
         self.plot_results = plot_results
 
         self.pop_keep = int(np.floor(selection_rate * pop_size))
-
         if self.pop_keep < 2:
             self.pop_keep = 2
 
@@ -97,6 +95,7 @@ class GenAlgSolver:
         self.best_fitness_ = 0
         self.population_ = None
         self.fitness_ = None
+        self.runtime_ = 0.0
 
         if progress_bars:
             set_progress_bars(self)
@@ -164,9 +163,9 @@ class GenAlgSolver:
             gen_n += 1
 
             if self.verbose and gen_n % gen_interval == 0:
-                self.logger.info(f"Iteration: {gen_n}")
-                self.logger.info(f"Best fitness: {fitness[0]}")
-                self.logger.info(f"Best individual: {population[0,:]}")
+                self.logger.info("Generation: {0}".format(gen_n))
+                self.logger.info("Best fitness: {0}".format(fitness[0]))
+                self.logger.info("Best individual: {0}".format(population[0, :]))
                 self.logger.debug(
                     "Population at generation: {0}: {1}".format(gen_n, population)
                 )
@@ -212,10 +211,11 @@ class GenAlgSolver:
         if self.plot_results:
             self.plot_fitness_results(mean_fitness, max_fitness, gen_n)
 
+        end_time = datetime.datetime.now()
+        self.runtime_ = get_elapsed_time(start_time, end_time)
+
         if self.show_stats:
-            end_time = datetime.datetime.now()
-            time_str = get_elapsed_time(start_time, end_time)
-            self.print_stats(time_str)
+            self.print_stats(self.runtime_)
 
         self.close_solve_logger()
 

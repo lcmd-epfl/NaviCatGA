@@ -15,7 +15,7 @@ def test_target_property():
         ),  # logp target
         starting_selfies=starting_selfies,
         excluded_genes=[0, 1],
-        random_state=66,
+        random_state=666,
         logger_level="INFO",
         n_crossover_points=1,
         verbose=True,

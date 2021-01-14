@@ -9,8 +9,14 @@ from selfies import (
     set_semantic_constraints,
 )
 from simpleGA.genetic_algorithm_base import GenAlgSolver
-from simpleGA.chemistry import sanitize_multiple_smiles, get_selfie_chars, check_selfie_chars
-from simpleGA.fitness_functions_selfies import fitness_function_selfies
+from simpleGA.chemistry import (
+    sanitize_multiple_smiles,
+    get_selfie_chars,
+    check_selfie_chars,
+    randomize_selfies,
+)
+from simpleGA.exceptions import NoFitnessFunction, InvalidInput
+from simpleGA.exception_messages import exception_messages
 from rdkit import rdBase
 
 
@@ -23,11 +29,12 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         n_genes: int,
         starting_selfies: list = ["[nop]"],
         starting_random: bool = False,
+        starting_stoned: bool = False,
         alphabet_list: list = list(get_semantic_robust_alphabet()),
         fitness_function=None,
         max_gen: int = 500,
         pop_size: int = 100,
-        mutation_rate: float = 0.25,
+        mutation_rate: float = 0.15,
         selection_rate: float = 0.25,
         selection_strategy: str = "tournament",
         verbose: bool = True,
@@ -35,7 +42,6 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         plot_results: bool = False,
         excluded_genes: Sequence = None,
         variables_limits: dict = None,
-        problem_type=str,
         n_crossover_points: int = 1,
         branching: bool = False,
         max_counter: int = 10,
@@ -84,16 +90,35 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                     # alphabet.add("[Branch{0}_{1}]".format(i[0], i[1]))
                     pass
         self.alphabet = list(sorted(alphabet_list))
-        self.problem_type = problem_type
 
-        if len(starting_selfies) < self.pop_size:
-            n_patch = self.pop_size - len(starting_selfies)
-            starting_selfies.extend(np.random.choice(starting_selfies, size=n_patch))
+        if not self.alphabet:
+            raise (InvalidInput(exception_messages["AlphabetIsEmpty"]))
+        if self.n_crossover_points > self.n_genes:
+            raise (InvalidInput(exception_messages["TooManyCrossoverPoints"]))
+        if self.n_crossover_points < 1:
+            raise (InvalidInput(exception_messages["TooFewCrossoverPoints"]))
+        if starting_random and starting_stoned:
+            raise (InvalidInput(exception_messages["ConflictedRandomStoned"]))
+        if starting_stoned and (len(starting_selfies) != 1):
+            raise (InvalidInput(exception_messages["ConflictedStonedStarting"]))
+
         if starting_random:
+            logger.warning(
+                "Randomizing starting population. Any starting chromosomes will be overwritten."
+            )
             starting_selfies = list([""] * self.pop_size)
             for i in range(self.pop_size):
                 for j in range(random.randint(1, self.n_genes)):
                     starting_selfies[i] += np.random.choice(self.alphabet, size=1)[0]
+        elif starting_stoned:
+            starting_selfies = randomize_selfies(
+                starting_selfies[0], num_random=self.pop_size
+            )
+        if len(starting_selfies) < self.pop_size:
+            n_patch = self.pop_size - len(starting_selfies)
+            for i in range(n_patch):
+                starting_selfies.append(np.random.choice(starting_selfies, size=1)[0])
+        assert len(starting_selfies) == self.pop_size
         self.starting_selfies = starting_selfies
         self.max_counter = int(max_counter)
 
@@ -106,6 +131,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         """
 
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype="object")
+
         for i in range(self.pop_size):
             logger.debug(
                 "Getting selfie chars from {0}".format(self.starting_selfies[i])
@@ -113,6 +139,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             chromosome = get_selfie_chars(self.starting_selfies[i], self.n_genes)
             assert check_selfie_chars(chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
+
         self.logger.debug("Initial population: {0}".format(population))
         return population
 
@@ -259,6 +286,8 @@ class SelfiesGenAlgSolver(GenAlgSolver):
 
 
 def test_benzene():
+    from simpleGA.fitness_functions_selfies import fitness_function_selfies
+
     starting_selfies = "[C][C=][C][C=][C][C=][Ring1][Branch1_2]"
     solver = SelfiesGenAlgSolver(
         n_genes=16,

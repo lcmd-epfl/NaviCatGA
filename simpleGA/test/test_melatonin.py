@@ -7,8 +7,7 @@ from simpleGA.chemistry import count_selfie_chars
 from simpleGA.wrappers import sc2smiles, sc2mol_structure, mol_structure2depictions
 
 
-def test_melatonin():
-
+def test_melatonin_logp():
     starting_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
     starting_selfies = [encoder(starting_smiles)]
     n_starting_genes = count_selfie_chars(starting_selfies[0])
@@ -26,7 +25,8 @@ def test_melatonin():
             range(n_starting_genes)
         ),  # We do not modify the melatonin molecule
         fitness_function=fitness_function_selfies(1),  # See fitness_functions_selfies
-        max_gen=50,  # This is a simple test
+        max_gen=100,  # This is a simple test
+        random_state=420,
         logger_file="melatonin_logp.log",
         verbose=True,
     )
@@ -42,6 +42,17 @@ def test_melatonin():
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="melatonin_logp")
 
+
+def test_melatonin_ilogp():
+    starting_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
+    starting_selfies = [encoder(starting_smiles)]
+    n_starting_genes = count_selfie_chars(starting_selfies[0])
+    print(
+        "This test attempts to modify melatonin to improve a given property. \n The starting SMILES is : {0} \n The starting SELFIES is : {1} \n The number of genes required is : {2}".format(
+            starting_smiles, starting_selfies, n_starting_genes
+        )
+    )
+
     # We will now maximize 1/logp
     solver = SelfiesGenAlgSolver(
         starting_selfies=starting_selfies,  # We start the run from the melatonin molecule
@@ -52,7 +63,7 @@ def test_melatonin():
         fitness_function=fitness_function_selfies(
             2
         ),  # See fitness_functions_selfies, this is inverse logp
-        max_gen=50,  # This is a simple test
+        max_gen=100,  # This is a simple test
         logger_file="melatonin_ilogp.log",
         verbose=True,
     )
@@ -68,6 +79,17 @@ def test_melatonin():
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="melatonin_ilogp")
 
+
+def test_melatonin_mw():
+    starting_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
+    starting_selfies = [encoder(starting_smiles)]
+    n_starting_genes = count_selfie_chars(starting_selfies[0])
+    print(
+        "This test attempts to modify melatonin to improve a given property. \n The starting SMILES is : {0} \n The starting SELFIES is : {1} \n The number of genes required is : {2}".format(
+            starting_smiles, starting_selfies, n_starting_genes
+        )
+    )
+
     # We will now maximize molecular weight
     solver = SelfiesGenAlgSolver(
         starting_selfies=starting_selfies,  # We start the run from the melatonin molecule
@@ -78,7 +100,7 @@ def test_melatonin():
         fitness_function=fitness_function_selfies(
             3
         ),  # See fitness_functions_selfies, this is mw
-        max_gen=50,  # This is a simple test
+        max_gen=100,  # This is a simple test
         logger_file="melatonin_mw.log",
         verbose=True,
     )
@@ -94,6 +116,17 @@ def test_melatonin():
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="melatonin_mw")
 
+
+def test_melatonin_mv():
+    starting_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
+    starting_selfies = [encoder(starting_smiles)]
+    n_starting_genes = count_selfie_chars(starting_selfies[0])
+    print(
+        "This test attempts to modify melatonin to improve a given property. \n The starting SMILES is : {0} \n The starting SELFIES is : {1} \n The number of genes required is : {2}".format(
+            starting_smiles, starting_selfies, n_starting_genes
+        )
+    )
+
     # We will now maximize molecular volume
     solver = SelfiesGenAlgSolver(
         starting_selfies=starting_selfies,  # We start the run from the melatonin molecule
@@ -104,8 +137,9 @@ def test_melatonin():
         fitness_function=fitness_function_selfies(
             6
         ),  # See fitness_functions_selfies, this is mv
-        max_gen=10,  # This is a simple test and this run is more expensive
-        pop_size=10,  # So we reduce the size of everything
+        max_gen=50,  # This is a simple test and this run is more expensive
+        pop_size=10,
+        logger_level="INFO",
         logger_file="melatonin_mv.log",
         verbose=True,
     )
@@ -123,4 +157,7 @@ def test_melatonin():
 
 
 if __name__ == "__main__":
-    test_melatonin()
+    test_melatonin_logp()
+    test_melatonin_ilogp()
+    test_melatonin_mw()
+    test_melatonin_mv()

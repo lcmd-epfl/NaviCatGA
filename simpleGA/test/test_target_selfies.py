@@ -25,6 +25,7 @@ def test_tanimoto_methane():
         max_gen=500,
         pop_size=100,
         n_crossover_points=2,
+        random_state=420,
         logger_file="tanimoto_methane.log",
         verbose=True,
     )
@@ -62,6 +63,7 @@ def test_tanimoto_random():
         max_gen=500,
         pop_size=100,
         n_crossover_points=2,
+        random_state=420,
         logger_file="tanimoto_random.log",
         verbose=True,
     )
@@ -99,6 +101,7 @@ def test_levenshtein_methane():
         max_gen=500,
         pop_size=100,
         n_crossover_points=1,
+        random_state=420,
         logger_file="levenshtein_methane.log",
         verbose=True,
     )
@@ -131,6 +134,7 @@ def test_levenshtein_random():
         max_gen=500,
         pop_size=100,
         n_crossover_points=1,
+        random_state=420,
         logger_file="levenshtein_random.log",
         verbose=True,
     )
