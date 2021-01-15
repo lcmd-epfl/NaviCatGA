@@ -3,6 +3,7 @@ exception_messages = {
     f"Available options are {', '.join(allowed_selection_strategies)}.",
     "InvalidPopulationSize": "The population size must be larger than 2",
     "InvalidExcludedGenes": lambda excluded_genes: f"{excluded_genes} is not a valid input for excluded_genes",
+    "StartingSelfiesNotAList": "starting_selfies must be a list even if it only contains one string",
     "ConflictedRandomStoned": "starting_random is not compatible with starting_stoned",
     "ConflictedStonedStarting": "there must be exactly one item in starting_selfies for starting_stoned to work",
     "AlphabetIsEmpty": "at least one element is required in the alphabet for mutation and randomization purposes",

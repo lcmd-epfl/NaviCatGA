@@ -69,9 +69,7 @@ class GenAlgSolver:
         self.check_input_base(
             fitness_function, selection_strategy, pop_size, excluded_genes
         )
-
         self.selection_strategy = selection_strategy
-
         self.max_gen = max_gen
         self.pop_size = pop_size
         self.mutation_rate = mutation_rate
@@ -80,23 +78,18 @@ class GenAlgSolver:
         self.verbose = verbose
         self.show_stats = show_stats
         self.plot_results = plot_results
-
         self.pop_keep = int(np.floor(selection_rate * pop_size))
         if self.pop_keep < 2:
             self.pop_keep = 2
-
         self.prob_intervals = self.get_selection_probabilities()
-
         self.n_matings = int(np.floor((self.pop_size - self.pop_keep) / 2))
         self.n_mutations = self.get_number_mutations()
-
         self.generations_ = 0
         self.best_individual_ = None
         self.best_fitness_ = 0
         self.population_ = None
         self.fitness_ = None
         self.runtime_ = 0.0
-
         if progress_bars:
             set_progress_bars(self)
 
@@ -144,24 +137,17 @@ class GenAlgSolver:
         """
 
         start_time = datetime.datetime.now()
-
         mean_fitness = np.ndarray(shape=(1, 0))
         max_fitness = np.ndarray(shape=(1, 0))
 
         # initialize the population
         population = self.initialize_population()
-
         fitness = self.calculate_fitness(population)
-
         fitness, population = self.sort_by_fitness(fitness, population)
-
         gen_interval = max(round(self.max_gen / 10), 1)
-
         gen_n = 0
         while True:
-
             gen_n += 1
-
             if self.verbose and gen_n % gen_interval == 0:
                 self.logger.info("Generation: {0}".format(gen_n))
                 self.logger.info("Best fitness: {0}".format(fitness[0]))
@@ -172,11 +158,8 @@ class GenAlgSolver:
 
             mean_fitness = np.append(mean_fitness, fitness.mean())
             max_fitness = np.append(max_fitness, fitness[0])
-
             ma, pa = self.select_parents(fitness)
-
             ix = np.arange(0, self.pop_size - self.pop_keep - 1, 2)
-
             xp = np.array(
                 list(map(lambda _: self.get_crossover_points(), range(self.n_matings)))
             )
@@ -333,11 +316,9 @@ class GenAlgSolver:
     def get_selection_probabilities(self):
 
         if self.selection_strategy == "roulette_wheel":
-
             mating_prob = (
                 np.arange(1, self.pop_keep + 1) / np.arange(1, self.pop_keep + 1).sum()
             )[::-1]
-
             return np.array([0, *np.cumsum(mating_prob[: self.pop_keep + 1])])
 
         elif self.selection_strategy == "random":
@@ -356,10 +337,8 @@ class GenAlgSolver:
         """
 
         sorted_fitness = np.argsort(fitness)[::-1]
-
         population = population[sorted_fitness, :]
         fitness = fitness[sorted_fitness]
-
         return fitness, population
 
     def get_crossover_points(self):
@@ -386,12 +365,9 @@ class GenAlgSolver:
         """
 
         plt.figure(figsize=(7, 7))
-
         x = np.arange(1, iterations + 1)
-
         plt.plot(x, mean_fitness, label="mean fitness")
         plt.plot(x, max_fitness, label="max fitness")
-
         plt.legend()
         plt.show()
 
@@ -455,7 +431,6 @@ class GenAlgSolver:
         mutation_cols = np.random.choice(
             self.allowed_mutation_genes, n_mutations, replace=True
         )
-
         return mutation_rows, mutation_cols
 
     def close_solve_logger(self):

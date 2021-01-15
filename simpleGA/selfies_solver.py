@@ -34,7 +34,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         fitness_function=None,
         max_gen: int = 500,
         pop_size: int = 100,
-        mutation_rate: float = 0.15,
+        mutation_rate: float = 0.05,
         selection_rate: float = 0.25,
         selection_strategy: str = "tournament",
         verbose: bool = True,
@@ -91,6 +91,8 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                     pass
         self.alphabet = list(sorted(alphabet_list))
 
+        if not isinstance(starting_selfies, list):
+            raise (InvalidInput(exception_messages["StartingSelfiesNotAList"]))
         if not self.alphabet:
             raise (InvalidInput(exception_messages["AlphabetIsEmpty"]))
         if self.n_crossover_points > self.n_genes:
@@ -288,11 +290,11 @@ class SelfiesGenAlgSolver(GenAlgSolver):
 def test_benzene():
     from simpleGA.fitness_functions_selfies import fitness_function_selfies
 
-    starting_selfies = "[C][C=][C][C=][C][C=][Ring1][Branch1_2]"
+    starting_selfies = ["[C][C=][C][C=][C][C=][Ring1][Branch1_2]"]
     solver = SelfiesGenAlgSolver(
         n_genes=16,
-        pop_size=25,
-        max_gen=100,
+        pop_size=5,
+        max_gen=10,
         fitness_function=fitness_function_selfies(2),
         starting_selfies=starting_selfies,
         excluded_genes=[0, 1, 2, 3, 4, 5, 6, 7, 8],
