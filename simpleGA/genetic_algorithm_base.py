@@ -139,8 +139,6 @@ class GenAlgSolver:
         start_time = datetime.datetime.now()
         mean_fitness = np.ndarray(shape=(1, 0))
         max_fitness = np.ndarray(shape=(1, 0))
-
-        # initialize the population
         population = self.initialize_population()
         fitness = self.calculate_fitness(population)
         fitness, population = self.sort_by_fitness(fitness, population)
@@ -177,11 +175,8 @@ class GenAlgSolver:
                 )
 
             population = self.mutate_population(population, self.n_mutations)
-
             fitness = np.hstack((fitness[0], self.calculate_fitness(population[1:, :])))
-
             fitness, population = self.sort_by_fitness(fitness, population)
-
             if gen_n >= self.max_gen:
                 break
 
@@ -208,7 +203,9 @@ class GenAlgSolver:
         :param population: population state at a given iteration
         :return: the fitness of the current population
         """
-        return np.array(list(map(self.fitness_function, population)))
+        return np.fromiter(
+            map(self.fitness_function, population), dtype=float, count=len(population)
+        )
 
     def select_parents(self, fitness):
         """
@@ -346,13 +343,12 @@ class GenAlgSolver:
         Retrieves random crossover points
         :return: a numpy array with the crossover points
         """
-        return np.sort(
-            np.random.choice(
-                np.arange(len(self.allowed_mutation_genes)),
-                self.n_crossover_points,
-                replace=False,
-            )
+        crossover_points = np.random.choice(
+            np.arange(len(self.allowed_mutation_genes)),
+            self.n_crossover_points,
+            replace=False,
         )
+        return np.asarray(crossover_points).sort()
 
     @staticmethod
     def plot_fitness_results(mean_fitness, max_fitness, iterations):
@@ -399,7 +395,6 @@ class GenAlgSolver:
         pass
 
     @staticmethod
-    @abstractmethod
     def create_offspring(first_parent, sec_parent, crossover_pt, offspring_number):
         """
         Creates an offspring from 2 parents. It uses the crossover point(s)
