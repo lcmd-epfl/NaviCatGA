@@ -9,7 +9,7 @@ def test_benzene():
     solver = SelfiesGenAlgSolver(
         n_genes=16,
         pop_size=25,
-        max_gen=150,
+        max_gen=100,
         fitness_function=fitness_function_selfies(2),
         starting_selfies=starting_selfies,
         excluded_genes=[0, 1, 2, 3, 4, 5, 6, 7, 8],

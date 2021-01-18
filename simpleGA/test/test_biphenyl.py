@@ -34,7 +34,7 @@ def test_biphenyl():
             target=350.0, function_number=6, score_modifier_number=2
         ),  # See fitness_functions_selfies, this is mv
         max_gen=50,  # This is a simple test and this run is more expensive
-        pop_size=50,  # So we reduce the size of everything
+        pop_size=10,  # So we reduce the size of everything
         random_state=420,
         logger_level="INFO",
         logger_file="biphenyl_mv.log",

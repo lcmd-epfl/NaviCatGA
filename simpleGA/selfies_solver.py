@@ -51,6 +51,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         to_stdout: bool = True,
         to_file: bool = True,
         progress_bars: bool = False,
+        lru_cache: bool = False,
     ):
 
         GenAlgSolver.__init__(
@@ -120,6 +121,10 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             n_patch = self.pop_size - len(starting_selfies)
             for i in range(n_patch):
                 starting_selfies.append(np.random.choice(starting_selfies, size=1)[0])
+        elif len(starting_selfies) > self.pop_size:
+            n_remove = len(starting_selfies) - self.pop_size
+            for i in range(n_remove):
+                starting_selfies.remove(np.random.choice(starting_selfies, size=1)[0])
         assert len(starting_selfies) == self.pop_size
         self.starting_selfies = starting_selfies
         self.max_counter = int(max_counter)
@@ -132,7 +137,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         :return: a numpy array with a sanitized initialized population
         """
 
-        population = np.zeros(shape=(self.pop_size, self.n_genes), dtype="object")
+        population = np.zeros(shape=(self.pop_size, self.n_genes), dtype=object)
 
         for i in range(self.pop_size):
             logger.debug(

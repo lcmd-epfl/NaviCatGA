@@ -35,6 +35,7 @@ def test_float_1():
         )
     )
 
+
 def test_float_2():
     solver = ContinuousGenAlgSolver(
         n_genes=6,
@@ -65,7 +66,8 @@ def test_float_2():
             solver.best_individual_[5],
         )
     )
-    
+
+
 def test_float_3():
     solver = ContinuousGenAlgSolver(
         n_genes=6,
@@ -96,6 +98,7 @@ def test_float_3():
             solver.best_individual_[5],
         )
     )
+
 
 if __name__ == "__main__":
     test_float_1()

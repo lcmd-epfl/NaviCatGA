@@ -26,4 +26,4 @@ def get_elapsed_time(start_time, end_time):
     if seconds:
         time_str += f"{seconds} seconds"
 
-    return time_str
+    return runtime, time_str

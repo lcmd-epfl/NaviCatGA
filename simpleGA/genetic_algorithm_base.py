@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from simpleGA.exceptions import NoFitnessFunction, InvalidInput
 from simpleGA.exception_messages import exception_messages
 from simpleGA.progress_bars import set_progress_bars
+from simpleGA.cache import set_lru_cache
 from simpleGA.helpers import get_elapsed_time
 from simpleGA.logger import configure_logger, close_logger
 
@@ -31,6 +32,7 @@ class GenAlgSolver:
         excluded_genes: Sequence = None,
         n_crossover_points: int = 1,
         random_state: int = None,
+        lru_cache: bool = False,
         logger_file: str = "output.log",
         logger_level: str = "INFO",
         to_stdout: bool = True,
@@ -91,7 +93,11 @@ class GenAlgSolver:
         self.fitness_ = None
         self.runtime_ = 0.0
         if progress_bars:
+            self.logger.info("Setting up progress bars through monkeypatching.")
             set_progress_bars(self)
+        if lru_cache:
+            self.logger.info("Setting up lru cache through monkeypatching.")
+            set_lru_cache(self)
 
     def check_input_base(
         self, fitness_function, selection_strategy, pop_size, excluded_genes
@@ -190,10 +196,10 @@ class GenAlgSolver:
             self.plot_fitness_results(mean_fitness, max_fitness, gen_n)
 
         end_time = datetime.datetime.now()
-        self.runtime_ = get_elapsed_time(start_time, end_time)
+        self.runtime_, time_str = get_elapsed_time(start_time, end_time)
 
         if self.show_stats:
-            self.print_stats(self.runtime_)
+            self.print_stats(time_str)
 
         self.close_solve_logger()
 

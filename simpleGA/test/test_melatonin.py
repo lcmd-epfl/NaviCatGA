@@ -64,6 +64,7 @@ def test_melatonin_ilogp():
             2
         ),  # See fitness_functions_selfies, this is inverse logp
         max_gen=100,  # This is a simple test
+        random_state=420,
         logger_file="melatonin_ilogp.log",
         verbose=True,
     )
@@ -101,6 +102,7 @@ def test_melatonin_mw():
             3
         ),  # See fitness_functions_selfies, this is mw
         max_gen=100,  # This is a simple test
+        random_state=420,
         logger_file="melatonin_mw.log",
         verbose=True,
     )
@@ -139,6 +141,7 @@ def test_melatonin_mv():
         ),  # See fitness_functions_selfies, this is mv
         max_gen=50,  # This is a simple test and this run is more expensive
         pop_size=10,
+        random_state=420,
         logger_level="INFO",
         logger_file="melatonin_mv.log",
         verbose=True,

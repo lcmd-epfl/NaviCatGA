@@ -28,7 +28,7 @@ def test_target_multistep():
             fitness_function=fitness_function_target_selfies(
                 target_selfies, function_number=2
             ),  # See fitness_function_target_selfies
-            max_gen=100,
+            max_gen=50,
             pop_size=25,
             selection_strategy="random",
             n_crossover_points=1,
@@ -51,9 +51,9 @@ def test_target_multistep():
         fitness_function=fitness_function_target_selfies(
             target_selfies, function_number=1
         ),  # See fitness_function_target_selfies
-        max_gen=100,
+        max_gen=50,
         selection_strategy="tournament",
-        pop_size=50,
+        pop_size=25,
         n_crossover_points=3,
         logger_file="multistep.log",
         random_state=666,
