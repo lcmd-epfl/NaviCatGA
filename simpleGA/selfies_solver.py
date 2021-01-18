@@ -74,6 +74,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             to_stdout=to_stdout,
             to_file=to_file,
             progress_bars=progress_bars,
+            lru_cache=lru_cache,
         )
 
         if variables_limits is not None:

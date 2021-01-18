@@ -2,6 +2,8 @@ import numpy as np
 import types
 import logging
 from functools import lru_cache
+from simpleGA.chemistry import get_selfie_chars
+from simpleGA.wrappers import sc2selfies
 
 logger = logging.getLogger(__name__)
 
@@ -20,19 +22,24 @@ def calculate_fitness_cache(self, population):
     :param population: population state at a given iteration
     :return: the fitness of the current population
     """
-    fitness = np.zeros(shape=self.pop_size, dtype=float)
+    fitness = np.zeros(shape=population.shape[0], dtype=float)
+    logger.debug("Evaluating fitness individually with cache.")
 
-    @lru_cache(maxsize=256)
-    def calculate_one_fitness_cache(chromosome, fitness_function):
-        return fitness_function(chromosome)
-
-    for i in range(self.pop_size):
+    for i in range(population.shape[0]):
+        chromosome = population[i][0 : self.n_genes]
+        selfies = sc2selfies(chromosome)
         fitness[i] = calculate_one_fitness_cache(
-            population[i][0 : self.n_genes], self.fitness_function
+            selfies, self.n_genes, self.fitness_function
         )
-    logger.info(calculate_one_fitness_cache.cache_info())
+
+    logger.debug(calculate_one_fitness_cache.cache_info())
     return fitness
 
 
+@lru_cache(maxsize=128)
+def calculate_one_fitness_cache(selfies, n_genes, fitness_function):
+    return fitness_function(get_selfie_chars(selfies, n_genes))
+
+
 def set_lru_cache(self):
-    self.calculate_fitness = types.MethodType(calculate_fitness_cache, self, population)
+    self.calculate_fitness = types.MethodType(calculate_fitness_cache, self)
