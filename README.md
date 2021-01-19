@@ -10,7 +10,9 @@ Additional features require alive-progress (for progress bars, very useful) and 
 Installation is as simple as:
 python setup.py install --record files.txt
 
-This ensures easy uninstall: just remove all files listed in files.txt and you are done.
+This ensures easy uninstall. Just remove all files listed in files.txt using:
+rm $(cat files.txt)
+
 
 
 

@@ -12,6 +12,11 @@ from simpleGA.wrappers import (
     sc2tanimoto_to_target,
     sc2krr,
 )
+from simpleGA.quantum_wrappers import (
+    sc2gap,
+    sc2ehomo,
+    sc2elumo,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -76,3 +81,15 @@ def fitness_function_selfies(function_number=1):
     if function_number == 6:  # sc2mv molecular volume
 
         return lambda chromosome: sc2mv(chromosome)
+
+    if function_number == 7:  # sc2ehomo homo energy
+
+        return lambda chromosome: sc2ehomo(chromosome)
+
+    if function_number == 8:  # sc2elumo lumo energy
+
+        return lambda chromosome: sc2elumo(chromosome)
+
+    if function_number == 9:  # sc2gap gap
+
+        return lambda chromosome: sc2gap(chromosome)
