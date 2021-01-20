@@ -3,6 +3,7 @@ import numpy as np
 from rdkit import Chem, RDLogger
 from pyscf import gto, scf, dft, semiempirical
 from simpleGA.wrappers import sc2mol_structure
+from simpleGA.chemistry import timed_decoder
 
 logger = logging.getLogger(__name__)
 lg = RDLogger.logger()
@@ -11,55 +12,85 @@ RDLogger.DisableLog("rdApp.*")
 
 
 def sc2gap(chromosome, lot=0):
-    mol_structure = sc2mol_structure(chromosome, lot=lot)
-    pyscfmol, mf = mol_structure2pyscf(mol_structure, lot=1)
-    idx = np.argsort(mf.mo_energy)
-    e_sort = mf.mo_energy[idx]
-    occ_sort = mf.mo_occ[idx].astype(int)
-    assert len(e_sort) == len(occ_sort)
-    for i in occ_sort:
-        if i >= 1:
-            continue
-        if i < 1:
-            e_lumo = e_sort[i]
-            e_homo = e_sort[i - 1]
-            break
+    try:
+        mol_structure = sc2mol_structure(chromosome, lot=lot)
+        pyscfmol, mf = mol_structure2pyscf(mol_structure, lot=lot)
+        idx = np.argsort(mf.mo_energy)
+        e_sort = mf.mo_energy[idx]
+        occ_sort = mf.mo_occ[idx].astype(int)
+        assert len(e_sort) == len(occ_sort)
+        for i, occ in enumerate(occ_sort):
+            if occ >= 1:
+                continue
+            if occ < 1:
+                e_lumo = e_sort[i]
+                e_homo = e_sort[i - 1]
+                break
+        assert e_lumo > e_homo
+    except Exception as m:
+        logger.warning(
+            "E(LUMO)-E(HOMO) not be evaluated for chromosome. SMILES : {0}".format(
+                timed_decoder("".join(x for x in list(chromosome)))
+            )
+        )
+        logger.debug(m)
+        e_homo = -1e6
+        e_lumo = 0
     return e_lumo - e_homo
 
 
 def sc2ehomo(chromosome, lot=0):
-    mol_structure = sc2mol_structure(chromosome, lot=lot)
-    pyscfmol, mf = mol_structure2pyscf(mol_structure, lot=1)
-    idx = np.argsort(mf.mo_energy)
-    e_sort = mf.mo_energy[idx]
-    occ_sort = mf.mo_occ[idx].astype(int)
-    assert len(e_sort) == len(occ_sort)
-    for i in occ_sort:
-        if i >= 1:
-            continue
-        if i < 1:
-            e_homo = e_sort[i - 1]
-            break
+    try:
+        mol_structure = sc2mol_structure(chromosome, lot=lot)
+        pyscfmol, mf = mol_structure2pyscf(mol_structure, lot=lot)
+        idx = np.argsort(mf.mo_energy)
+        e_sort = mf.mo_energy[idx]
+        occ_sort = mf.mo_occ[idx].astype(int)
+        assert len(e_sort) == len(occ_sort)
+        for i, occ in enumerate(occ_sort):
+            if occ >= 1:
+                continue
+            if occ < 1:
+                e_homo = e_sort[i - 1]
+                break
+        assert 0 > e_homo
+    except Exception as m:
+        logger.warning(
+            "E(HOMO) not be evaluated for chromosome. SMILES : {0}".format(
+                timed_decoder("".join(x for x in list(chromosome)))
+            )
+        )
+        logger.debug(m)
+        e_homo = -1e6
     return e_homo
 
 
 def sc2elumo(chromosome, lot=0):
-    mol_structure = sc2mol_structure(chromosome, lot=lot)
-    pyscfmol, mf = mol_structure2pyscf(mol_structure, lot=1)
-    idx = np.argsort(mf.mo_energy)
-    e_sort = mf.mo_energy[idx]
-    occ_sort = mf.mo_occ[idx].astype(int)
-    assert len(e_sort) == len(occ_sort)
-    for i in occ_sort:
-        if i >= 1:
-            continue
-        if i < 1:
-            e_lumo = e_sort[i]
-            break
+    try:
+        mol_structure = sc2mol_structure(chromosome, lot=lot)
+        pyscfmol, mf = mol_structure2pyscf(mol_structure, lot=lot)
+        idx = np.argsort(mf.mo_energy)
+        e_sort = mf.mo_energy[idx]
+        occ_sort = mf.mo_occ[idx].astype(int)
+        assert len(e_sort) == len(occ_sort)
+        for i, occ in enumerate(occ_sort):
+            if i >= 1:
+                continue
+            if i < 1:
+                e_lumo = e_sort[i]
+                break
+        assert 0 < e_lumo
+    except Exception as m:
+        logger.warning(
+            "E(LUMO) not be evaluated for chromosome. SMILES : {0}".format(
+                timed_decoder("".join(x for x in list(chromosome)))
+            )
+        )
+        logger.debug(m)
     return e_lumo
 
 
-def mol_structure2pyscf(mol, lot=1):
+def mol_structure2pyscf(mol, lot=0):
     pyscfmol = gto.Mole()
     pyscfmol.atom = ""
     pyscfmol.charge = Chem.GetFormalCharge(mol)
@@ -73,17 +104,20 @@ def mol_structure2pyscf(mol, lot=1):
     if lot == 0:
         pyscfmol.build()
         mf = semiempirical.RMINDO3(pyscfmol)
+        mf.verbose = 1
         mf.run(conv_tol=1e-6)  # UMINDO3 is an option as well
     if lot == 1:
         pyscfmol.basis = "MINAO"
         pyscfmol.build()
         mf = dft.ROKS(pyscfmol)
+        mf.verbose = 1
         mf.xc = "pbe,pbe"
-        mf = mf.density_fit().run()
+        mf = mf.density_fit().run(conv_tol=1e-6)
     if lot == 2:
-        pyscfmol.basis = "6-31G"
+        pyscfmol.basis = "pcseg0"
         pyscfmol.build()
         mf = dft.RKS(pyscfmol)
+        mf.verbose = 1
         mf.xc = "b3lypg"
-        mf = mf.density_fit().run()
+        mf = mf.density_fit().run(conv_tol=1e-7)
     return pyscfmol, mf

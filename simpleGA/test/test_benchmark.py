@@ -7,9 +7,7 @@ from simpleGA.exceptions import InvalidInput
 from simpleGA.fitness_functions_selfies import fitness_function_target_selfies
 from simpleGA.wrappers import (
     sc2smiles,
-    sc2mol_structure,
     sc2tanimoto_to_target,
-    mol_structure2depictions,
     sc2selfies,
 )
 
@@ -59,7 +57,7 @@ def test_crossover_points():
     for i in range(6):
         try:
             tanimoto = test_rediscover_paracetamol(
-                n_crossover_points=i, mutation_rate=0.15, max_gen=500, pop_size=50
+                n_crossover_points=i, mutation_rate=0.15, max_gen=100, pop_size=50
             )
             tanimoto_list.append(tanimoto)
         except InvalidInput:
@@ -77,7 +75,7 @@ def test_mutation_rate():
     for j in np.linspace(0.05, 0.55, 5, endpoint=False):
         mutation_rate = np.round(j, 2)
         tanimoto = test_rediscover_paracetamol(
-            n_crossover_points=1, mutation_rate=mutation_rate, max_gen=500, pop_size=50
+            n_crossover_points=1, mutation_rate=mutation_rate, max_gen=100, pop_size=50
         )
         tanimoto_list.append(tanimoto)
     print(

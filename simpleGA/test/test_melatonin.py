@@ -25,7 +25,7 @@ def test_melatonin_logp():
             range(n_starting_genes)
         ),  # We do not modify the melatonin molecule
         fitness_function=fitness_function_selfies(1),  # See fitness_functions_selfies
-        max_gen=100,  # This is a simple test
+        max_gen=25,  # This is a simple test
         random_state=420,
         logger_file="melatonin_logp.log",
         verbose=True,

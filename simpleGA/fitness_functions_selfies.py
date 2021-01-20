@@ -44,6 +44,12 @@ def fitness_function_target_property(
             sc2mv(chromosome), target, score_modifier_number, parameter
         )
 
+    if function_number == 9:  # sc2gap homo-lumo gap
+
+        return lambda chromosome: score_modifier(
+            sc2gap(chromosome), target, score_modifier_number, parameter
+        )
+
 
 def fitness_function_target_selfies(target_selfie, function_number=1):
 

@@ -205,21 +205,21 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 if self.allowed_mutation_genes is not None:
                     full_offspring[mask_allowed] = offspring[:]
                     offspring = full_offspring
-                logger.debug(
+                logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
                 valid_smiles = check_selfie_chars(offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
-                    logger.debug(
+                    logger.trace(
                         "Counter in create offspring exceeded {0}, using default.".format(
                             self.max_counter
                         )
                     )
                     valid_smiles = True
                     offspring = backup_first_parent
-            logger.debug("Final offspring chromosome: {0}".format(offspring))
+            logger.trace("Final offspring chromosome: {0}".format(offspring))
             return offspring
 
         if offspring_number == "second":
@@ -238,7 +238,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 if self.allowed_mutation_genes is not None:
                     full_offspring[mask_allowed] = offspring[:]
                     offspring = full_offspring
-                logger.debug(
+                logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
                 valid_smiles = check_selfie_chars(offspring)
@@ -252,7 +252,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                     )
                     valid_smiles = True
                     offspring = backup_sec_parent
-            logger.debug("Final offspring chromosome: {0}".format(offspring))
+            logger.trace("Final offspring chromosome: {0}".format(offspring))
             return offspring
 
     def mutate_population(self, population, n_mutations):
@@ -273,7 +273,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             while not valid_smiles:
                 backup_gene = population[i, j]
                 population[i, j] = np.random.choice(self.alphabet, size=1)[0]
-                logger.debug(
+                logger.trace(
                     "Mutated chromosome attempt {0}: {1}".format(
                         counter, population[i, :]
                     )

@@ -34,7 +34,7 @@ def test_celecoxib():
         fitness_function=fitness_function_target_property(
             target=0.5, function_number=1, score_modifier_number=3
         ),  # See fitness_functions_selfies, this is logp
-        max_gen=50,  # This is a simple test and this run is more expensive
+        max_gen=25,  # This is a simple test and this run is more expensive
         pop_size=10,  # So we reduce the size of everything
         random_state=420,
         logger_level="INFO",

@@ -23,7 +23,7 @@ def calculate_fitness_cache(self, population):
     :return: the fitness of the current population
     """
     fitness = np.zeros(shape=population.shape[0], dtype=float)
-    logger.debug("Evaluating fitness individually with cache.")
+    logger.trace("Evaluating fitness individually with cache.")
 
     for i in range(population.shape[0]):
         chromosome = population[i][0 : self.n_genes]
@@ -32,7 +32,7 @@ def calculate_fitness_cache(self, population):
             selfies, self.n_genes, self.fitness_function
         )
 
-    logger.debug(calculate_one_fitness_cache.cache_info())
+    logger.trace(calculate_one_fitness_cache.cache_info())
     return fitness
 
 

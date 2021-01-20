@@ -63,7 +63,7 @@ def sc2mol_structure(chromosome, lot=0):
     if lot == 0:
         return get_structure_ff(mol, n_confs=5)
     if lot == 1:
-        exit()
+        return get_structure_ff(mol, n_confs=10)
 
 
 def sc2logp(chromosome):

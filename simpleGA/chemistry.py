@@ -237,6 +237,7 @@ def get_confs_ff(mol, maxiters=250):
         energies_list = [e[1] for e in energies]
         min_e_index = energies_list.index(min(energies_list))
         mol_structure.AddConformer(mol.GetConformer(min_e_index))
+        return mol_structure
     elif Chem.rdForceFieldHelpers.UFFHasAllMoleculeParams(mol):
         energies = AllChem.UFFOptimizeMoleculeConfs(
             mol, maxIters=maxiters, vdwThresh=15.0
@@ -244,13 +245,14 @@ def get_confs_ff(mol, maxiters=250):
         energies_list = [e[1] for e in energies]
         min_e_index = energies_list.index(min(energies_list))
         mol_structure.AddConformer(mol.GetConformer(min_e_index))
+        return mol_structure
     else:
         logger.warning(
             "Could not generate structures using FF and rdkit typing. SMILES {0}".format(
                 mol2smi(mol)
             )
         )
-    return mol_structure
+        return mol
 
 
 def prune_mol_conformers(mol, energies_list):

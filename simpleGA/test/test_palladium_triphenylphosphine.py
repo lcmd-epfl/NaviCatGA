@@ -12,34 +12,33 @@ from simpleGA.wrappers import (
 )
 
 
-def test_biphenyl():
+def test_palladium_triphenylphosphine():
 
-    starting_smiles = "C1=CC=C(C=C1)C2=CC=CC=C2"
+    starting_smiles = "[Pd].C1=CC=C(C=C1)P(C2=CC=CC=C2)C3=CC=CC=C3.C1=CC=C(C=C1)P(C2=CC=CC=C2)C3=CC=CC=C3.C1=CC=C(C=C1)P(C2=CC=CC=C2)C3=CC=CC=C3.C1=CC=C(C=C1)P(C2=CC=CC=C2)C3=CC=CC=C3"
     starting_selfies = [encoder(starting_smiles)]
     n_starting_genes = count_selfie_chars(starting_selfies[0])
     print(
-        "This test attempts to modify biphenyl to target a given property. \n The starting SMILES is : {0} \n The starting SELFIES is : {1} \n The number of genes required is : {2}".format(
+        "This test attempts to generate palladium triphenylphosphine derivatives to target a given property. \n The starting SMILES is : {0} \n The starting SELFIES is : {1} \n The number of genes required is : {2}".format(
             starting_smiles, starting_selfies, n_starting_genes
         )
     )
 
-    # We will now tailor molecular volume to 350
+    # We will now tailor the molecule to a property
     solver = SelfiesGenAlgSolver(
-        starting_selfies=starting_selfies,  # We start the run from the biphenyl molecule
-        n_genes=int(n_starting_genes * 2),  # We need at least n_starting_genes
-        excluded_genes=list(
-            range(n_starting_genes)
-        ),  # We do not modify the biphenyl molecule
+        starting_selfies=starting_selfies,  # We start the run from the molecule
+        n_genes=int(n_starting_genes * 1.10),  # We need at least n_starting_genes
+        excluded_genes=[0],  # We do not modify some of the genes of the molecule
         fitness_function=fitness_function_target_property(
-            target=350.0, function_number=6, score_modifier_number=2
-        ),  # See fitness_functions_selfies, this is mv
-        max_gen=25,  # This is a simple test and this run is more expensive
+            target=250, function_number=6, score_modifier_number=1
+        ),  # See fitness_functions_selfies
+        max_gen=10,  # This is a simple test and this run is more expensive
         pop_size=10,  # So we reduce the size of everything
         random_state=420,
         logger_level="INFO",
-        logger_file="biphenyl_mv.log",
+        logger_file="palladium_triphenylphosphine_mv.log",
         verbose=True,
         progress_bars=True,
+        lru_cache=True,
     )
     solver.solve()
     print(
@@ -51,9 +50,9 @@ def test_biphenyl():
         "The corresponding SMILES is : {0}".format(sc2smiles(solver.best_individual_))
     )
     mol = sc2mol_structure(solver.best_individual_)
-    mol_structure2depictions(mol, root_name="biphenyl_mv")
+    mol_structure2depictions(mol, root_name="palladium_triphenylphosphine_mv")
     print("The corresponding mv is : {0}".format(sc2mv(solver.best_individual_)))
 
 
 if __name__ == "__main__":
-    test_biphenyl()
+    test_palladium_triphenylphosphine()

@@ -7,14 +7,14 @@ from simpleGA.fitness_functions_selfies import fitness_function_target_property
 def test_target_property():
     starting_selfies = ["[C][O]"]
     solver = SelfiesGenAlgSolver(
-        n_genes=10,
-        pop_size=50,
-        max_gen=100,
+        n_genes=4,
+        pop_size=10,
+        max_gen=25,
         fitness_function=fitness_function_target_property(
-            function_number=1, target=0.5
-        ),  # logp target
+            function_number=9, target=0.1
+        ),  # homo-lumo gap
         starting_selfies=starting_selfies,
-        excluded_genes=[0, 1],
+        excluded_genes=[0],
         random_state=666,
         logger_level="INFO",
         n_crossover_points=1,
@@ -22,6 +22,7 @@ def test_target_property():
         progress_bars=True,
         to_file=False,
         to_stdout=True,
+        lru_cache=True,
     )
     solver.solve()
 

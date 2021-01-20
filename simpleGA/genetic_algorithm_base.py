@@ -156,7 +156,7 @@ class GenAlgSolver:
                 self.logger.info("Generation: {0}".format(gen_n))
                 self.logger.info("Best fitness: {0}".format(fitness[0]))
                 self.logger.info("Best individual: {0}".format(population[0, :]))
-                self.logger.debug(
+                self.logger.trace(
                     "Population at generation: {0}: {1}".format(gen_n, population)
                 )
 
