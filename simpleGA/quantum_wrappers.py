@@ -1,7 +1,7 @@
 import logging
 import numpy as np
 from rdkit import Chem, RDLogger
-from pyscf import gto, scf, dft, semiempirical
+from pyscf import gto, dft, semiempirical
 from simpleGA.wrappers import sc2mol_structure
 from simpleGA.chemistry import timed_decoder
 
@@ -34,7 +34,7 @@ def sc2gap(chromosome, lot=0):
             )
         )
         logger.debug(m)
-        e_homo = -1e6
+        e_homo = 1e6
         e_lumo = 0
     return e_lumo - e_homo
 

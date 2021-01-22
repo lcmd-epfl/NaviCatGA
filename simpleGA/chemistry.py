@@ -132,8 +132,9 @@ def get_selfie_chars(selfie, maxchars):
         selfie = selfie[selfie.find("]") + 1 :]
     if len(chars_selfie) > maxchars:
         logger.warning(
-            "Exceedingly long SELFIES produced. Will be truncated. Value :",
-            chars_selfie,
+            "Exceedingly long SELFIES produced. Will be truncated. Value :{0}".format(
+                chars_selfie
+            )
         )
         chars_selfie = chars_selfie[0 : maxchars - 1]
     if len(chars_selfie) < maxchars:

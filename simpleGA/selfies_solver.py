@@ -15,7 +15,7 @@ from simpleGA.chemistry import (
     check_selfie_chars,
     randomize_selfies,
 )
-from simpleGA.exceptions import NoFitnessFunction, InvalidInput
+from simpleGA.exceptions import InvalidInput
 from simpleGA.exception_messages import exception_messages
 from rdkit import rdBase
 

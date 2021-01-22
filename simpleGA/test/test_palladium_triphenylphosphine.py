@@ -29,10 +29,10 @@ def test_palladium_triphenylphosphine():
         n_genes=int(n_starting_genes * 1.10),  # We need at least n_starting_genes
         excluded_genes=[0],  # We do not modify some of the genes of the molecule
         fitness_function=fitness_function_target_property(
-            target=250, function_number=6, score_modifier_number=1
+            target=350, function_number=6, score_modifier_number=1
         ),  # See fitness_functions_selfies
-        max_gen=10,  # This is a simple test and this run is more expensive
-        pop_size=10,  # So we reduce the size of everything
+        max_gen=5,  # This is a simple test and this run is more expensive
+        pop_size=4,  # So we reduce the size of everything
         random_state=420,
         logger_level="INFO",
         logger_file="palladium_triphenylphosphine_mv.log",

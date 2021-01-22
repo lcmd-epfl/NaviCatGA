@@ -9,6 +9,7 @@ from simpleGA.wrappers import (
     sc2smiles,
     sc2tanimoto_to_target,
     sc2selfies,
+    sc2depictions,
 )
 
 
@@ -48,6 +49,10 @@ def test_rediscover_paracetamol(
         )
     )
     print("       Its SELFIES is : {0}".format(sc2selfies(solver.best_individual_)))
+    sc2depictions(
+        solver.best_individual_,
+        "benchmark_{0}_{1}_{2}".format(n_crossover_points, mutation_rate, max_gen),
+    )
     return sc2tanimoto_to_target(solver.best_individual_, target_selfies)
 
 

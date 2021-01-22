@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+
+from simpleGA.selfies_solver import SelfiesGenAlgSolver
+from simpleGA.score_modifiers import score_modifier
+from simpleGA.wrappers import sc2smiles, sc2mol_structure, mol_structure2depictions
+from simpleGA.quantum_wrappers import sc2gap
+from simpleGA.wrappers import sc2logp, sc2mw
+
+
+def fitness_function_wrapper(target_1, target_2, target_3):
+
+    return (
+        lambda chromosome: (
+            0.4 * score_modifier(sc2gap(chromosome, lot=0), target_1, 3)
+            + 0.4 * score_modifier(sc2logp(chromosome), target_2, 1)
+            + 0.2 * score_modifier(sc2mw(chromosome), target_3, 3)
+        )
+        / 3
+    )
+
+
+def test_real_application():
+    starting_selfies = ["[C][O][=C][C][=N][Ring_1]"]
+    solver = SelfiesGenAlgSolver(
+        n_genes=15,
+        pop_size=10,
+        max_gen=10,
+        fitness_function=fitness_function_wrapper(
+            target_1=0.05,
+            target_2=0.1,
+            target_3=65,
+        ),  # homo-lumo gap, logp
+        starting_selfies=starting_selfies,
+        starting_stoned=True,
+        excluded_genes=[0],
+        mutation_rate=0.05,
+        selection_rate=0.4,
+        random_state=666,
+        n_crossover_points=1,
+        verbose=False,
+        progress_bars=True,
+        to_file=True,
+        to_stdout=False,
+        logger_level="INFO",
+        logger_file="real_application.log",
+        lru_cache=True,
+        show_stats=True,
+    )
+    solver.solve()
+    print(
+        "After optimization, the corresponding SMILES is : {0}".format(
+            sc2smiles(solver.best_individual_)
+        )
+    )
+    print(
+        "It has properties: \n HOMO-LUMO gap : {0} \n LogP : {1} \n Molecular weight : {2}".format(
+            sc2gap(solver.best_individual_),
+            sc2logp(solver.best_individual_),
+            sc2mw(solver.best_individual_),
+        )
+    )
+    mol = sc2mol_structure(solver.best_individual_)
+    mol_structure2depictions(mol, "real_application")
+
+
+if __name__ == "__main__":
+    test_real_application()

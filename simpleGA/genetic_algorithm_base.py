@@ -367,7 +367,7 @@ class GenAlgSolver:
         """
 
         plt.figure(figsize=(7, 7))
-        x = np.arange(1, iterations + 1)
+        x = np.arange(1, iterations + 2)
         plt.plot(x, mean_fitness, label="mean fitness")
         plt.plot(x, max_fitness, label="max fitness")
         plt.legend()
