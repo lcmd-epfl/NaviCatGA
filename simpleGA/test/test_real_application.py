@@ -2,9 +2,13 @@
 
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.score_modifiers import score_modifier
-from simpleGA.wrappers import sc2smiles, sc2mol_structure, mol_structure2depictions
-from simpleGA.quantum_wrappers import sc2gap
-from simpleGA.wrappers import sc2logp, sc2mw
+from simpleGA.wrappers_selfies import (
+    sc2smiles,
+    sc2mol_structure,
+    mol_structure2depictions,
+)
+from simpleGA.quantum_wrappers_selfies import sc2gap
+from simpleGA.wrappers_selfies import sc2logp, sc2mw
 
 
 def fitness_function_wrapper(target_1, target_2, target_3):
@@ -19,7 +23,7 @@ def fitness_function_wrapper(target_1, target_2, target_3):
     )
 
 
-def test_real_application():
+def test_real_application_16():
     starting_selfies = ["[C][O][=C][C][=N][Ring_1]"]
     solver = SelfiesGenAlgSolver(
         n_genes=15,
@@ -64,4 +68,4 @@ def test_real_application():
 
 
 if __name__ == "__main__":
-    test_real_application()
+    test_real_application_16()

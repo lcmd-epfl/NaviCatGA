@@ -3,8 +3,8 @@
 from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_target_property
-from simpleGA.chemistry import count_selfie_chars
-from simpleGA.wrappers import (
+from simpleGA.chemistry_selfies import count_selfie_chars
+from simpleGA.wrappers_selfies import (
     sc2smiles,
     sc2mv,
     sc2mol_structure,
@@ -12,7 +12,7 @@ from simpleGA.wrappers import (
 )
 
 
-def test_biphenyl():
+def test_biphenyl_05():
 
     starting_smiles = "C1=CC=C(C=C1)C2=CC=CC=C2"
     starting_selfies = [encoder(starting_smiles)]
@@ -56,4 +56,4 @@ def test_biphenyl():
 
 
 if __name__ == "__main__":
-    test_biphenyl()
+    test_biphenyl_05()

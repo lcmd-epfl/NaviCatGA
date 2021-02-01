@@ -3,10 +3,14 @@
 from selfies import decoder, encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_target_selfies
-from simpleGA.wrappers import sc2smiles, sc2mol_structure, mol_structure2depictions
+from simpleGA.wrappers_selfies import (
+    sc2smiles,
+    sc2mol_structure,
+    mol_structure2depictions,
+)
 
 
-def test_tanimoto_methane():
+def test_tanimoto_methane_19():
 
     target_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
     target_selfies = encoder(target_smiles)
@@ -44,7 +48,7 @@ def test_tanimoto_methane():
     mol_structure2depictions(mol, root_name="tanimoto_methane")
 
 
-def test_tanimoto_random():
+def test_tanimoto_random_20():
 
     target_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
     target_selfies = encoder(target_smiles)
@@ -82,7 +86,7 @@ def test_tanimoto_random():
     mol_structure2depictions(mol, root_name="tanimoto_random")
 
 
-def test_levenshtein_methane():
+def test_levenshtein_methane_21():
 
     target_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
     target_selfies = encoder(target_smiles)
@@ -115,7 +119,7 @@ def test_levenshtein_methane():
     mol_structure2depictions(mol, root_name="levenshtein_methane")
 
 
-def test_levenshtein_random():
+def test_levenshtein_random_22():
 
     target_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
     target_selfies = encoder(target_smiles)
@@ -149,7 +153,7 @@ def test_levenshtein_random():
 
 
 if __name__ == "__main__":
-    test_tanimoto_methane()
-    test_tanimoto_random()
-    test_levenshtein_methane()
-    test_levenshtein_random()
+    test_tanimoto_methane_19()
+    test_tanimoto_random_20()
+    test_levenshtein_methane_21()
+    test_levenshtein_random_22()

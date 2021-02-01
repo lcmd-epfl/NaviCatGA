@@ -3,8 +3,8 @@
 from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_target_property
-from simpleGA.chemistry import count_selfie_chars
-from simpleGA.wrappers import (
+from simpleGA.chemistry_selfies import count_selfie_chars
+from simpleGA.wrappers_selfies import (
     sc2smiles,
     sc2mv,
     sc2mol_structure,
@@ -12,7 +12,7 @@ from simpleGA.wrappers import (
 )
 
 
-def test_palladium_triphenylphosphine():
+def test_palladium_triphenylphosphine_15():
 
     starting_smiles = "[Pd].C1=CC=C(C=C1)P(C2=CC=CC=C2)C3=CC=CC=C3.C1=CC=C(C=C1)P(C2=CC=CC=C2)C3=CC=CC=C3.C1=CC=C(C=C1)P(C2=CC=CC=C2)C3=CC=CC=C3.C1=CC=C(C=C1)P(C2=CC=CC=C2)C3=CC=CC=C3"
     starting_selfies = [encoder(starting_smiles)]
@@ -55,4 +55,4 @@ def test_palladium_triphenylphosphine():
 
 
 if __name__ == "__main__":
-    test_palladium_triphenylphosphine()
+    test_palladium_triphenylphosphine_15()

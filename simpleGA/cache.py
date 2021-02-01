@@ -2,8 +2,8 @@ import numpy as np
 import types
 import logging
 from functools import lru_cache
-from simpleGA.chemistry import get_selfie_chars
-from simpleGA.wrappers import sc2selfies
+from simpleGA.chemistry_selfies import get_selfie_chars
+from simpleGA.wrappers_selfies import sc2selfies
 
 logger = logging.getLogger(__name__)
 

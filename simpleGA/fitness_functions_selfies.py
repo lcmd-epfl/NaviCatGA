@@ -1,7 +1,7 @@
 import logging
 
 from simpleGA.score_modifiers import score_modifier
-from simpleGA.wrappers import (
+from simpleGA.wrappers_selfies import (
     sc2logp,
     sc2ilogp,
     sc2mw,
@@ -12,7 +12,7 @@ from simpleGA.wrappers import (
     sc2tanimoto_to_target,
     sc2krr,
 )
-from simpleGA.quantum_wrappers import (
+from simpleGA.quantum_wrappers_selfies import (
     sc2gap,
     sc2ehomo,
     sc2elumo,

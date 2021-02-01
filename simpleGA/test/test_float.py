@@ -4,7 +4,7 @@ from simpleGA.continuous_solver import ContinuousGenAlgSolver
 from simpleGA.fitness_functions_float import fitness_function_float
 
 
-def test_float_1():
+def test_float_08():
     solver = ContinuousGenAlgSolver(
         n_genes=6,
         pop_size=50,
@@ -36,7 +36,7 @@ def test_float_1():
     )
 
 
-def test_float_2():
+def test_float_09():
     solver = ContinuousGenAlgSolver(
         n_genes=6,
         pop_size=50,
@@ -68,7 +68,7 @@ def test_float_2():
     )
 
 
-def test_float_3():
+def test_float_10():
     solver = ContinuousGenAlgSolver(
         n_genes=6,
         pop_size=50,
@@ -101,6 +101,6 @@ def test_float_3():
 
 
 if __name__ == "__main__":
-    test_float_1()
-    test_float_2()
-    test_float_3()
+    test_float_08()
+    test_float_09()
+    test_float_10()

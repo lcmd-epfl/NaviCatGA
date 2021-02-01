@@ -4,7 +4,7 @@ from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_target_property
 
 
-def test_target_property():
+def test_target_property_18():
     starting_selfies = ["[C][O]"]
     solver = SelfiesGenAlgSolver(
         n_genes=4,
@@ -28,4 +28,4 @@ def test_target_property():
 
 
 if __name__ == "__main__":
-    test_target_property()
+    test_target_property_18()

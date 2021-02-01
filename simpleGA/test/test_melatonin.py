@@ -3,11 +3,15 @@
 from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_selfies
-from simpleGA.chemistry import count_selfie_chars
-from simpleGA.wrappers import sc2smiles, sc2mol_structure, mol_structure2depictions
+from simpleGA.chemistry_selfies import count_selfie_chars
+from simpleGA.wrappers_selfies import (
+    sc2smiles,
+    sc2mol_structure,
+    mol_structure2depictions,
+)
 
 
-def test_melatonin_logp():
+def test_melatonin_logp_11():
     starting_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
     starting_selfies = [encoder(starting_smiles)]
     n_starting_genes = count_selfie_chars(starting_selfies[0])
@@ -43,7 +47,7 @@ def test_melatonin_logp():
     mol_structure2depictions(mol, root_name="melatonin_logp")
 
 
-def test_melatonin_ilogp():
+def test_melatonin_ilogp_12():
     starting_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
     starting_selfies = [encoder(starting_smiles)]
     n_starting_genes = count_selfie_chars(starting_selfies[0])
@@ -81,7 +85,7 @@ def test_melatonin_ilogp():
     mol_structure2depictions(mol, root_name="melatonin_ilogp")
 
 
-def test_melatonin_mw():
+def test_melatonin_mw_13():
     starting_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
     starting_selfies = [encoder(starting_smiles)]
     n_starting_genes = count_selfie_chars(starting_selfies[0])
@@ -119,7 +123,7 @@ def test_melatonin_mw():
     mol_structure2depictions(mol, root_name="melatonin_mw")
 
 
-def test_melatonin_mv():
+def test_melatonin_mv_14():
     starting_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
     starting_selfies = [encoder(starting_smiles)]
     n_starting_genes = count_selfie_chars(starting_selfies[0])
@@ -160,7 +164,7 @@ def test_melatonin_mv():
 
 
 if __name__ == "__main__":
-    test_melatonin_logp()
-    test_melatonin_ilogp()
-    test_melatonin_mw()
-    test_melatonin_mv()
+    test_melatonin_logp_11()
+    test_melatonin_ilogp_12()
+    test_melatonin_mw_13()
+    test_melatonin_mv_14()

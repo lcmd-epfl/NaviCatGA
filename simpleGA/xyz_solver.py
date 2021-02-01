@@ -1,19 +1,15 @@
 from typing import Sequence
 import logging
-import random
 import numpy as np
 
-from selfies import (
-    get_alphabet_from_selfies,
-    get_semantic_robust_alphabet,
-    set_semantic_constraints,
-)
 from simpleGA.genetic_algorithm_base import GenAlgSolver
-from simpleGA.chemistry_selfies import (
-    sanitize_multiple_smiles,
-    get_selfie_chars,
-    check_selfie_chars,
-    randomize_selfies,
+from simpleGA.chemistry_xyz import (
+    get_starting_xyz_fromfile,
+    get_starting_xyz_fromsmi,
+    pad_xyz_list,
+    check_xyz,
+    get_default_dictionary,
+    get_dictionary_from_path,
 )
 from simpleGA.exceptions import InvalidInput
 from simpleGA.exception_messages import exception_messages
@@ -23,27 +19,27 @@ from rdkit import rdBase
 logger = logging.getLogger(__name__)
 
 
-class SelfiesGenAlgSolver(GenAlgSolver):
+class XYZGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
         n_genes: int,
-        starting_selfies: list = ["[nop]"],
+        starting_scaffolds: list = [],
+        starting_xyz: list = [],
         starting_random: bool = False,
         starting_stoned: bool = False,
-        alphabet_list: list = list(get_semantic_robust_alphabet()),
+        alphabet_choice: str = "default",
         fitness_function=None,
-        max_gen: int = 500,
-        pop_size: int = 100,
+        max_gen: int = 5,
+        pop_size: int = 5,
         mutation_rate: float = 0.05,
         selection_rate: float = 0.25,
         selection_strategy: str = "tournament",
         verbose: bool = True,
         show_stats: bool = False,
         plot_results: bool = False,
-        excluded_genes: Sequence = None,
+        excluded_genes: Sequence = [0],
         variables_limits: dict = None,
         n_crossover_points: int = 1,
-        branching: bool = False,
         max_counter: int = 10,
         random_state: int = None,
         logger_file: str = "output.log",
@@ -53,6 +49,12 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         progress_bars: bool = False,
         lru_cache: bool = False,
     ):
+        if starting_scaffolds:
+            starting_xyz = get_starting_xyz_fromfile(starting_scaffolds)
+        if alphabet_choice == "default":
+            self.alphabet = get_default_dictionary()
+        else:
+            self.alphabet = get_dictionary_from_path(alphabet_choice)
 
         GenAlgSolver.__init__(
             self,
@@ -78,23 +80,10 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         )
 
         if variables_limits is not None:
-            set_semantic_constraints(variables_limits)
+            pass  # TBD
 
-        self.branching = branching
-        if self.branching:
-            tuples = [
-                (i + 1, j + 1) for i in range(self.n_genes) for j in range(self.n_genes)
-            ]
-            for i in tuples:
-                if i[0] == i[1]:
-                    pass
-                else:
-                    # alphabet.add("[Branch{0}_{1}]".format(i[0], i[1]))
-                    pass
-        self.alphabet = list(sorted(alphabet_list))
-
-        if not isinstance(starting_selfies, list):
-            raise (InvalidInput(exception_messages["StartingSelfiesNotAList"]))
+        if not isinstance(starting_xyz, list):
+            raise (InvalidInput(exception_messages["StartingXYZNotAList"]))
         if not self.alphabet:
             raise (InvalidInput(exception_messages["AlphabetIsEmpty"]))
         if self.n_crossover_points > self.n_genes:
@@ -103,49 +92,53 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             raise (InvalidInput(exception_messages["TooFewCrossoverPoints"]))
         if starting_random and starting_stoned:
             raise (InvalidInput(exception_messages["ConflictedRandomStoned"]))
-        if starting_stoned and (len(starting_selfies) != 1):
+        if starting_stoned and (len(starting_xyz) != 1):
             raise (InvalidInput(exception_messages["ConflictedStonedStarting"]))
 
         if starting_random:
-            logger.warning(
-                "Randomizing starting population. Any starting chromosomes will be overwritten."
-            )
-            starting_selfies = list([""] * self.pop_size)
-            for i in range(self.pop_size):
-                for j in range(random.randint(1, self.n_genes)):
-                    starting_selfies[i] += np.random.choice(self.alphabet, size=1)[0]
+            pass  # TBD
+            # logger.warning(
+            #     "Randomizing starting population. Any starting chromosomes will be overwritten."
+            # )
+            # starting_xyz = list([""] * self.pop_size)
+            # for i in range(self.pop_size):
+            #     for j in range(random.randint(1, self.n_genes)):
+            #         starting_xyz[i] += np.random.choice(self.alphabet, size=1)[0]
         elif starting_stoned:
-            starting_selfies = randomize_selfies(
-                starting_selfies[0], num_random=self.pop_size
-            )
-        if len(starting_selfies) < self.pop_size:
-            n_patch = self.pop_size - len(starting_selfies)
+            pass  # TBD
+            # starting_xyz = randomize_xyz(
+            #     starting_selfies[0], num_random=self.pop_size
+            # )
+        if len(starting_xyz) < self.pop_size:
+            n_patch = self.pop_size - len(starting_xyz)
             for i in range(n_patch):
-                starting_selfies.append(np.random.choice(starting_selfies, size=1)[0])
-        elif len(starting_selfies) > self.pop_size:
-            n_remove = len(starting_selfies) - self.pop_size
+                starting_xyz.append(
+                    np.random.choice(starting_xyz, size=1)[0]
+                )  # OKAYISH
+        elif len(starting_xyz) > self.pop_size:
+            n_remove = len(starting_xyz) - self.pop_size
             for i in range(n_remove):
-                starting_selfies.remove(np.random.choice(starting_selfies, size=1)[0])
-        assert len(starting_selfies) == self.pop_size
-        self.starting_selfies = starting_selfies
+                starting_xyz.remove(
+                    np.random.choice(starting_xyz, size=1)[0]
+                )  # MIGHT BE IMPROVABLE
+        assert len(starting_xyz) == self.pop_size
+        self.starting_xyz = starting_xyz
         self.max_counter = int(max_counter)
 
     def initialize_population(self):
         """
         Initializes the population of the problem according to the
         population size and number of genes and according to the problem
-        type (SELFIES elements here).
+        type (XYZ fragmenta here).
         :return: a numpy array with a sanitized initialized population
         """
 
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype=object)
 
         for i in range(self.pop_size):
-            logger.debug(
-                "Getting selfie chars from {0}".format(self.starting_selfies[i])
-            )
-            chromosome = get_selfie_chars(self.starting_selfies[i], self.n_genes)
-            assert check_selfie_chars(chromosome)
+            logger.debug("Getting scaffold from:\n {0}".format(self.starting_xyz[i]))
+            chromosome = pad_xyz_list(self.starting_xyz[i], self.n_genes)
+            assert check_xyz(chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Initial population: {0}".format(population))
@@ -208,7 +201,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_smiles = check_selfie_chars(offspring)
+                valid_smiles = check_xyz(offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -241,7 +234,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_smiles = check_selfie_chars(offspring)
+                valid_smiles = check_xyz(offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -265,9 +258,9 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         """
 
         valid_smiles = False
-        mutation_rows, mutation_cols = super(
-            SelfiesGenAlgSolver, self
-        ).mutate_population(population, n_mutations)
+        mutation_rows, mutation_cols = super(XYZGenAlgSolver, self).mutate_population(
+            population, n_mutations
+        )
         for i, j in zip(mutation_rows, mutation_cols):
             counter = 0
             while not valid_smiles:
@@ -278,7 +271,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                         counter, population[i, :]
                     )
                 )
-                valid_smiles = check_selfie_chars(population[i, :])
+                valid_smiles = check_xyz(population[i, :])
                 counter += 1
                 if counter > self.max_counter:
                     logger.debug(
@@ -293,20 +286,20 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         return population
 
 
-def test_benzene_selfies():
-    from simpleGA.fitness_functions_selfies import fitness_function_selfies
+def test_benzene_xyz():
+    from simpleGA.fitness_functions_xyz import fitness_function_xyz
 
-    starting_selfies = ["[C][C=][C][C=][C][C=][Ring1][Branch1_2]"]
-    solver = SelfiesGenAlgSolver(
-        n_genes=16,
+    starting_smiles = ["C1=CC=CC=C1"]
+    starting_xyz = get_starting_xyz_fromsmi(starting_smiles)
+    solver = XYZGenAlgSolver(
+        n_genes=5,
         pop_size=5,
-        max_gen=10,
-        fitness_function=fitness_function_selfies(2),
-        starting_selfies=starting_selfies,
-        excluded_genes=[0, 1, 2, 3, 4, 5, 6, 7, 8],
-        logger_level="INFO",
-        n_crossover_points=2,
-        verbose=False,
+        max_gen=5,
+        fitness_function=fitness_function_xyz(1),
+        starting_xyz=starting_xyz,
+        logger_level="TRACE",
+        n_crossover_points=1,
+        verbose=True,
         progress_bars=True,
         to_file=False,
         to_stdout=True,
@@ -315,4 +308,4 @@ def test_benzene_selfies():
 
 
 if __name__ == "__main__":
-    test_benzene_selfies()
+    test_benzene_xyz()

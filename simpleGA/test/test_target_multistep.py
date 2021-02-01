@@ -3,7 +3,7 @@
 from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_target_selfies
-from simpleGA.wrappers import (
+from simpleGA.wrappers_selfies import (
     sc2smiles,
     sc2selfies,
     sc2mol_structure,
@@ -11,7 +11,7 @@ from simpleGA.wrappers import (
 )
 
 
-def test_target_multistep():
+def test_target_multistep_17():
 
     target_smiles = "CC(=O)NCCc1c[nH]c2c1cc(cc2)OC"
     target_selfies = encoder(target_smiles)
@@ -73,4 +73,4 @@ def test_target_multistep():
 
 
 if __name__ == "__main__":
-    test_target_multistep()
+    test_target_multistep_17()

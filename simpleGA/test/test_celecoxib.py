@@ -3,8 +3,8 @@
 from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_target_property
-from simpleGA.chemistry import count_selfie_chars
-from simpleGA.wrappers import (
+from simpleGA.chemistry_selfies import count_selfie_chars
+from simpleGA.wrappers_selfies import (
     sc2smiles,
     sc2logp,
     sc2mol_structure,
@@ -12,7 +12,7 @@ from simpleGA.wrappers import (
 )
 
 
-def test_celecoxib():
+def test_celecoxib_07():
 
     starting_smiles = "CC1=CC=C(C=C1)C2=CC(=NN2C3=CC=C(C=C3)S(=O)(=O)N)C(F)(F)F"
     starting_selfies = [encoder(starting_smiles)]
@@ -36,7 +36,7 @@ def test_celecoxib():
         ),  # See fitness_functions_selfies, this is logp
         max_gen=25,  # This is a simple test and this run is more expensive
         pop_size=10,  # So we reduce the size of everything
-        random_state=420,
+        random_state=42069,
         logger_level="INFO",
         logger_file="celecoxib_logp.log",
         verbose=True,
@@ -57,4 +57,4 @@ def test_celecoxib():
 
 
 if __name__ == "__main__":
-    test_celecoxib()
+    test_celecoxib_07()

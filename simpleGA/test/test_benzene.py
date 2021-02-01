@@ -4,7 +4,7 @@ from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_selfies
 
 
-def test_benzene():
+def test_benzene_04():
     starting_selfies = ["[C][C=][C][C=][C][C=][Ring1][Branch1_2]"]
     solver = SelfiesGenAlgSolver(
         n_genes=16,
@@ -25,4 +25,4 @@ def test_benzene():
 
 
 if __name__ == "__main__":
-    test_benzene()
+    test_benzene_04()

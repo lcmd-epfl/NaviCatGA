@@ -3,11 +3,11 @@
 from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_selfies
-from simpleGA.chemistry import count_selfie_chars
-from simpleGA.wrappers import sc2smiles
+from simpleGA.chemistry_selfies import count_selfie_chars
+from simpleGA.wrappers_selfies import sc2smiles
 
 
-def test_ibuprofen_mv(lru_cache=False):
+def test_ibuprofen_mv_06(lru_cache=False):
     starting_smiles = "CC(C)Cc1ccc(cc1)[C@](C)C(=O)O"  # Ibuprofen
     starting_selfies = [encoder(starting_smiles)]
     n_starting_genes = count_selfie_chars(starting_selfies[0])
@@ -49,7 +49,7 @@ def test_ibuprofen_mv(lru_cache=False):
 
 
 if __name__ == "__main__":
-    t1 = test_ibuprofen_mv(lru_cache=False)
-    t2 = test_ibuprofen_mv(lru_cache=True)
+    t1 = test_ibuprofen_mv_06(lru_cache=False)
+    t2 = test_ibuprofen_mv_06(lru_cache=True)
     assert t1 > t2
     print("{0} seconds saved by cacheing.".format(t1 - t2))
