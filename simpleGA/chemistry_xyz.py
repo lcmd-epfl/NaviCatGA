@@ -6,15 +6,10 @@ from AaronTools.geometry import Geometry
 from AaronTools.fileIO import FileReader, read_types
 from AaronTools.substituent import Substituent
 
-from rdkit import RDLogger
-
 logger = logging.getLogger(__name__)
-lg = RDLogger.logger()
-lg.setLevel(RDLogger.ERROR)
-RDLogger.DisableLog("rdApp.*")
 
 
-def get_xyz_list(files):
+def get_starting_xyz_fromfile(files):
     reference = False
     xyz_list = []
     for i in files:
@@ -27,6 +22,20 @@ def get_xyz_list(files):
         xyz_list.append(geom)
     assert len(files) == len(xyz_list)
     return xyz_list
+
+
+def get_starting_xyz_fromsmi(smiles):
+    reference = False
+    xyz_list = []
+    for i in files:
+        geom = Geometry.from_string(i)
+        if reference:
+            geom.RMSD(ref_geom, align=True, heavy_only=True, sort=True)
+        else:
+            ref_geom = geom
+            reference = True
+        xyz_list.append(geom)
+    assert len(smiles) == len(xyz_list)
 
 
 def get_default_dictionary():
