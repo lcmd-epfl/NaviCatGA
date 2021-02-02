@@ -95,16 +95,7 @@ class XYZGenAlgSolver(GenAlgSolver):
         if starting_stoned and (len(starting_xyz) != 1):
             raise (InvalidInput(exception_messages["ConflictedStonedStarting"]))
 
-        if starting_random:
-            pass  # TBD
-            # logger.warning(
-            #     "Randomizing starting population. Any starting chromosomes will be overwritten."
-            # )
-            # starting_xyz = list([""] * self.pop_size)
-            # for i in range(self.pop_size):
-            #     for j in range(random.randint(1, self.n_genes)):
-            #         starting_xyz[i] += np.random.choice(self.alphabet, size=1)[0]
-        elif starting_stoned:
+        if starting_stoned:
             pass  # TBD
             # starting_xyz = randomize_xyz(
             #     starting_selfies[0], num_random=self.pop_size
@@ -122,6 +113,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                     np.random.choice(starting_xyz, size=1)[0]
                 )  # MIGHT BE IMPROVABLE
         assert len(starting_xyz) == self.pop_size
+        self.starting_random = starting_random
         self.starting_xyz = starting_xyz
         self.max_counter = int(max_counter)
 
@@ -138,6 +130,9 @@ class XYZGenAlgSolver(GenAlgSolver):
         for i in range(self.pop_size):
             logger.debug("Getting scaffold from:\n{0}".format(self.starting_xyz[i]))
             chromosome = pad_xyz_list(self.starting_xyz[i], self.n_genes)
+            if self.starting_random:
+                for j in range(1, self.n_genes):
+                    chromosome[j] = np.random.choice(self.alphabet, size=1)[0]
             assert check_xyz(chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
@@ -289,15 +284,17 @@ class XYZGenAlgSolver(GenAlgSolver):
 def test_cyclohexanes_xyz():
     from simpleGA.fitness_functions_xyz import fitness_function_xyz
 
-    starting_smiles = ["C1=CC=CC=C1", "C1CCCCC1"]
+    starting_smiles = ["C1CCCCC1"]
     starting_xyz = get_starting_xyz_fromsmi(starting_smiles)
     solver = XYZGenAlgSolver(
-        n_genes=7,
-        pop_size=2,
-        max_gen=2,
+        n_genes=13,
+        pop_size=5,
+        max_gen=10,
+        mutation_rate=0.10,
         fitness_function=fitness_function_xyz(1),
         starting_xyz=starting_xyz,
-        logger_level="DEBUG",
+        starting_random=True,
+        logger_level="INFO",
         n_crossover_points=1,
         verbose=True,
         progress_bars=True,

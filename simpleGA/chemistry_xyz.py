@@ -1,6 +1,7 @@
 import logging
 import numpy as np
 import os
+from copy import deepcopy
 from glob import glob
 from AaronTools.geometry import Geometry
 from AaronTools.fileIO import FileReader, read_types
@@ -59,7 +60,7 @@ def get_dictionary_from_path(path="dictionary"):
 def check_xyz(chromosome):
     """Check if a list of Geometries can lead to a valid structure."""
     logger.debug("Checking chromosome using scaffold:\n{0}".format(chromosome[0]))
-    scaffold = Geometry(chromosome[0])
+    scaffold = deepcopy(chromosome[0])
     target_list = []
     for gene in chromosome[1:]:
         if gene is not None:
