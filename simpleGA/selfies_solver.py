@@ -269,9 +269,9 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             SelfiesGenAlgSolver, self
         ).mutate_population(population, n_mutations)
         for i, j in zip(mutation_rows, mutation_cols):
+            backup_gene = population[i, j]
             counter = 0
             while not valid_smiles:
-                backup_gene = population[i, j]
                 population[i, j] = np.random.choice(self.alphabet, size=1)[0]
                 logger.trace(
                     "Mutated chromosome attempt {0}: {1}".format(

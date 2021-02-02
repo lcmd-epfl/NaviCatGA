@@ -9,10 +9,10 @@ from AaronTools.substituent import Substituent
 logger = logging.getLogger(__name__)
 
 
-def get_starting_xyz_fromfile(files):
+def get_starting_xyz_fromfile(file_list):
     reference = False
     xyz_list = []
-    for i in files:
+    for i in file_list:
         geom = Geometry(FileReader(i))
         if reference:
             geom.RMSD(ref_geom, align=True, heavy_only=True, sort=True)
@@ -20,14 +20,14 @@ def get_starting_xyz_fromfile(files):
             ref_geom = geom
             reference = True
         xyz_list.append(geom)
-    assert len(files) == len(xyz_list)
+    assert len(file_list) == len(xyz_list)
     return xyz_list
 
 
-def get_starting_xyz_fromsmi(smiles):
+def get_starting_xyz_fromsmi(smiles_list):
     reference = False
     xyz_list = []
-    for i in files:
+    for i in smiles_list:
         geom = Geometry.from_string(i)
         if reference:
             geom.RMSD(ref_geom, align=True, heavy_only=True, sort=True)
@@ -35,7 +35,8 @@ def get_starting_xyz_fromsmi(smiles):
             ref_geom = geom
             reference = True
         xyz_list.append(geom)
-    assert len(smiles) == len(xyz_list)
+    assert len(smiles_list) == len(xyz_list)
+    return xyz_list
 
 
 def get_default_dictionary():
@@ -57,14 +58,20 @@ def get_dictionary_from_path(path="dictionary"):
 
 def check_xyz(chromosome):
     """Check if a list of Geometries can lead to a valid structure."""
-    logger.debug("Checking chromosome using scaffold {0}".format(scaffold))
+    logger.debug("Checking chromosome using scaffold:\n{0}".format(chromosome[0]))
+    scaffold = Geometry(chromosome[0])
+    target_list = []
+    for gene in chromosome[1:]:
+        if gene is not None:
+            target_list.append(Substituent(gene))
+        if gene is None:
+            target_list.append(None)
+    h_positions = scaffold.find("H")
     try:
-        scaffold = chromosome[0]
-        target_list = [Substituent(i) for i in chromosome[1:]]
-        h_positions = scaffold.find["H"]
-        assert len(h_positions) <= len(target_list)
-        for i, atom in enumerate(h_positions):
-            scaffold.substitute(target_list[i], atom, minimize=True)
+        assert len(h_positions) >= len(target_list)
+        for i, j in enumerate(target_list):
+            if j is not None:
+                scaffold.substitute(j, h_positions[i], minimize=True)
         scaffold.refresh_connected()
         ok = True
     except Exception as m:
@@ -80,7 +87,5 @@ def pad_xyz_list(xyz, maxchars):
         logger.warning("Exceedingly long list produced. Will be truncated.")
         xyz_list = xyz_list[0 : maxchars - 1]
     if len(xyz_list) < maxchars:
-        xyz_list += [Geometry.from_string("[H]", form="smiles")] * (
-            maxchars - len(xyz_list)
-        )
+        xyz_list += [None] * (maxchars - len(xyz_list))
     return xyz_list
