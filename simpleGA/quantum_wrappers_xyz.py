@@ -3,6 +3,7 @@ import numpy as np
 from pyscf import gto, dft, semiempirical
 from simpleGA.wrappers_xyz import gl2geom
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -98,19 +99,25 @@ def geom2pyscf(geom, lot=0):
         pyscfmol.build()
         mf = semiempirical.RMINDO3(pyscfmol)
         mf.verbose = 1
-        mf.run(conv_tol=1e-6)  # UMINDO3 is an option as well
+        mf = mf.run(conv_tol=1e-6)
     if lot == 1:
-        pyscfmol.basis = "MINAO"
+        from pyscf import dftd3
+
+        pyscfmol.basis = "pcseg0"
         pyscfmol.build()
-        mf = dft.ROKS(pyscfmol)
+        mf = dftd3.dftd3(dft.ROKS(pyscfmol))
         mf.verbose = 1
         mf.xc = "pbe,pbe"
         mf = mf.density_fit().run(conv_tol=1e-6)
+        pyscfmol = optimize(mf)
     if lot == 2:
+        from pyscf.geomopt.berny_solver import optimize
+
         pyscfmol.basis = "pcseg0"
         pyscfmol.build()
         mf = dft.RKS(pyscfmol)
         mf.verbose = 1
         mf.xc = "b3lypg"
-        mf = mf.density_fit().run(conv_tol=1e-7)
+        mf = mf.density_fit().run(conv_tol=1e-6)
+        pyscfmol = optimize(mf)
     return pyscfmol, mf

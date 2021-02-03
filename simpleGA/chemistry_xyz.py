@@ -6,6 +6,7 @@ from glob import glob
 from AaronTools.geometry import Geometry
 from AaronTools.fileIO import FileReader, read_types
 from AaronTools.substituent import Substituent
+from simpleGA.wrappers_xyz import gl2geom
 
 logger = logging.getLogger(__name__)
 
@@ -60,25 +61,7 @@ def get_dictionary_from_path(path="dictionary"):
 def check_xyz(chromosome):
     """Check if a list of Geometries can lead to a valid structure."""
     logger.debug("Checking chromosome using scaffold:\n{0}".format(chromosome[0]))
-    scaffold = deepcopy(chromosome[0])
-    target_list = []
-    for gene in chromosome[1:]:
-        if gene is not None:
-            target_list.append(Substituent(gene))
-        if gene is None:
-            target_list.append(None)
-    h_positions = scaffold.find("H")
-    try:
-        assert len(h_positions) >= len(target_list)
-        for i, j in enumerate(target_list):
-            if j is not None:
-                scaffold.substitute(j, h_positions[i], minimize=True)
-        scaffold.refresh_connected()
-        ok = True
-    except Exception as m:
-        logger.debug(m)
-        ok = False
-    return ok
+    return gl2geom(chromosome)[0]
 
 
 def pad_xyz_list(xyz, maxchars):

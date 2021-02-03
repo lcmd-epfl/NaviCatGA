@@ -51,10 +51,15 @@ class XYZGenAlgSolver(GenAlgSolver):
     ):
         if starting_scaffolds:
             starting_xyz = get_starting_xyz_fromfile(starting_scaffolds)
+        alphabet = []
         if alphabet_choice == "default":
-            self.alphabet = get_default_dictionary()
+            alphabet = get_default_dictionary()
         else:
-            self.alphabet = get_dictionary_from_path(alphabet_choice)
+            alphabet = get_dictionary_from_path(alphabet_choice)
+        alphabet.append(None)
+        self.alphabet = alphabet
+        if len(self.alphabet) < 2:
+            raise (InvalidInput(exception_messages["AlphabetIsEmpty"]))
 
         GenAlgSolver.__init__(
             self,
@@ -84,8 +89,6 @@ class XYZGenAlgSolver(GenAlgSolver):
 
         if not isinstance(starting_xyz, list):
             raise (InvalidInput(exception_messages["StartingXYZNotAList"]))
-        if not self.alphabet:
-            raise (InvalidInput(exception_messages["AlphabetIsEmpty"]))
         if self.n_crossover_points > self.n_genes:
             raise (InvalidInput(exception_messages["TooManyCrossoverPoints"]))
         if self.n_crossover_points < 1:
