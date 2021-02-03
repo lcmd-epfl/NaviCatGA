@@ -4,8 +4,9 @@ import numpy as np
 
 from simpleGA.genetic_algorithm_base import GenAlgSolver
 from simpleGA.chemistry_xyz import (
-    get_starting_xyz_fromfile,
-    get_starting_xyz_fromsmi,
+    get_starting_xyz_from_file,
+    get_starting_xyz_from_path,
+    get_starting_xyz_from_smi,
     pad_xyz_list,
     check_xyz,
     get_default_dictionary,
@@ -24,6 +25,7 @@ class XYZGenAlgSolver(GenAlgSolver):
         self,
         n_genes: int,
         starting_scaffolds: list = [],
+        path_scaffolds: str = "",
         starting_xyz: list = [],
         starting_random: bool = False,
         starting_stoned: bool = False,
@@ -50,7 +52,9 @@ class XYZGenAlgSolver(GenAlgSolver):
         lru_cache: bool = False,
     ):
         if starting_scaffolds:
-            starting_xyz = get_starting_xyz_fromfile(starting_scaffolds)
+            starting_xyz = get_starting_xyz_from_file(starting_scaffolds)
+        if path_scaffolds:
+            starting_xyz = get_starting_xyz_from_path(path_scaffolds)
         alphabet = []
         if alphabet_choice == "default":
             alphabet = get_default_dictionary()
@@ -288,7 +292,7 @@ def test_cyclohexanes_xyz():
     from simpleGA.fitness_functions_xyz import fitness_function_xyz
 
     starting_smiles = ["C1CCCCC1"]
-    starting_xyz = get_starting_xyz_fromsmi(starting_smiles)
+    starting_xyz = get_starting_xyz_from_smi(starting_smiles)
     solver = XYZGenAlgSolver(
         n_genes=13,
         pop_size=5,

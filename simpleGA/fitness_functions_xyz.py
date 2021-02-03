@@ -14,6 +14,14 @@ def fitness_function_xyz(
 
         return lambda chromosome: gl2gap(chromosome)
 
+    if function_number == 2:  # gl2ehomo
+
+        return lambda chromosome: gl2ehomo(chromosome)
+
+    if function_number == 3:  # gl2elumo
+
+        return lambda chromosome: gl2elumo(chromosome)
+
 
 def fitness_function_target_property(
     target,
@@ -26,6 +34,24 @@ def fitness_function_target_property(
 
         return lambda chromosome: score_modifier(
             gl2gap(chromosome),
+            target,
+            score_modifier_number,
+            parameter,
+        )
+
+    if function_number == 2:
+
+        return lambda chromosome: score_modifier(
+            gl2ehomo(chromosome),
+            target,
+            score_modifier_number,
+            parameter,
+        )
+
+    if function_number == 3:
+
+        return lambda chromosome: score_modifier(
+            gl2elumo(chromosome),
             target,
             score_modifier_number,
             parameter,

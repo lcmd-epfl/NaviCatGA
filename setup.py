@@ -1,4 +1,3 @@
-
 from distutils.core import setup
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -14,7 +13,5 @@ setup(
     url="https://github.com/rlaplaza/GA_selfies",
     classifiers=["Programming Language :: Python :: 3"],
     packages=["simpleGA"],
-    package_dir={
-        "simpleGA": "simpleGA",
-    },
+    package_dir={"simpleGA": "simpleGA"},
 )

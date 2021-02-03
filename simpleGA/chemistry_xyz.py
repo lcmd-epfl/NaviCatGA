@@ -11,7 +11,22 @@ from simpleGA.wrappers_xyz import gl2geom
 logger = logging.getLogger(__name__)
 
 
-def get_starting_xyz_fromfile(file_list):
+def get_starting_xyz_from_path(path="scaffolds"):
+    reference = False
+    xyz_list = []
+    dictionary_directory = os.path.join(path, "*.xyz")
+    for i in glob(dictionary_directory):
+        geom = Geometry(FileReader(i))
+        if reference:
+            geom.RMSD(ref_geom, align=True, heavy_only=True, sort=True)
+        else:
+            ref_geom = geom
+            reference = True
+        xyz_list.append(geom)
+    return xyz_list
+
+
+def get_starting_xyz_from_file(file_list):
     reference = False
     xyz_list = []
     for i in file_list:
@@ -26,7 +41,7 @@ def get_starting_xyz_fromfile(file_list):
     return xyz_list
 
 
-def get_starting_xyz_fromsmi(smiles_list):
+def get_starting_xyz_from_smi(smiles_list):
     reference = False
     xyz_list = []
     for i in smiles_list:

@@ -3,14 +3,14 @@
 from simpleGA.xyz_solver import XYZGenAlgSolver
 from simpleGA.fitness_functions_xyz import fitness_function_xyz
 from simpleGA.chemistry_xyz import (
-    get_starting_xyz_fromsmi,
+    get_starting_xyz_from_smi,
 )
 from simpleGA.wrappers_xyz import gl2geom
 
 
 def test_benzene_xyz_23():
     starting_smiles = ["C1=CC=CC=C1"]
-    starting_xyz = get_starting_xyz_fromsmi(starting_smiles)
+    starting_xyz = get_starting_xyz_from_smi(starting_smiles)
     solver = XYZGenAlgSolver(
         n_genes=4,
         pop_size=10,
