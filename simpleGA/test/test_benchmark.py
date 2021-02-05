@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 import numpy as np
-from selfies import decoder, encoder
+from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.exceptions import InvalidInput
 from simpleGA.fitness_functions_selfies import fitness_function_target_selfies
 from simpleGA.wrappers_selfies import (
-    sc2smiles,
-    sc2tanimoto_to_target,
     sc2selfies,
+    sc2tanimoto_to_target,
     sc2depictions,
 )
 

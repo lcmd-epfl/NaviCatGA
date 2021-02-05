@@ -14,7 +14,6 @@ from simpleGA.chemistry_xyz import (
 )
 from simpleGA.exceptions import InvalidInput
 from simpleGA.exception_messages import exception_messages
-from rdkit import rdBase
 
 
 logger = logging.getLogger(__name__)

@@ -1,10 +1,8 @@
 import logging
-import numpy as np
 import os
-from copy import deepcopy
 from glob import glob
 from AaronTools.geometry import Geometry
-from AaronTools.fileIO import FileReader, read_types
+from AaronTools.fileIO import FileReader
 from AaronTools.substituent import Substituent
 from simpleGA.wrappers_xyz import gl2geom
 

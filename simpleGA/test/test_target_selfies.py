@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from selfies import decoder, encoder
+from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.fitness_functions_selfies import fitness_function_target_selfies
 from simpleGA.wrappers_selfies import (

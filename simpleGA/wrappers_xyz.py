@@ -1,8 +1,6 @@
 import logging
-import numpy as np
 from copy import deepcopy
 from AaronTools.geometry import Geometry
-from AaronTools.fileIO import FileReader, read_types
 from AaronTools.substituent import Substituent
 
 logger = logging.getLogger(__name__)
@@ -56,10 +54,10 @@ def geom2dihedral(geom, a1, a2, a3, a4):
     return geom.dihedral(a1, a2, a3, a4)
 
 
-def geom2b1(geom, pos):
+def geom2sub_sterimol(geom, pos, parameter):
     try:
         sub = geom.find_substituent(pos)
-        b1 = sub.sterimol(parameter="B1", return_vector=False, radii="bondi")
+        val = sub.sterimol(parameter=parameter, return_vector=False, radii="bondi")
     except Exception as m:
         logger.debug(m)
         logger.warning(
@@ -67,7 +65,5 @@ def geom2b1(geom, pos):
                 geom
             )
         )
-        b1 = 1.0
-    return b1
-
-    return b1
+        val = 1.0
+    return val
