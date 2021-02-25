@@ -28,12 +28,9 @@ def gl2gap(chromosome, lot=0):
                 break
         assert e_lumo > e_homo
     except Exception as m:
-        logger.warning(
-            "E(LUMO)-E(HOMO) could not be evaluated for chromosome with geometry:\n{0}".format(
-                geom
-            )
-        )
         logger.debug(m)
+        logger.warning("E(LUMO)-E(HOMO) could not be evaluated for chromosome.")
+        logger.debug("Geometry :\n{0}".format(geom))
         e_homo = 1e6
         e_lumo = 0
     return e_lumo - e_homo
@@ -57,12 +54,9 @@ def gl2ehomo(chromosome, lot=0):
                 break
         assert 0 > e_homo
     except Exception as m:
-        logger.warning(
-            "E(HOMO) could not be evaluated for chromosome with geometry:\n{0}".format(
-                geom
-            )
-        )
         logger.debug(m)
+        logger.warning("E(HOMO) could not be evaluated for chromosome.")
+        logger.debug("Geometry :\n{0}".format(geom))
         e_homo = -1e6
     return e_homo
 
@@ -70,6 +64,12 @@ def gl2ehomo(chromosome, lot=0):
 def geom2ehomo(geom, lot=0):
     try:
         pyscfmol, mf = geom2pyscf(geom, lot=lot)
+    except Exception as m:
+        logger.debug(m)
+        logger.warning("SCF could not be run for chromosome.")
+        logger.debug("Geometry :\n{0}".format(geom))
+        return -1e6
+    try:
         idx = np.argsort(mf.mo_energy)
         e_sort = mf.mo_energy[idx]
         occ_sort = mf.mo_occ[idx].astype(int)
@@ -82,12 +82,9 @@ def geom2ehomo(geom, lot=0):
                 break
         assert 0 > e_homo
     except Exception as m:
-        logger.warning(
-            "E(HOMO) could not be evaluated for chromosome with geometry:\n{0}".format(
-                geom
-            )
-        )
         logger.debug(m)
+        logger.warning("E(HOMO) could not be evaluated for chromosome.")
+        logger.debug("Geometry :\n{0}".format(geom))
         e_homo = -1e6
     return e_homo
 
@@ -110,51 +107,53 @@ def gl2elumo(chromosome, lot=0):
                 break
         assert 0 < e_lumo
     except Exception as m:
-        logger.warning(
-            "E(LUMO) could not be evaluated for chromosome with geometry:\n{0}".format(
-                geom
-            )
-        )
         logger.debug(m)
+        logger.warning("E(LUMO) could not be evaluated for chromosome.")
+        logger.debug("Geometry :\n{0}".format(geom))
     return e_lumo
 
 
 def gl2opt(chromosome, lot=0):
     ok, geom = gl2geom(chromosome)
     if not ok:
-        logger.debug("No molecule generated from genes.")
+        logger.warning("No molecule generated from genes.")
+    return geom2opt(geom, lot)
+
+
+def geom2opt(geom, lot=0):
     try:
         pyscfmol, mf = geom2pyscf(geom, lot=lot)
         pyscfmol, mf = opt(pyscfmol, mf)
-        geom_opt = pyscf2geom(pyscfmol)
+        geom = pyscf2geom(pyscfmol, geom)
     except Exception as m:
-        logger.warning("Could not optimize geometry:\n{0}".format(geom))
         logger.debug(m)
-        geom_opt = geom
-    return geom_opt
+        logger.warning("Could not optimize geometry.")
+        logger.debug("Geometry :\n{0}".format(geom))
+    return geom
 
 
 def opt(pyscfmol, mf):
     from pyscf.geomopt.berny_solver import optimize
 
     conv_params = {  # They are default settings
-        "gradientmax": 5e-1,  # Eh/Angstrom
-        "gradientrms": 5e-2,  # Eh/Angstrom
-        "stepmax": 5e-1,  # Angstrom
-        "steprms": 5e-2,  # Angstrom
+        "gradientmax": 3e-4,  # Eh/Angstrom
+        "gradientrms": 3e-4,  # Eh/Angstrom
+        "stepmax": 2e-3,  # Angstrom
+        "steprms": 2e-3,  # Angstrom
     }
     opt_pyscfmol = optimize(mf, **conv_params)
     return opt_pyscfmol, mf
 
 
-def pyscf2geom(pyscfmol):
+def pyscf2geom(pyscfmol, geom):
     atom_list = []
     for i in range(pyscfmol.natm):
         s = pyscfmol.atom_symbol(i)
         r = pyscfmol.atom_coord(i)
         atom = Atom(element=s, coords=r, name=str(i))
         atom_list.append(atom)
-    geom = Geometry(atom_list)
+    geom.update_geometry(atom_list)
+    geom.detect_substituents()
     return geom
 
 
@@ -173,19 +172,14 @@ def geom2pyscf(geom, lot=0):
         pyscfmol.atom += """{0} {1} {2} {3}\n""".format(symbol, p[0], p[1], p[2])
     if lot == 0:
         pyscfmol.build()
-        try:
-            mf = semiempirical.RMINDO3(pyscfmol)
-        except:
-            mf = semiempirical.UMINDO3(pyscfmol)
+        mf = semiempirical.RMINDO3(pyscfmol)
         mf.verbose = 1
         mf.conv_tol = 1e-6
         mf = mf.run()
     if lot == 1:
-        from pyscf import dftd3
-
         pyscfmol.basis = "pcseg0"
         pyscfmol.build()
-        mf = dftd3.dftd3(dft.ROKS(pyscfmol))
+        mf = dft.ROKS(pyscfmol)
         mf.verbose = 1
         mf.xc = "pbe,pbe"
         mf.conv_tol = 1e-6
@@ -195,7 +189,7 @@ def geom2pyscf(geom, lot=0):
         pyscfmol.build()
         mf = dft.ROKS(pyscfmol)
         mf.verbose = 1
-        mf.xc = "b3lypg"
-        mf.conv_tol = 1e-6
+        mf.xc = "b97d"
+        mf.conv_tol = 1e-7
         mf = mf.density_fit().run()
     return pyscfmol, mf

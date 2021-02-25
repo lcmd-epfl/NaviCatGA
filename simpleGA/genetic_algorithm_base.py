@@ -21,7 +21,9 @@ class GenAlgSolver:
         self,
         n_genes: int,
         fitness_function=None,
+        hashable_fitness_function=None,
         max_gen: int = 1000,
+        max_conv: int = 100,
         pop_size: int = 100,
         mutation_rate: float = 0.15,
         selection_rate: float = 0.5,
@@ -38,6 +40,7 @@ class GenAlgSolver:
         to_stdout: bool = True,
         to_file: bool = True,
         progress_bars: bool = False,
+        problem_type=None,
     ):
         """
         :param fitness_function: can either be a fitness function or
@@ -73,6 +76,7 @@ class GenAlgSolver:
         )
         self.selection_strategy = selection_strategy
         self.max_gen = max_gen
+        self.max_conv = max_conv
         self.pop_size = pop_size
         self.mutation_rate = mutation_rate
         self.selection_rate = selection_rate
@@ -92,6 +96,9 @@ class GenAlgSolver:
         self.population_ = None
         self.fitness_ = None
         self.runtime_ = 0.0
+        self.problem_type = problem_type
+        self.hashable_fitness_function = hashable_fitness_function
+
         if progress_bars:
             self.logger.info("Setting up progress bars through monkeypatching.")
             set_progress_bars(self)
@@ -135,7 +142,7 @@ class GenAlgSolver:
                 exception_messages["InvalidExcludedGenes"](excluded_genes)
             )
 
-    def solve(self):
+    def solve(self, niter=None):
         """
         Performs the genetic algorithm optimization according to the parameters
         provided at initialization.
@@ -145,17 +152,25 @@ class GenAlgSolver:
         start_time = datetime.datetime.now()
         mean_fitness = np.ndarray(shape=(1, 0))
         max_fitness = np.ndarray(shape=(1, 0))
-        population = self.initialize_population()
+        if self.population_ is None:
+            population = self.initialize_population()
+        else:
+            population = self.population_
         fitness = self.calculate_fitness(population)
         fitness, population = self.sort_by_fitness(fitness, population)
         gen_interval = max(round(self.max_gen / 10), 1)
         gen_n = 0
+        conv = 0
+        if isinstance(niter, int):
+            niter = min(self.max_gen, niter)
+        else:
+            niter = self.max_gen
         while True:
             gen_n += 1
             if self.verbose and gen_n % gen_interval == 0:
                 self.logger.info("Generation: {0}".format(gen_n))
                 self.logger.info("Best fitness: {0}".format(fitness[0]))
-                self.logger.info("Best individual: {0}".format(population[0, :]))
+                self.logger.trace("Best individual: {0}".format(population[0, :]))
                 self.logger.trace(
                     "Population at generation: {0}: {1}".format(gen_n, population)
                 )
@@ -183,12 +198,16 @@ class GenAlgSolver:
             population = self.mutate_population(population, self.n_mutations)
             fitness = np.hstack((fitness[0], self.calculate_fitness(population[1:, :])))
             fitness, population = self.sort_by_fitness(fitness, population)
-            if gen_n >= self.max_gen:
+            self.best_individual_ = population[0, :]
+            if self.best_fitness_:
+                if not np.close(self.best_fitness, fitness[0]):
+                    self.best_fitness_ = fitness[0]
+                else:
+                    conv += 1
+            if gen_n >= niter or conv > self.max_conv:
                 break
 
         self.generations_ = gen_n
-        self.best_individual_ = population[0, :]
-        self.best_fitness_ = fitness[0]
         self.population_ = population
         self.fitness_ = fitness
 
@@ -367,11 +386,13 @@ class GenAlgSolver:
         """
 
         plt.figure(figsize=(7, 7))
-        x = np.arange(1, iterations + 2)
-        plt.plot(x, mean_fitness, label="mean fitness")
+        x = np.arange(1, iterations + 1)
         plt.plot(x, max_fitness, label="max fitness")
+        plt.plot(x, mean_fitness, label="mean fitness")
         plt.legend()
-        plt.show()
+        plt.tight_layout()
+        plt.savefig("evolution.png")
+        plt.close()
 
     def print_stats(self, time_str):
         """

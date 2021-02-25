@@ -1,39 +1,33 @@
 from typing import Sequence
 import logging
+import random
 import numpy as np
 
 from simpleGA.genetic_algorithm_base import GenAlgSolver
-from simpleGA.chemistry_xyz import (
-    get_starting_xyz_from_file,
-    get_starting_xyz_from_path,
-    get_starting_xyz_from_smi,
-    pad_xyz_list,
-    check_xyz,
-    get_default_dictionary,
-    get_dictionary_from_path,
-    write_chromosome,
+from simpleGA.chemistry_smiles import (
+    sanitize_multiple_smiles,
+    get_smiles_chars,
+    check_smiles_chars,
+    randomize_smiles,
 )
 from simpleGA.exceptions import InvalidInput
 from simpleGA.exception_messages import exception_messages
+from rdkit import rdBase
 
 
 logger = logging.getLogger(__name__)
 
 
-class XYZGenAlgSolver(GenAlgSolver):
+class SmilesGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
         n_genes: int,
-        starting_scaffolds: list = [],
-        path_scaffolds: str = "",
-        starting_xyz: list = [],
+        starting_smiles: list = [""],
         starting_random: bool = False,
-        starting_stoned: bool = False,
-        alphabet_choice: str = "default",
+        substituent_list: list = ["C", "N", "P"],
         fitness_function=None,
-        hashable_fitness_function=None,
-        max_gen: int = 5,
-        pop_size: int = 5,
+        max_gen: int = 500,
+        pop_size: int = 100,
         mutation_rate: float = 0.05,
         selection_rate: float = 0.25,
         selection_strategy: str = "tournament",
@@ -51,25 +45,12 @@ class XYZGenAlgSolver(GenAlgSolver):
         to_file: bool = True,
         progress_bars: bool = False,
         lru_cache: bool = False,
+        problem_type="smiles",
     ):
-        if starting_scaffolds:
-            starting_xyz = get_starting_xyz_from_file(starting_scaffolds)
-        if path_scaffolds:
-            starting_xyz = get_starting_xyz_from_path(path_scaffolds)
-        alphabet = []
-        if alphabet_choice == "default":
-            alphabet = get_default_dictionary()
-        else:
-            alphabet = get_dictionary_from_path(alphabet_choice)
-        alphabet.append(None)
-        self.alphabet = alphabet
-        if len(self.alphabet) < 2:
-            raise (InvalidInput(exception_messages["AlphabetIsEmpty"]))
 
         GenAlgSolver.__init__(
             self,
             fitness_function=fitness_function,
-            hashable_fitness_function=hashable_fitness_function,
             n_genes=n_genes,
             max_gen=max_gen,
             pop_size=pop_size,
@@ -88,75 +69,52 @@ class XYZGenAlgSolver(GenAlgSolver):
             to_file=to_file,
             progress_bars=progress_bars,
             lru_cache=lru_cache,
+            problem_type=problem_type,
         )
+        self.alphabet = list(sorted(substituent_list))
 
-        if variables_limits is not None:
-            pass  # TBD
-
-        if not isinstance(starting_xyz, list):
-            raise (InvalidInput(exception_messages["StartingXYZNotAList"]))
+        if not isinstance(starting_smiles, list):
+            raise (InvalidInput(exception_messages["StartingSmilesNotAList"]))
+        if not self.alphabet:
+            raise (InvalidInput(exception_messages["AlphabetIsEmpty"]))
         if self.n_crossover_points > self.n_genes:
             raise (InvalidInput(exception_messages["TooManyCrossoverPoints"]))
         if self.n_crossover_points < 1:
             raise (InvalidInput(exception_messages["TooFewCrossoverPoints"]))
-        if starting_random and starting_stoned:
-            raise (InvalidInput(exception_messages["ConflictedRandomStoned"]))
-        if starting_stoned and (len(starting_xyz) != 1):
-            raise (InvalidInput(exception_messages["ConflictedStonedStarting"]))
 
-        if starting_stoned:
-            pass  # TBD
-            # starting_xyz = randomize_xyz(
-            #     starting_selfies[0], num_random=self.pop_size
-            # )
-        if len(starting_xyz) < self.pop_size:
-            n_patch = self.pop_size - len(starting_xyz)
+        if len(starting_smiles) < self.pop_size:
+            n_patch = self.pop_size - len(starting_smiles)
             for i in range(n_patch):
-                starting_xyz.append(
-                    np.random.choice(starting_xyz, size=1)[0]
-                )  # OKAYISH
-        elif len(starting_xyz) > self.pop_size:
-            n_remove = len(starting_xyz) - self.pop_size
+                starting_smiles.append(np.random.choice(starting_smiles, size=1)[0])
+        elif len(starting_smiles) > self.pop_size:
+            n_remove = len(starting_smiles) - self.pop_size
             for i in range(n_remove):
-                starting_xyz.remove(
-                    np.random.choice(starting_xyz, size=1)[0]
-                )  # MIGHT BE IMPROVABLE
-        assert len(starting_xyz) == self.pop_size
-        self.starting_random = starting_random
-        self.starting_xyz = starting_xyz
+                starting_smiles.remove(np.random.choice(starting_smiles, size=1)[0])
+        assert len(starting_smiles) == self.pop_size
+        self.starting_smiles = starting_smiles
         self.max_counter = int(max_counter)
+        self.starting_random = starting_random
 
     def initialize_population(self):
         """
         Initializes the population of the problem according to the
         population size and number of genes and according to the problem
-        type (XYZ fragmenta here).
+        type (smiles string elements here).
         :return: a numpy array with a sanitized initialized population
         """
 
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype=object)
 
         for i in range(self.pop_size):
-            logger.debug("Getting scaffold from:\n{0}".format(self.starting_xyz[i]))
-            chromosome = pad_xyz_list(self.starting_xyz[i], self.n_genes)
+            chromosome = get_smiles_chars(self.starting_smiles[i], self.n_genes)
             if self.starting_random:
                 for j in range(1, self.n_genes):
                     chromosome[j] = np.random.choice(self.alphabet, size=1)[0]
-            assert check_xyz(chromosome)
+            assert check_smiles_chars(chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
-        self.logger.debug("Initial population:\n{0}".format(population))
+        self.logger.debug("Initial population: {0}".format(population))
         return population
-
-    def write_population(self, basename="chromosome"):
-        """
-        Print  xyz for all the population at the current state.
-        """
-        for i, j in zip(range(self.pop_size), self.fitness_):
-            write_chromosome(
-                "{0}_{1}_{2}".format(basename, i, np.round(j, 4)),
-                self.population_[i][:],
-            )
 
     def get_crossover_points(self):
         """
@@ -191,17 +149,15 @@ class XYZGenAlgSolver(GenAlgSolver):
             sec_parent = sec_parent[mask_allowed]
 
         offspring = np.empty_like(first_parent, dtype=object)
-        valid = False
+        valid_smiles = False
 
-        if beta < 0.5:
-            # first_parent = first_parent[::-1]
-            pass
-        if gamma > 0.5:
-            # sec_parent = sec_parent[::-1]
-            pass
+        # if beta < 0.5:
+        #    first_parent = first_parent[::-1]
+        # if gamma > 0.5:
+        #    sec_parent = sec_parent[::-1]
 
         if offspring_number == "first":
-            while not valid:
+            while not valid_smiles:
                 offspring = np.empty_like(first_parent, dtype=object)
                 counter = 0
                 c = int(0)
@@ -215,9 +171,9 @@ class XYZGenAlgSolver(GenAlgSolver):
                     full_offspring[mask_allowed] = offspring[:]
                     offspring = full_offspring
                 logger.trace(
-                    "Offspring chromosome attempt {0}:\n{1}".format(counter, offspring)
+                    "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid = check_xyz(offspring)
+                valid_smiles = check_smiles_chars(offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -226,13 +182,13 @@ class XYZGenAlgSolver(GenAlgSolver):
                             self.max_counter
                         )
                     )
-                    valid = True
+                    valid_smiles = True
                     offspring = backup_first_parent
-            logger.trace("Final offspring chromosome:\n{0}".format(offspring))
+            logger.trace("Final offspring chromosome: {0}".format(offspring))
             return offspring
 
         if offspring_number == "second":
-            while not valid:
+            while not valid_smiles:
                 offspring = np.empty_like(first_parent, dtype=object)
                 counter = 0
                 c = int(0)
@@ -248,9 +204,9 @@ class XYZGenAlgSolver(GenAlgSolver):
                     full_offspring[mask_allowed] = offspring[:]
                     offspring = full_offspring
                 logger.trace(
-                    "Offspring chromosome attempt {0}:\n{1}".format(counter, offspring)
+                    "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid = check_xyz(offspring)
+                valid_smiles = check_smiles_chars(offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -259,9 +215,9 @@ class XYZGenAlgSolver(GenAlgSolver):
                             self.max_counter
                         )
                     )
-                    valid = True
+                    valid_smiles = True
                     offspring = backup_sec_parent
-            logger.trace("Final offspring chromosome:\n{0}".format(offspring))
+            logger.trace("Final offspring chromosome: {0}".format(offspring))
             return offspring
 
     def mutate_population(self, population, n_mutations):
@@ -273,25 +229,24 @@ class XYZGenAlgSolver(GenAlgSolver):
         :return: the mutated population
         """
 
-        valid = False
+        valid_smiles = False
         alpha = np.random.rand(1)[0]
-        sm_rate = self.mutation_rate / self.n_genes
-        mutation_rows, mutation_cols = super(XYZGenAlgSolver, self).mutate_population(
-            population, n_mutations
-        )
+        mutation_rows, mutation_cols = super(
+            SmilesGenAlgSolver, self
+        ).mutate_population(population, n_mutations)
         for i, j in zip(mutation_rows, mutation_cols):
             backup_gene = population[i, j]
             counter = 0
-            while not valid:
+            while not valid_smiles:
                 population[i, j] = np.random.choice(self.alphabet, size=1)[0]
                 logger.trace(
-                    "Mutated chromosome attempt {0}:\n{1}".format(
+                    "Mutated chromosome attempt {0}: {1}".format(
                         counter, population[i, :]
                     )
                 )
-                if alpha < sm_rate:
-                    population[i, 0] = np.random.choice(self.starting_xyz, size=1)[0]
-                valid = check_xyz(population[i, :])
+                if alpha < self.mutation_rate:
+                    population[i, 0] = np.random.choice(self.starting_smiles, size=1)[0]
+                valid_smiles = check_smiles_chars(population[i, :])
                 counter += 1
                 if counter > self.max_counter:
                     logger.debug(
@@ -300,7 +255,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                         )
                     )
                     population[i, j] = backup_gene
-                    valid = True
-            valid = False
+                    valid_smiles = True
+            valid_smiles = False
 
         return population

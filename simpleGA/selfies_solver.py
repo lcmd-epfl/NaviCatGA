@@ -52,6 +52,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         to_file: bool = True,
         progress_bars: bool = False,
         lru_cache: bool = False,
+        problem_type="selfies",
     ):
 
         GenAlgSolver.__init__(
@@ -75,6 +76,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             to_file=to_file,
             progress_bars=progress_bars,
             lru_cache=lru_cache,
+            problem_type=problem_type,
         )
 
         if variables_limits is not None:

@@ -19,7 +19,7 @@ if __name__ == "__main__":
         print(m)
 
 
-def solve_progress(self):
+def solve_progress(self, niter=None):
     """
     Performs the genetic algorithm optimization according to the parameters
     provided at initialization.
@@ -39,8 +39,12 @@ def solve_progress(self):
     fitness, population = self.sort_by_fitness(fitness, population)
 
     gen_interval = max(round(self.max_gen / 10), 1)
+    if niter is None:
+        niter = self.max_gen
+    else:
+        niter = int(min(self.max_gen, niter, 1))
 
-    with alive_bar(self.max_gen) as bar:
+    with alive_bar(niter) as bar:
         for gen_n in range(self.max_gen):
 
             if self.verbose and gen_n % gen_interval == 0:
@@ -91,9 +95,10 @@ def solve_progress(self):
         if self.plot_results:
             self.plot_fitness_results(mean_fitness, max_fitness, gen_n)
 
+        end_time = datetime.datetime.now()
+        self.runtime_, time_str = get_elapsed_time(start_time, end_time)
+
         if self.show_stats:
-            end_time = datetime.datetime.now()
-            time_str = get_elapsed_time(start_time, end_time)
             self.print_stats(time_str)
 
         self.close_solve_logger()

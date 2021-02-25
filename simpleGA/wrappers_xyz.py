@@ -13,23 +13,26 @@ def gl2geom(chromosome):
     target_list = []
     for gene in chromosome[1:]:
         if gene is not None:
-            deepgene = deepcopy(gene)
-            target_list.append(Substituent(deepgene))
+            deepgene = deepcopy(Substituent(gene))
+            target_list.append(deepgene)
         if gene is None:
             target_list.append(None)
-    h_positions = scaffold.find("H")[0::2] + scaffold.find("H")[1::2]
+    h_positions = scaffold.find("H", "19-20")
+    # h_positions = h_positions[::-1]
+
     assert len(h_positions) >= len(target_list)
     try:
         for i, j in enumerate(target_list):
             if j is not None:
                 scaffold.substitute(j, h_positions[i], minimize=True)
         geom = Geometry(scaffold)
+        geom.minimize()
         ok = True
     except Exception as m:
         logger.debug(m)
         geom = None
         ok = False
-    logger.debug("Final geometry from scaffold:\n{0}".format(geom))
+    logger.trace("Final geometry from scaffold:\n{0}".format(geom))
     return (ok, geom)
 
 
@@ -60,10 +63,7 @@ def geom2sub_sterimol(geom, pos, parameter):
         val = sub.sterimol(parameter=parameter, return_vector=False, radii="bondi")
     except Exception as m:
         logger.debug(m)
-        logger.warning(
-            "Could not evaluate Sterimol, perhaps there is no substituent:\n{0}".format(
-                geom
-            )
-        )
+        logger.warning("Could not evaluate Sterimol, perhaps there is no substituent.")
+        logger.debug("Geometry :\n{0}".format(geom))
         val = 1.0
     return val

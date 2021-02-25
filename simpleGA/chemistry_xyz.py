@@ -86,3 +86,11 @@ def pad_xyz_list(xyz, maxchars):
     if len(xyz_list) < maxchars:
         xyz_list += [None] * (maxchars - len(xyz_list))
     return xyz_list
+
+
+def write_chromosome(outname, chromosome):
+    ok, geom = gl2geom(chromosome)
+    if ok:
+        geom.write(outname)
+    else:
+        logger.warning("Could not write {0} as {1}.".format(gl, outname))

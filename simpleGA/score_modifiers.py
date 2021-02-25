@@ -12,17 +12,17 @@ def GaussianModifier(score, target, parameter=1) -> float:
         logger.warning("Gaussian-modified score could not be evaluated for chromosome.")
         logger.debug(m)
         score = -1e6
-    return score
+    return np.around(score, decimals=4)
 
 
 def AbsoluteModifier(score, target, parameter=1) -> float:
     score = 1.0 - (parameter * np.abs(target - score))
-    return score
+    return np.around(score, decimals=4)
 
 
 def SquaredModifier(score, target, parameter=1) -> float:
     score = 1.0 - (parameter * np.square(target - score))
-    return score
+    return np.around(score, decimals=4)
 
 
 def score_modifier(score, target, score_modifier_number=1, parameter=1) -> float:

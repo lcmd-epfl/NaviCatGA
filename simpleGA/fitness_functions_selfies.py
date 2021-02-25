@@ -12,11 +12,7 @@ from simpleGA.wrappers_selfies import (
     sc2tanimoto_to_target,
     sc2krr,
 )
-from simpleGA.quantum_wrappers_selfies import (
-    sc2gap,
-    sc2ehomo,
-    sc2elumo,
-)
+from simpleGA.quantum_wrappers_selfies import sc2gap, sc2ehomo, sc2elumo
 
 
 logger = logging.getLogger(__name__)

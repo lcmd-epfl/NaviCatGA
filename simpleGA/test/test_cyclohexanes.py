@@ -3,7 +3,7 @@
 from simpleGA.xyz_solver import XYZGenAlgSolver
 from simpleGA.fitness_functions_xyz import fitness_function_xyz
 from simpleGA.chemistry_xyz import (
-    get_starting_xyz_fromsmi,
+    get_starting_xyz_from_smi,
 )
 from simpleGA.wrappers_xyz import gl2geom
 
