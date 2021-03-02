@@ -3,6 +3,9 @@ from abc import abstractmethod
 from typing import Sequence
 
 import numpy as np
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from simpleGA.exceptions import NoFitnessFunction, InvalidInput
@@ -95,6 +98,8 @@ class GenAlgSolver:
         self.best_fitness_ = 0
         self.population_ = None
         self.fitness_ = None
+        self.mean_fitness_ = None
+        self.max_fitness_ = None
         self.runtime_ = 0.0
         self.problem_type = problem_type
         self.hashable_fitness_function = hashable_fitness_function
@@ -150,11 +155,20 @@ class GenAlgSolver:
         """
 
         start_time = datetime.datetime.now()
-        mean_fitness = np.ndarray(shape=(1, 0))
-        max_fitness = np.ndarray(shape=(1, 0))
+        if self.mean_fitness_ is None:
+            mean_fitness = np.ndarray(shape=(1, 0))
+        else:
+            self.logger.debug("Continuing run with previous mean fitness in memory.")
+            mean_fitness = self.mean_fitness_
+        if self.max_fitness_ is None:
+            max_fitness = np.ndarray(shape=(1, 0))
+        else:
+            self.logger.debug("Continuing run with previous max fitness in memory.")
+            max_fitness = self.max_fitness_
         if self.population_ is None:
             population = self.initialize_population()
         else:
+            self.logger.debug("Continuing run with previous population in memory.")
             population = self.population_
         fitness = self.calculate_fitness(population)
         fitness, population = self.sort_by_fitness(fitness, population)
@@ -165,15 +179,9 @@ class GenAlgSolver:
             niter = min(self.max_gen, niter)
         else:
             niter = self.max_gen
-        while True:
+        for _ in range(niter):
             gen_n += 1
-            if self.verbose and gen_n % gen_interval == 0:
-                self.logger.info("Generation: {0}".format(gen_n))
-                self.logger.info("Best fitness: {0}".format(fitness[0]))
-                self.logger.trace("Best individual: {0}".format(population[0, :]))
-                self.logger.trace(
-                    "Population at generation: {0}: {1}".format(gen_n, population)
-                )
+            self.generations_ += 1
 
             mean_fitness = np.append(mean_fitness, fitness.mean())
             max_fitness = np.append(max_fitness, fitness[0])
@@ -199,20 +207,32 @@ class GenAlgSolver:
             fitness = np.hstack((fitness[0], self.calculate_fitness(population[1:, :])))
             fitness, population = self.sort_by_fitness(fitness, population)
             self.best_individual_ = population[0, :]
-            if self.best_fitness_:
-                if not np.close(self.best_fitness, fitness[0]):
-                    self.best_fitness_ = fitness[0]
-                else:
-                    conv += 1
+            if np.isclose(self.best_fitness_, fitness[0]):
+                conv += 1
+            self.best_fitness_ = fitness[0]
+
+            if self.verbose and self.generations_ % gen_interval == 0:
+                self.logger.info("Generation: {0}".format(self.generations_))
+                self.logger.info("Best fitness: {0}".format(self.best_fitness_))
+                self.logger.trace("Best individual: {0}".format(population[0, :]))
+                self.logger.trace(
+                    "Population at generation: {0}: {1}".format(
+                        self.generations_, population
+                    )
+                )
+
             if gen_n >= niter or conv > self.max_conv:
                 break
 
-        self.generations_ = gen_n
         self.population_ = population
         self.fitness_ = fitness
+        self.mean_fitness_ = mean_fitness
+        self.max_fitness_ = max_fitness
 
         if self.plot_results:
-            self.plot_fitness_results(mean_fitness, max_fitness, gen_n)
+            self.plot_fitness_results(
+                self.mean_fitness_, self.max_fitness_, self.generations_
+            )
 
         end_time = datetime.datetime.now()
         self.runtime_, time_str = get_elapsed_time(start_time, end_time)
@@ -220,7 +240,7 @@ class GenAlgSolver:
         if self.show_stats:
             self.print_stats(time_str)
 
-        self.close_solve_logger()
+        # self.close_solve_logger()
 
     def calculate_fitness(self, population):
         """
@@ -376,7 +396,11 @@ class GenAlgSolver:
         return np.asarray(crossover_points).sort()
 
     @staticmethod
-    def plot_fitness_results(mean_fitness, max_fitness, iterations):
+    def plot_fitness_results(
+        mean_fitness,
+        max_fitness,
+        iterations,
+    ):
         """
         Plots the evolution of the mean and max fitness of the population
         :param mean_fitness: mean fitness array for each generation
@@ -404,12 +428,12 @@ class GenAlgSolver:
         self.logger.info("\n#############################")
         self.logger.info("#           STATS           #")
         self.logger.info("#############################\n\n")
-        self.logger.info(f"Total running time: {time_str}\n\n")
+        self.logger.info(f"Total running time: {time_str}\n")
         self.logger.info(f"Population size: {self.pop_size}")
         self.logger.info(f"Number variables: {self.n_genes}")
         self.logger.info(f"Selection rate: {self.selection_rate}")
         self.logger.info(f"Mutation rate: {self.mutation_rate}")
-        self.logger.info(f"Number Generations: {self.generations_}\n")
+        self.logger.info(f"Number Generations: {self.generations_}")
         self.logger.info(f"Best fitness: {self.best_fitness_}")
         self.logger.info(f"Best individual: {self.best_individual_}")
 

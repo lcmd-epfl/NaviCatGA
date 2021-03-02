@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from simpleGA.smiles_solver import SmilesGenAlgSolver
-from simpleGA.wrappers_smiles import sc2smiles, sc2mol_structure, sc2mw
+from simpleGA.wrappers_smiles import sc2smiles, sc2mol_structure, sc2mw, sc2depictions
 import pandas as pd
 
 
@@ -14,8 +14,6 @@ def read_database(filename="database.xls") -> pd.DataFrame:
 # Get lists from xls
 fdb = read_database("database.xls")
 substituent_list = list(set(fdb.Substituent_1.dropna()))
-# id_1 = fdb.Id_1
-print(substituent_list)
 
 starting_smiles = ["[Ni@]"]
 
@@ -32,22 +30,23 @@ def krr(chromosome):
 def test_ni_catalyst_24():
     solver = SmilesGenAlgSolver(
         n_genes=7,
-        pop_size=5,
-        max_gen=5,
+        pop_size=50,
+        max_gen=10,
         mutation_rate=0.05,
         fitness_function=my_fitness_function(),
         starting_smiles=starting_smiles,
         substituent_list=substituent_list,
         random_state=24,
         starting_random=True,
-        logger_level="DEBUG",
-        n_crossover_points=1,
+        logger_level="INFO",
+        n_crossover_points=2,
         verbose=True,
         progress_bars=True,
         to_file=False,
         to_stdout=True,
     )
     solver.solve()
+    sc2depictions(solver.best_individual_, "best_ni_catalyst")
 
 
 if __name__ == "__main__":

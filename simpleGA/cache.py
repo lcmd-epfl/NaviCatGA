@@ -4,6 +4,8 @@ import logging
 from functools import lru_cache
 from simpleGA.chemistry_selfies import get_selfie_chars
 from simpleGA.wrappers_selfies import sc2selfies
+from simpleGA.wrappers_smiles import sc2smiles
+from simpleGA.wrappers_xyz import gl2geom
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +38,26 @@ def calculate_fitness_cache_selfies(self, population):
     return fitness
 
 
+def calculate_fitness_cache_smiles(self, population):
+    """
+    Calculates the fitness of the population
+    :param population: population state at a given iteration
+    :return: the fitness of the current population
+    """
+    fitness = np.zeros(shape=population.shape[0], dtype=float)
+    logger.debug("Evaluating fitness individually with cache.")
+
+    for i in range(population.shape[0]):
+        chromosome = population[i][0 : self.n_genes]
+        smiles = sc2smiles(chromosome)
+        fitness[i] = calculate_one_fitness_cache_smiles(
+            smiles, self.hashable_fitness_function
+        )
+
+    logger.trace(calculate_one_fitness_cache_selfies.cache_info())
+    return fitness
+
+
 def calculate_fitness_cache_xyz(self, population):
     """
     Calculates the fitness of the population
@@ -61,6 +83,11 @@ def calculate_one_fitness_cache_selfies(selfies, n_genes, fitness_function):
 
 
 @lru_cache(maxsize=128)
+def calculate_one_fitness_cache_smiles(smiles, hashable_fitness_function):
+    return hashable_fitness_function(smiles)
+
+
+@lru_cache(maxsize=128)
 def calculate_one_fitness_cache_xyz(geom, hashable_fitness_function):
     return hashable_fitness_function(geom)
 
@@ -68,5 +95,7 @@ def calculate_one_fitness_cache_xyz(geom, hashable_fitness_function):
 def set_lru_cache(self):
     if self.problem_type == "selfies":
         self.calculate_fitness = types.MethodType(calculate_fitness_cache_selfies, self)
+    if self.problem_type == "smiles":
+        self.calculate_fitness = types.MethodType(calculate_fitness_cache_smiles, self)
     if self.problem_type == "xyz":
         self.calculate_fitness = types.MethodType(calculate_fitness_cache_xyz, self)

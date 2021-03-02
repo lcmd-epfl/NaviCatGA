@@ -93,4 +93,4 @@ def write_chromosome(outname, chromosome):
     if ok:
         geom.write(outname)
     else:
-        logger.warning("Could not write {0} as {1}.".format(gl, outname))
+        logger.warning("Could not write {0} as {1}.".format(chromosome, outname))

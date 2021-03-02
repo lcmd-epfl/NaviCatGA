@@ -1,7 +1,6 @@
 import logging
 import numpy as np
 from simpleGA.timeout import timeout
-from simpleGA.wrappers_smiles import sc2smiles
 from rdkit import Chem, RDLogger
 from rdkit.Chem import AllChem
 from rdkit.Chem.rdmolfiles import MolToSmiles as mol2smi
@@ -66,12 +65,6 @@ def timed_sanitizer(smiles):
         else:
             logger.debug("Smiles {0} could not be understood by rdkit.".format(smiles))
             return (None, None, False)
-
-
-def check_smiles_chars(chromosome):
-    smiles = sc2smiles(chromosome)
-    logger.debug("Checking SMILES {0} from chromosome {1}".format(smiles, chromosome))
-    return sanitize_smiles(smiles)[2]
 
 
 def get_smiles_chars(smiles, maxchars):
@@ -188,11 +181,7 @@ def get_confs_ff(mol, maxiters=250):
         mol_structure.AddConformer(mol.GetConformer(min_e_index))
         return mol_structure
     else:
-        logger.warning(
-            "Could not generate structures using FF and rdkit typing. SMILES {0}".format(
-                mol2smi(mol)
-            )
-        )
+        logger.debug("Could not do complete FF typing. SMILES {0}".format(mol2smi(mol)))
         return mol
 
 

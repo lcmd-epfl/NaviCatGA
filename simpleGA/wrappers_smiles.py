@@ -1,10 +1,8 @@
 import logging
 import numpy as np
-from simpleGA.chemistry_selfies import (
+from simpleGA.chemistry_smiles import (
     sanitize_smiles,
-    timed_decoder,
     get_structure_ff,
-    get_selfie_chars,
     get_interatomic_distances,
     get_ECFP4,
 )
@@ -18,6 +16,12 @@ logger = logging.getLogger(__name__)
 lg = RDLogger.logger()
 lg.setLevel(RDLogger.ERROR)
 RDLogger.DisableLog("rdApp.*")
+
+
+def check_smiles_chars(chromosome):
+    smiles = sc2smiles(chromosome)
+    logger.debug("Checking SMILES {0} from chromosome {1}".format(smiles, chromosome))
+    return sanitize_smiles(smiles)[2]
 
 
 def sc2smiles(chromosome):
@@ -58,6 +62,16 @@ def mol_structure2depictions(mol_structure, root_name="output"):
 def sc2mol_structure(chromosome, lot=0):
     """Generates a rdkit.mol object with 3D coordinates from a list of selfies characters."""
     smiles = sc2smiles(chromosome)
+    mol, smi_canon, check = sanitize_smiles(smiles)
+    if not check:
+        logger.exception("SMILES {0} cannot be sanitized".format(smiles))
+    if lot == 0:
+        return get_structure_ff(mol, n_confs=5)
+    if lot == 1:
+        return get_structure_ff(mol, n_confs=10)
+
+
+def smiles2mol_structure(smiles, lot=0):
     mol, smi_canon, check = sanitize_smiles(smiles)
     if not check:
         logger.exception("SMILES {0} cannot be sanitized".format(smiles))
@@ -123,11 +137,6 @@ def sc2mv(chromosome):
         mol = sc2mol_structure(chromosome)
         mv = AllChem.ComputeMolVolume(mol)
     except Exception as m:
-        logger.warning(
-            "Molecular Volume not be evaluated for chromosome. SMILES : {0}".format(
-                timed_decoder("".join(x for x in list(chromosome)))
-            )
-        )
         logger.debug(m)
         mv = -1e6
     return mv
@@ -142,11 +151,6 @@ def sc2cm(chromosome, order="C"):
         elif order == "F":
             cm = m.flatten(order="F")
     except Exception as m:
-        logger.warning(
-            "Fitness could not be evaluated for chromosome. SMILES : {0}".format(
-                timed_decoder("".join(x for x in list(chromosome)))
-            )
-        )
         logger.debug(m)
         cm = None
     return cm

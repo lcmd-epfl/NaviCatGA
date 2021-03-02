@@ -7,9 +7,9 @@ from simpleGA.genetic_algorithm_base import GenAlgSolver
 from simpleGA.chemistry_smiles import (
     sanitize_multiple_smiles,
     get_smiles_chars,
-    check_smiles_chars,
     randomize_smiles,
 )
+from simpleGA.wrappers_smiles import check_smiles_chars, sc2depictions
 from simpleGA.exceptions import InvalidInput
 from simpleGA.exception_messages import exception_messages
 from rdkit import rdBase
@@ -31,6 +31,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         mutation_rate: float = 0.05,
         selection_rate: float = 0.25,
         selection_strategy: str = "tournament",
+        hashable_fitness_function=None,
         verbose: bool = True,
         show_stats: bool = False,
         plot_results: bool = False,
@@ -51,6 +52,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         GenAlgSolver.__init__(
             self,
             fitness_function=fitness_function,
+            hashable_fitness_function=hashable_fitness_function,
             n_genes=n_genes,
             max_gen=max_gen,
             pop_size=pop_size,
@@ -259,3 +261,13 @@ class SmilesGenAlgSolver(GenAlgSolver):
             valid_smiles = False
 
         return population
+
+    def write_population(self, basename="chromosome"):
+        """
+        Print xyz for all the population at the current state.
+        """
+        for i, j in zip(range(self.pop_size), self.fitness_):
+            sc2depictions(
+                self.population_[i][:],
+                "{0}_{1}_{2}".format(basename, i, np.round(j, 4)),
+            )

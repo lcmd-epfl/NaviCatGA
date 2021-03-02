@@ -51,6 +51,7 @@ class XYZGenAlgSolver(GenAlgSolver):
         to_file: bool = True,
         progress_bars: bool = False,
         lru_cache: bool = False,
+        problem_type: str = "xyz",
     ):
         if starting_scaffolds:
             starting_xyz = get_starting_xyz_from_file(starting_scaffolds)
@@ -88,6 +89,7 @@ class XYZGenAlgSolver(GenAlgSolver):
             to_file=to_file,
             progress_bars=progress_bars,
             lru_cache=lru_cache,
+            problem_type=problem_type,
         )
 
         if variables_limits is not None:
@@ -275,7 +277,7 @@ class XYZGenAlgSolver(GenAlgSolver):
 
         valid = False
         alpha = np.random.rand(1)[0]
-        sm_rate = self.mutation_rate / self.n_genes
+        sm_rate = 1 / (self.n_genes - 1)
         mutation_rows, mutation_cols = super(XYZGenAlgSolver, self).mutate_population(
             population, n_mutations
         )
