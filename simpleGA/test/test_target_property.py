@@ -22,7 +22,6 @@ def test_target_property_18():
         progress_bars=True,
         to_file=False,
         to_stdout=True,
-        lru_cache=True,
     )
     solver.solve()
 

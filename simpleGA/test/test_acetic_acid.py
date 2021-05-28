@@ -2,7 +2,7 @@
 
 from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
-from simpleGA.chemistry_selfies import count_selfie_chars
+from simpleGA.chemistry_selfies import count_selfie_chars, get_selfie_chars
 from simpleGA.wrappers_selfies import (
     sc2smiles,
     sc2mol_structure,
@@ -13,7 +13,7 @@ from simpleGA.quantum_wrappers_selfies import sc2ehomo
 
 def fitness_function_wrapper():
 
-    return lambda chromosome: sc2ehomo(chromosome, lot=1)
+    return lambda selfies: sc2ehomo(get_selfie_chars(selfies), lot=1)
 
 
 def test_acetic_acid_01():
@@ -31,7 +31,7 @@ def test_acetic_acid_01():
         starting_selfies=starting_selfies,  #
         n_genes=int(n_starting_genes * 1.2),  # We need at least n_starting_genes
         excluded_genes=list(range(n_starting_genes)),  # We do not modify the backbone
-        fitness_function=fitness_function_wrapper(),
+        hashable_fitness_function=fitness_function_wrapper(),
         pop_size=10,
         max_gen=5,  # This is a simple test, no need for many
         random_state=420,

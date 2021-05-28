@@ -37,8 +37,7 @@ def test_palladium_triphenylphosphine_15():
         logger_level="INFO",
         logger_file="palladium_triphenylphosphine_mv.log",
         verbose=True,
-        progress_bars=True,
-        lru_cache=True,
+        progress_bars=False,
     )
     solver.solve()
     print(

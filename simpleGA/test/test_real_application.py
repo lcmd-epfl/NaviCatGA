@@ -30,9 +30,7 @@ def test_real_application_16():
         pop_size=10,
         max_gen=10,
         fitness_function=fitness_function_wrapper(
-            target_1=0.05,
-            target_2=0.1,
-            target_3=65,
+            target_1=0.05, target_2=0.1, target_3=65
         ),  # homo-lumo gap, logp
         starting_selfies=starting_selfies,
         starting_stoned=True,
@@ -47,7 +45,6 @@ def test_real_application_16():
         to_stdout=False,
         logger_level="INFO",
         logger_file="real_application.log",
-        lru_cache=True,
         show_stats=True,
     )
     solver.solve()

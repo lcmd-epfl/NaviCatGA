@@ -5,11 +5,7 @@ from selfies import encoder
 from simpleGA.selfies_solver import SelfiesGenAlgSolver
 from simpleGA.exceptions import InvalidInput
 from simpleGA.fitness_functions_selfies import fitness_function_target_selfies
-from simpleGA.wrappers_selfies import (
-    sc2selfies,
-    sc2tanimoto_to_target,
-    sc2depictions,
-)
+from simpleGA.wrappers_selfies import sc2selfies, sc2tanimoto_to_target, sc2depictions
 
 
 def test_rediscover_paracetamol(
@@ -34,7 +30,7 @@ def test_rediscover_paracetamol(
         pop_size=pop_size,
         mutation_rate=mutation_rate,
         n_crossover_points=n_crossover_points,
-        random_state=42069,
+        random_state=133742,
         logger_file="benchmark_{0}_{1}_{2}.log".format(
             n_crossover_points, mutation_rate, max_gen
         ),
@@ -58,7 +54,7 @@ def test_rediscover_paracetamol(
 def test_crossover_points_02():
     print("\n\nTesting different number of crossover points:\n")
     tanimoto_list = []
-    for i in range(6):
+    for i in range(4):
         try:
             tanimoto = test_rediscover_paracetamol(
                 n_crossover_points=i, mutation_rate=0.15, max_gen=50, pop_size=25
@@ -76,7 +72,7 @@ def test_crossover_points_02():
 def test_mutation_rate_03():
     print("\n\nTesting different mutation rates:\n")
     tanimoto_list = []
-    for j in np.linspace(0.05, 0.55, 5, endpoint=False):
+    for j in np.linspace(0.05, 0.25, 5, endpoint=False):
         mutation_rate = np.round(j, 2)
         tanimoto = test_rediscover_paracetamol(
             n_crossover_points=1, mutation_rate=mutation_rate, max_gen=50, pop_size=25
