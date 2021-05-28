@@ -28,8 +28,20 @@ def solve_progress(self, niter=None):
 
     start_time = datetime.datetime.now()
 
-    mean_fitness = np.ndarray(shape=(1, 0))
-    max_fitness = np.ndarray(shape=(1, 0))
+    if self.mean_fitness_ is None:
+        mean_fitness = np.ndarray(shape=(1, 0))
+    else:
+        self.logger.info("Continuing run with previous mean fitness in memory.")
+        mean_fitness = self.mean_fitness_
+    if self.max_fitness_ is None:
+        max_fitness = np.ndarray(shape=(1, 0))
+    else:
+        self.logger.info("Continuing run with previous max fitness in memory.")
+        max_fitness = self.max_fitness_
+    if self.population_ is None:
+        population = self.initialize_population()
+    else:
+        self.logger.info("Continuing run with previous population in memory.")
 
     # initialize the population
     population = self.initialize_population()
@@ -44,10 +56,11 @@ def solve_progress(self, niter=None):
         niter = self.max_gen
     else:
         niter = int(min(self.max_gen, niter, 1))
+    conv = 0
 
     with alive_bar(niter) as bar:
-        for gen_n in range(self.max_gen):
-
+        for counter in range(self.max_gen):
+            gen_n = counter + 1
             if self.verbose and gen_n % gen_interval == 0:
                 self.logger.info("Iteration: {0}".format(gen_n))
                 self.logger.info(f"Best fitness: {fitness[0]}")
@@ -80,6 +93,24 @@ def solve_progress(self, niter=None):
                 )
 
             population = self.mutate_population(population, self.n_mutations)
+            if self.prune_duplicates:
+                try:
+                    population = np.unique(population, axis=0)
+                    nrefill = self.pop_size - population.shape[0]
+                    population = np.vstack(
+                        (population, self.refill_population(nrefill))
+                    )
+                except TypeError:
+                    pruned_pop = np.zeros(shape=(1, self.n_genes), dtype=object)
+                    pruned_pop[0, :] = population[0, :]
+                    for i in range(self.pop_size):
+                        if not all(population[i, :] == pruned_pop[0, :]):
+                            pruned_pop = np.vstack((pruned_pop, population[i]))
+                    nrefill = self.pop_size - pruned_pop.shape[0]
+                    if nrefill > 0:
+                        population = np.vstack(
+                            (pruned_pop, self.refill_population(nrefill))
+                        )
 
             fitness = np.hstack((fitness[0], self.calculate_fitness(population[1:, :])))
 
@@ -88,10 +119,12 @@ def solve_progress(self, niter=None):
             bar()
 
         self.generations_ = gen_n
+        self.fitness_ = fitness
         self.best_individual_ = population[0, :]
+        if np.isclose(self.best_fitness_, fitness[0]):
+            conv += 1
         self.best_fitness_ = fitness[0]
         self.population_ = population
-        self.fitness_ = fitness
 
         if self.plot_results:
             self.plot_fitness_results(mean_fitness, max_fitness, gen_n)

@@ -37,6 +37,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         show_stats: bool = False,
         plot_results: bool = False,
         excluded_genes: Sequence = [0],
+        prune_duplicates=False,
         variables_limits: dict = None,
         n_crossover_points: int = 1,
         max_counter: int = 10,
@@ -67,6 +68,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
             excluded_genes=excluded_genes,
             n_crossover_points=n_crossover_points,
             random_state=random_state,
+            prune_duplicates=prune_duplicates,
             logger_file=logger_file,
             logger_level=logger_level,
             to_stdout=to_stdout,
@@ -119,6 +121,21 @@ class SmilesGenAlgSolver(GenAlgSolver):
 
         self.logger.debug("Initial population: {0}".format(population))
         return population
+
+    def refill_population(self, nrefill=0):
+
+        assert nrefill > 0
+        ref_pop = np.zeros(shape=(nrefill, self.n_genes), dtype=object)
+
+        for i in range(nrefill):
+            chromosome = get_smiles_chars(self.starting_smiles[i], self.n_genes)
+            for j in range(1, self.n_genes):
+                chromosome[j] = np.random.choice(self.alphabet, size=1)[0]
+            assert check_smiles_chars(chromosome)
+            ref_pop[i][:] = chromosome[0 : self.n_genes]
+
+        self.logger.debug("Refill subset for population:\n{0}".format(ref_pop))
+        return ref_pop
 
     def get_crossover_points(self):
         """

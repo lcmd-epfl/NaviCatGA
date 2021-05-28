@@ -99,7 +99,7 @@ class Hashable_Geometry(Geometry):
         return hash(tuple(t))
 
 
-def gl2geom(chromosome):
+def gl2geom(chromosome, h_positions="19-20"):
     """Check if a list of Geometries can lead to a valid structure."""
     logger.debug("Checking chromosome using scaffold:\n{0}".format(chromosome[0]))
     scaffold = deepcopy(chromosome[0])
@@ -110,7 +110,7 @@ def gl2geom(chromosome):
             target_list.append(deepgene)
         if gene is None:
             target_list.append(None)
-    h_positions = scaffold.find("H", "19-20")
+    h_positions = scaffold.find("H", h_positions)
     # h_positions = h_positions[::-1]
 
     assert len(h_positions) >= len(target_list)

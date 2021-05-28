@@ -8,9 +8,11 @@ from AaronTools.geometry import Geometry
 
 logger = logging.getLogger(__name__)
 
+h_positions = "19-20"
+
 
 def gl2gap(chromosome, lot=0):
-    ok, geom = gl2geom(chromosome)
+    ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
         logger.debug("No molecule generated from genes.")
     return geom2gap(geom, lot)
@@ -41,7 +43,7 @@ def geom2gap(geom, lot=0):
 
 
 def gl2ehl(chromosome, lot=0):
-    ok, geom = gl2geom(chromosome)
+    ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
         logger.debug("No molecule generated from genes.")
     return geom2ehl(geom, lot)
@@ -115,21 +117,21 @@ def geom2elumo(geom, lot=0):
 
 
 def gl2elumo(chromosome, lot=0):
-    ok, geom = gl2geom(chromosome)
+    ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
         logger.debug("No molecule generated from genes.")
     return geom2elumo(geom, lot)
 
 
 def gl2opt(chromosome, lot=0):
-    ok, geom = gl2geom(chromosome)
+    ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
         logger.warning("No molecule generated from genes.")
     return geom2opt(geom, lot)
 
 
 def gl2ehomo(chromosome, lot=0):
-    ok, geom = gl2geom(chromosome)
+    ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
         logger.debug("No molecule generated from genes.")
     return geom2ehomo(geom, lot)

@@ -205,18 +205,19 @@ class GenAlgSolver:
         if self.mean_fitness_ is None:
             mean_fitness = np.ndarray(shape=(1, 0))
         else:
-            self.logger.debug("Continuing run with previous mean fitness in memory.")
+            self.logger.info("Continuing run with previous mean fitness in memory.")
             mean_fitness = self.mean_fitness_
         if self.max_fitness_ is None:
             max_fitness = np.ndarray(shape=(1, 0))
         else:
-            self.logger.debug("Continuing run with previous max fitness in memory.")
+            self.logger.info("Continuing run with previous max fitness in memory.")
             max_fitness = self.max_fitness_
         if self.population_ is None:
             population = self.initialize_population()
         else:
-            self.logger.debug("Continuing run with previous population in memory.")
+            self.logger.info("Continuing run with previous population in memory.")
             population = self.population_
+
         fitness = self.calculate_fitness(population)
         fitness, population = self.sort_by_fitness(fitness, population)
         gen_interval = max(round(self.max_gen / 10), 1)
@@ -251,6 +252,25 @@ class GenAlgSolver:
                 )
 
             population = self.mutate_population(population, self.n_mutations)
+            if self.prune_duplicates:
+                try:
+                    population = np.unique(population, axis=0)
+                    nrefill = self.pop_size - population.shape[0]
+                    population = np.hstack(
+                        (population, self.refill_population(nrefill))
+                    )
+                except TypeError:
+                    pruned_pop = np.zeros(shape=(1, self.n_genes), dtype=object)
+                    pruned_pop[0, :] = population[0, :]
+                    for i in range(self.pop_size):
+                        if not all(population[i, :] == pruned_pop[0, :]):
+                            pruned_pop = np.vstack((pruned_pop, population[i]))
+                    nrefill = self.pop_size - pruned_pop.shape[0]
+                    if nrefill > 0:
+                        population = np.vstack(
+                            (pruned_pop, self.refill_population(nrefill))
+                        )
+
             fitness = np.hstack((fitness[0], self.calculate_fitness(population[1:, :])))
             fitness, population = self.sort_by_fitness(fitness, population)
             self.best_individual_ = population[0, :]

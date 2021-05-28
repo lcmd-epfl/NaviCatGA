@@ -8,6 +8,8 @@ from simpleGA.wrappers_xyz import gl2geom
 
 logger = logging.getLogger(__name__)
 
+h_positions = "19-20"
+
 
 def get_starting_xyz_from_path(path="scaffolds"):
     reference = False
@@ -76,7 +78,7 @@ def get_dictionary_from_path(path="dictionary"):
 def check_xyz(chromosome):
     """Check if a list of Geometries can lead to a valid structure."""
     logger.debug("Checking chromosome using scaffold:\n{0}".format(chromosome[0]))
-    return gl2geom(chromosome)[0]
+    return gl2geom(chromosome, h_positions)[0]
 
 
 def pad_xyz_list(xyz, maxchars):
@@ -91,7 +93,7 @@ def pad_xyz_list(xyz, maxchars):
 
 
 def write_chromosome(outname, chromosome):
-    ok, geom = gl2geom(chromosome)
+    ok, geom = gl2geom(chromosome, h_positions)
     if ok:
         geom.write(outname)
     else:

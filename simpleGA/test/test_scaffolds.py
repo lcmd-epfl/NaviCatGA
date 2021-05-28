@@ -25,9 +25,9 @@ def mlr(geom, lot=0):
 def test_scaffolds_23():
     solver = XYZGenAlgSolver(
         n_genes=3,
-        pop_size=5,
-        max_gen=2,
-        mutation_rate=0.05,
+        pop_size=10,
+        max_gen=5,
+        mutation_rate=0.15,
         fitness_function=my_fitness_function(),
         path_scaffolds="scaffolds",
         random_state=24,

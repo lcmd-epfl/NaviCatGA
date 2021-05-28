@@ -86,7 +86,7 @@ def calculate_fitness_cache_xyz(self, population):
     logger.debug("Evaluating fitness individually with cache.")
     for i in range(population.shape[0]):
         chromosome = population[i][0 : self.n_genes]
-        geom = gl2geom(chromosome)[1]
+        geom = gl2geom(chromosome, self.h_positions)[1]
         fitness[i, :] = calculate_one_fitness_cache_xyz(
             geom, self.hashable_fitness_function
         )

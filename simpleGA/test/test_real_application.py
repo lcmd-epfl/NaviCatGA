@@ -34,7 +34,7 @@ def test_real_application_16():
         ),  # homo-lumo gap, logp
         starting_selfies=starting_selfies,
         starting_stoned=True,
-        excluded_genes=[0],
+        prune_duplicates=True,
         mutation_rate=0.05,
         selection_rate=0.4,
         random_state=666,

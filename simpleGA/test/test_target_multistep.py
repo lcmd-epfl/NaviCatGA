@@ -31,6 +31,7 @@ def test_target_multistep_17():
             max_gen=50,
             pop_size=10,
             selection_strategy="random",
+            prune_duplicates=True,
             n_crossover_points=1,
             random_state=420,
             to_file=False,
