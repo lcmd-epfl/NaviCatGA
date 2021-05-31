@@ -51,8 +51,6 @@ def solve_progress(self, niter=None):
         fitness, population, printable_fitness
     )
 
-    self.logger.info(fitness)
-
     gen_interval = max(round(self.max_gen / 10), 1)
     if niter is None:
         niter = self.max_gen
@@ -61,7 +59,7 @@ def solve_progress(self, niter=None):
     conv = 0
 
     with alive_bar(niter) as bar:
-        for counter in range(self.max_gen):
+        for counter in range(niter):
             gen_n = counter + 1
             if self.verbose and gen_n % gen_interval == 0:
                 self.logger.info("Iteration: {0}".format(gen_n))
