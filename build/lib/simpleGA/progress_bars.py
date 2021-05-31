@@ -46,10 +46,12 @@ def solve_progress(self, niter=None):
     # initialize the population
     population = self.initialize_population()
 
-    fitness = self.calculate_fitness(population)
-    self.logger.info(fitness)
+    fitness, printable_fitness = self.calculate_fitness(population)
+    fitness, population, printable_fitness = self.sort_by_fitness(
+        fitness, population, printable_fitness
+    )
 
-    fitness, population = self.sort_by_fitness(fitness, population)
+    self.logger.info(fitness)
 
     gen_interval = max(round(self.max_gen / 10), 1)
     if niter is None:
@@ -112,9 +114,16 @@ def solve_progress(self, niter=None):
                             (pruned_pop, self.refill_population(nrefill))
                         )
 
-            fitness = np.hstack((fitness[0], self.calculate_fitness(population[1:, :])))
-
-            fitness, population = self.sort_by_fitness(fitness, population)
+            rest_fitness, rest_printable_fitness = self.calculate_fitness(
+                population[1:, :]
+            )
+            fitness = np.hstack((fitness[0], rest_fitness))
+            printable_fitness = np.hstack(
+                (printable_fitness[0], rest_printable_fitness)
+            )
+            fitness, population, printable_fitness = self.sort_by_fitness(
+                fitness, population, printable_fitness
+            )
 
             bar()
 
@@ -124,6 +133,7 @@ def solve_progress(self, niter=None):
         if np.isclose(self.best_fitness_, fitness[0]):
             conv += 1
         self.best_fitness_ = fitness[0]
+        self.best_pfitness_ = printable_fitness[0]
         self.population_ = population
 
         if self.plot_results:

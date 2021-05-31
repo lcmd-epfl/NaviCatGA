@@ -104,8 +104,10 @@ class GenAlgSolver:
         self.generations_ = 0
         self.best_individual_ = None
         self.best_fitness_ = 0
+        self.best_pfitness__ = 0
         self.population_ = None
         self.fitness_ = None
+        self.printable_fitness = None
         self.mean_fitness_ = None
         self.max_fitness_ = None
         self.runtime_ = 0.0
@@ -218,8 +220,11 @@ class GenAlgSolver:
             self.logger.info("Continuing run with previous population in memory.")
             population = self.population_
 
-        fitness = self.calculate_fitness(population)
-        fitness, population = self.sort_by_fitness(fitness, population)
+        fitness, printable_fitness = self.calculate_fitness(population)
+        fitness, population, printable_fitness = self.sort_by_fitness(
+            fitness, population, printable_fitness
+        )
+
         gen_interval = max(round(self.max_gen / 10), 1)
         gen_n = 1
         conv = 0
@@ -270,17 +275,25 @@ class GenAlgSolver:
                         population = np.vstack(
                             (pruned_pop, self.refill_population(nrefill))
                         )
-
-            fitness = np.hstack((fitness[0], self.calculate_fitness(population[1:, :])))
-            fitness, population = self.sort_by_fitness(fitness, population)
+            rest_fitness, rest_printable_fitness = self.calculate_fitness(
+                population[1:, :]
+            )
+            fitness = np.hstack((fitness[0], rest_fitness))
+            printable_fitness = np.hstack(
+                (printable_fitness[0], rest_printable_fitness)
+            )
+            fitness, population, printable_fitness = self.sort_by_fitness(
+                fitness, population, printable_fitness
+            )
             self.best_individual_ = population[0, :]
             if np.isclose(self.best_fitness_, fitness[0]):
                 conv += 1
             self.best_fitness_ = fitness[0]
+            self.best_pfitness_ = printable_fitness[0]
 
             if self.verbose and self.generations_ % gen_interval == 0:
                 self.logger.info("Generation: {0}".format(self.generations_))
-                self.logger.info("Best fitness: {0}".format(self.best_fitness_))
+                self.logger.info("Best fitness: {0}".format(self.best_pfitness_))
                 self.logger.trace("Best individual: {0}".format(population[0, :]))
                 self.logger.trace(
                     "Population at generation: {0}: {1}".format(
@@ -318,13 +331,15 @@ class GenAlgSolver:
             fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
             for i in range(population.shape[0]):
                 fitness[i, :] = self.fitness_function(population[i])
-            return np.squeeze(fitness)
+            self.printable_fitness = fitness
+            return np.squeeze(fitness), np.squeeze(fitness)
         else:
             nvals = len(self.scalarizer.goals)
             fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
             for i in range(population.shape[0]):
                 fitness[i, :] = self.fitness_function(population[i])
-            return self.scalarizer.scalarize(fitness)
+            self.printable_fitness = fitness
+            return self.scalarizer.scalarize(fitness), fitness
 
     def select_parents(self, fitness):
         """
@@ -444,7 +459,7 @@ class GenAlgSolver:
         return int(np.ceil((self.pop_size - 1) * self.n_genes * self.mutation_rate))
 
     @staticmethod
-    def sort_by_fitness(fitness, population):
+    def sort_by_fitness(fitness, population, printable_fitness):
         """
         Sorts the population by its fitness.
         :param fitness: fitness of the population
@@ -455,7 +470,11 @@ class GenAlgSolver:
         sorted_fitness = np.argsort(fitness)[::-1]
         population = population[sorted_fitness, :]
         fitness = fitness[sorted_fitness]
-        return fitness, population
+        try:
+            printable_fitness = printable_fitness[sorted_fitness, :]
+        except IndexError:
+            printable_fitness = fitness
+        return fitness, population, printable_fitness
 
     def get_crossover_points(self):
         """

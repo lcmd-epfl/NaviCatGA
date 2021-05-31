@@ -12,6 +12,7 @@ h_positions = "19-20"
 
 
 def gl2gap(chromosome, lot=0):
+    logger.debug(f"Level of Theory passed at {lot}")
     ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
         logger.debug("No molecule generated from genes.")
@@ -19,6 +20,7 @@ def gl2gap(chromosome, lot=0):
 
 
 def geom2gap(geom, lot=0):
+    logger.debug(f"Level of Theory passed at {lot}")
     try:
         pyscfmol, mf = geom2pyscf(geom, lot=lot)
         idx = np.argsort(mf.mo_energy)
@@ -34,7 +36,7 @@ def geom2gap(geom, lot=0):
                 break
         assert e_lumo > e_homo
     except Exception as m:
-        logger.debug(m)
+        logger.warning(m)
         logger.warning("E(LUMO)-E(HOMO) could not be evaluated for chromosome.")
         logger.debug("Geometry :\n{0}".format(geom))
         e_homo = 1e6
@@ -43,6 +45,7 @@ def geom2gap(geom, lot=0):
 
 
 def gl2ehl(chromosome, lot=0):
+    logger.debug(f"Level of Theory passed at {lot}")
     ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
         logger.debug("No molecule generated from genes.")
@@ -50,6 +53,7 @@ def gl2ehl(chromosome, lot=0):
 
 
 def geom2ehl(geom, lot=0):
+    logger.debug(f"Level of Theory passed at {lot}")
     try:
         pyscfmol, mf = geom2pyscf(geom, lot=lot)
         idx = np.argsort(mf.mo_energy)
@@ -65,7 +69,7 @@ def geom2ehl(geom, lot=0):
                 break
         assert e_lumo > e_homo
     except Exception as m:
-        logger.debug(m)
+        logger.warning(m)
         logger.warning("E(HOMO) and E(LUMO) could not be evaluated for chromosome.")
         logger.debug("Geometry :\n{0}".format(geom))
         e_homo = 1e6
@@ -74,6 +78,7 @@ def geom2ehl(geom, lot=0):
 
 
 def geom2ehomo(geom, lot=0):
+    logger.debug(f"Level of Theory passed at {lot}")
     try:
         pyscfmol, mf = geom2pyscf(geom, lot=lot)
         idx = np.argsort(mf.mo_energy)
@@ -88,7 +93,7 @@ def geom2ehomo(geom, lot=0):
                 break
         assert 0 > e_homo
     except Exception as m:
-        logger.debug(m)
+        logger.warning(m)
         logger.warning("E(HOMO) could not be evaluated for chromosome.")
         logger.debug("Geometry :\n{0}".format(geom))
         e_homo = -1e6
@@ -96,6 +101,7 @@ def geom2ehomo(geom, lot=0):
 
 
 def geom2elumo(geom, lot=0):
+    logger.debug(f"Level of Theory passed at {lot}")
     try:
         pyscfmol, mf = geom2pyscf(geom, lot=lot)
         idx = np.argsort(mf.mo_energy)
@@ -110,13 +116,14 @@ def geom2elumo(geom, lot=0):
                 break
         assert 0 < e_lumo
     except Exception as m:
-        logger.debug(m)
+        logger.warning(m)
         logger.warning("E(LUMO) could not be evaluated for chromosome.")
         logger.debug("Geometry :\n{0}".format(geom))
     return e_lumo
 
 
 def gl2elumo(chromosome, lot=0):
+    logger.debug(f"Level of Theory passed at {lot}")
     ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
         logger.debug("No molecule generated from genes.")
@@ -124,6 +131,7 @@ def gl2elumo(chromosome, lot=0):
 
 
 def gl2opt(chromosome, lot=0):
+    logger.debug(f"Level of Theory passed at {lot}")
     ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
         logger.warning("No molecule generated from genes.")
@@ -131,6 +139,7 @@ def gl2opt(chromosome, lot=0):
 
 
 def gl2ehomo(chromosome, lot=0):
+    logger.debug(f"Level of Theory passed at {lot}")
     ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
         logger.debug("No molecule generated from genes.")
@@ -138,6 +147,7 @@ def gl2ehomo(chromosome, lot=0):
 
 
 def geom2opt(geom, lot=0):
+    logger.debug(f"Level of Theory passed at {lot}")
     try:
         pyscfmol, mf = geom2pyscf(geom, lot=lot)
         pyscfmol, mf = opt(pyscfmol, mf)
@@ -175,6 +185,9 @@ def pyscf2geom(pyscfmol, geom):
 
 
 def geom2pyscf(geom, lot=0):
+    logger.debug(
+        f"Level of Theory passed to pySCF at {lot}:\n 0 is RMINDO3 \n 1 is PBE/pcseg0 \n 2 is b97d/def2svp"
+    )
     pyscfmol = gto.Mole()
     pyscfmol.atom = ""
     nelectron = pyscfmol.atom_charges().sum()

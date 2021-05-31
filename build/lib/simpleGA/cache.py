@@ -40,9 +40,9 @@ def calculate_fitness_cache_selfies(self, population):
 
     logger.trace(calculate_one_fitness_cache_selfies.cache_info())
     if self.scalarizer is None:
-        return np.squeeze(fitness)
+        return np.squeeze(fitness), np.squeeze(fitness)
     else:
-        return self.scalarizer.scalarize(fitness)
+        return self.scalarizer.scalarize(fitness), fitness
 
 
 def calculate_fitness_cache_smiles(self, population):
@@ -67,9 +67,9 @@ def calculate_fitness_cache_smiles(self, population):
 
     logger.trace(calculate_one_fitness_cache_selfies.cache_info())
     if self.scalarizer is None:
-        return np.squeeze(fitness)
+        return np.squeeze(fitness), np.squeeze(fitness)
     else:
-        return self.scalarizer.scalarize(fitness)
+        return self.scalarizer.scalarize(fitness), fitness
 
 
 def calculate_fitness_cache_xyz(self, population):
@@ -92,9 +92,9 @@ def calculate_fitness_cache_xyz(self, population):
         )
     logger.trace(calculate_one_fitness_cache_xyz.cache_info())
     if self.scalarizer is None:
-        return np.squeeze(fitness)
+        return np.squeeze(fitness), np.squeeze(fitness)
     else:
-        return self.scalarizer.scalarize(fitness)
+        return self.scalarizer.scalarize(fitness), fitness
 
 
 @lru_cache(maxsize=128)
