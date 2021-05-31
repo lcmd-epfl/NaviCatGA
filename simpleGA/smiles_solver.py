@@ -24,7 +24,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         n_genes: int,
         starting_smiles: list = [""],
         starting_random: bool = False,
-        substituent_list: list = ["C", "N", "P"],
+        substituent_list: list = ["C", "N", "P", "O", "[Si]", "F", "[H]"],
         fitness_function=None,
         hashable_fitness_function=None,
         scalarizer=None,
@@ -66,9 +66,9 @@ class SmilesGenAlgSolver(GenAlgSolver):
             show_stats=show_stats,
             plot_results=plot_results,
             excluded_genes=excluded_genes,
+            prune_duplicates=prune_duplicates,
             n_crossover_points=n_crossover_points,
             random_state=random_state,
-            prune_duplicates=prune_duplicates,
             logger_file=logger_file,
             logger_level=logger_level,
             to_stdout=to_stdout,
@@ -172,10 +172,10 @@ class SmilesGenAlgSolver(GenAlgSolver):
         offspring = np.empty_like(first_parent, dtype=object)
         valid_smiles = False
 
-        # if beta < 0.5:
-        #    first_parent = first_parent[::-1]
-        # if gamma > 0.5:
-        #    sec_parent = sec_parent[::-1]
+        if beta < 0.5:
+            first_parent = first_parent[::-1]
+        if gamma > 0.5:
+            sec_parent = sec_parent[::-1]
 
         if offspring_number == "first":
             while not valid_smiles:

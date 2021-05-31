@@ -36,10 +36,6 @@ def sc2smiles(chromosome):
     )
     smiles = "*{0}{1}{2}{3}*".format(core, phosphine_1, phosphine_2, silyl)
     smiles = "{0}{1}{2}{3}".format(core, phosphine_1, phosphine_2, silyl)
-    # mol, smi_canon, check = sanitize_smiles(smiles)
-    # if check:
-    #     return smi_canon
-    # else:
     logger.debug("Chromosome transformed to SMILES {0}".format(smiles))
     return smiles
 
