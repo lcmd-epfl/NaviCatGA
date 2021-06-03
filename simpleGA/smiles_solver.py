@@ -84,17 +84,18 @@ class SmilesGenAlgSolver(GenAlgSolver):
                 raise (InvalidInput(exception_messages["AlphabetDimensions"]))
             self.alphabet = substituent_list
             self.multi_alphabet = True
-            if self.excluded_genes is not None:
+            if excluded_genes is not None:
                 raise (InvaludInput(exception_messages["MultiDictExcluded"]))
             if equivalences is None:
-                equivalences = [[] * n_genes]
+                equivalences = []
                 for j in range(n_genes):
+                    equivalences.append([j])
                     for k in range(n_genes):
-                        if all(self.alphabet[j] == self.alphabet[k]):
+                        if list(self.alphabet[j]) == list(self.alphabet[k]):
                             equivalences[j].append(k)
                 tpls = [tuple(x) for x in equivalences]
                 dct = list(dict.fromkeys(tpls))
-                equivalences = [list(x) for x in lst]
+                equivalences = [list(x) for x in dct]
                 self.equivalences = equivalences
                 logger.debug(f"Equivalence classes are {equivalences}")
             else:
@@ -208,7 +209,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
             backup_first_parent = first_parent
             for group in self.equivalences:
                 mask_allowed = np.zeros(backup_first_parent.size, dtype=bool)
-                mask_forbidden = np.ones(baclup_first_parent.size, dtype=bool)
+                mask_forbidden = np.ones(backup_first_parent.size, dtype=bool)
                 mask_allowed[group] = True
                 mask_forbidden[group] = False
                 full_offspring = np.empty_like(backup_first_parent, dtype=object)
@@ -238,7 +239,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                     offspring[c:ci] = first_parent[c:ci]
                     offspring[ci:] = sec_parent[ci:]
                     c = cj
-                if self.allowed_mutation_genes is not None:
+                if not self.multi_alphabet:
                     full_offspring[mask_allowed] = offspring[:]
                     offspring = full_offspring
                 logger.trace(
@@ -271,7 +272,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                     offspring[c:ci] = sec_parent[c:ci]
                     offspring[ci:] = first_parent[ci:]
                     c = cj
-                if self.allowed_mutation_genes is not None:
+                if not self.multi_alphabet:
                     full_offspring[mask_allowed] = offspring[:]
                     offspring = full_offspring
                 logger.trace(
@@ -336,6 +337,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         Print xyz for all the population at the current state.
         """
         for i, j in zip(range(self.pop_size), self.fitness_):
+            print(self.population_[:].reshape(-1))
             sc2depictions(
                 self.population_[i][:],
                 "{0}_{1}_{2}".format(basename, i, np.round(j, 4)),
