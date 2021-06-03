@@ -35,14 +35,14 @@ def calculate_fitness_cache_selfies(self, population):
         chromosome = population[i][0 : self.n_genes]
         selfies = sc2selfies(chromosome)
         fitness[i, :] = calculate_one_fitness_cache_selfies(
-            selfies, self.n_genes, self.fitness_function
+            selfies, self.fitness_function
         )
 
     logger.trace(calculate_one_fitness_cache_selfies.cache_info())
     if self.scalarizer is None:
         return np.squeeze(fitness), np.squeeze(fitness)
     else:
-        return self.scalarizer.scalarize(fitness), fitness
+        return self.scalarizer.scalarize(fitness), (fitness)
 
 
 def calculate_fitness_cache_smiles(self, population):
@@ -69,7 +69,7 @@ def calculate_fitness_cache_smiles(self, population):
     if self.scalarizer is None:
         return np.squeeze(fitness), np.squeeze(fitness)
     else:
-        return self.scalarizer.scalarize(fitness), fitness
+        return self.scalarizer.scalarize(fitness), (fitness)
 
 
 def calculate_fitness_cache_xyz(self, population):
@@ -94,11 +94,30 @@ def calculate_fitness_cache_xyz(self, population):
     if self.scalarizer is None:
         return np.squeeze(fitness), np.squeeze(fitness)
     else:
-        return self.scalarizer.scalarize(fitness), fitness
+        return self.scalarizer.scalarize(fitness), (fitness)
+
+
+def calculate_fitness_cache(self, population):
+    if self.scalarizer is None:
+        nvals = 1
+    else:
+        nvals = len(self.scalarizer.goals)
+    fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
+    for i in range(population.shape[0]):
+        chromosome = population[i][0 : self.n_genes]
+        hashed_list = self.fitness_function(chromosome)
+        fitness[i, :] = calculate_one_fitness_cache_xyz(
+            hashed_list, self.hashable_fitness_function
+        )
+    logger.trace(self.hashable_fitness_function.cache_info())
+    if self.scalarizer is None:
+        return np.squeeze(fitness), np.squeeze(fitness)
+    else:
+        return self.scalarizer.scalarize(fitness), (fitness)
 
 
 @lru_cache(maxsize=128)
-def calculate_one_fitness_cache_selfies(selfies, n_genes, hashable_fitness_function):
+def calculate_one_fitness_cache_selfies(selfies, hashable_fitness_function):
     return hashable_fitness_function(selfies)
 
 
@@ -115,7 +134,9 @@ def calculate_one_fitness_cache_xyz(geom, hashable_fitness_function):
 def set_lru_cache(self):
     if self.problem_type == "selfies":
         self.calculate_fitness = types.MethodType(calculate_fitness_cache_selfies, self)
-    if self.problem_type == "smiles":
+    elif self.problem_type == "smiles":
         self.calculate_fitness = types.MethodType(calculate_fitness_cache_smiles, self)
-    if self.problem_type == "xyz":
+    elif self.problem_type == "xyz":
         self.calculate_fitness = types.MethodType(calculate_fitness_cache_xyz, self)
+    else:
+        self.calculate_fitness = types.MethodType(calculate_fitness_cache, self)

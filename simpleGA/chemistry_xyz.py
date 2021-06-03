@@ -77,7 +77,7 @@ def get_dictionary_from_path(path="dictionary"):
 
 def check_xyz(chromosome):
     """Check if a list of Geometries can lead to a valid structure."""
-    logger.debug("Checking chromosome using scaffold:\n{0}".format(chromosome[0]))
+    logger.trace("Checking chromosome using scaffold:\n{0}".format(chromosome[0]))
     return gl2geom(chromosome, h_positions)[0]
 
 

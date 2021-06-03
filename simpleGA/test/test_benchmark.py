@@ -30,7 +30,7 @@ def test_rediscover_paracetamol(
         pop_size=pop_size,
         mutation_rate=mutation_rate,
         n_crossover_points=n_crossover_points,
-        random_state=133742,
+        random_state=42,
         logger_file="benchmark_{0}_{1}_{2}.log".format(
             n_crossover_points, mutation_rate, max_gen
         ),

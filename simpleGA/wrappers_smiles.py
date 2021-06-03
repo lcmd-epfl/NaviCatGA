@@ -34,7 +34,6 @@ def sc2smiles(chromosome):
     phosphine_2 = (
         "(P(" + chromosome[4] + ")(" + chromosome[5] + ")(" + chromosome[6] + "))"
     )
-    smiles = "*{0}{1}{2}{3}*".format(core, phosphine_1, phosphine_2, silyl)
     smiles = "{0}{1}{2}{3}".format(core, phosphine_1, phosphine_2, silyl)
     logger.debug("Chromosome transformed to SMILES {0}".format(smiles))
     return smiles

@@ -40,28 +40,37 @@ class GenAlgSolver:
         hashable_fitness_function=None,
         scalarizer=None,
         prune_duplicates=False,
-        logger_file: str = "output.log",
-        logger_level: str = "INFO",
         to_stdout: bool = True,
         to_file: bool = True,
+        logger_file: str = "output.log",
+        logger_level: str = "INFO",
         progress_bars: bool = False,
-        problem_type=None,
+        problem_type: str = "base",
     ):
         """
         :param n_genes: number of genes (variables) to have in each chromosome
-        :param fitness_function: can either be a fitness function or
-        a class implementing a fitness function + methods to override
-        the default ones: create_offspring, mutate_population, initialize_population
+        :param fitness_function: a fitness function that takes a chromosome and returns one (or more) fitness scores
         :param max_gen: maximum number of generations to perform the optimization
-        :param pop_size: population size
+        :param max_conv: maximum number of generations with same max fitness until convergence is assumed
+        :param pop_size: number of chromosomes in population
         :param mutation_rate: rate at which random mutations occur
-        :param selection_rate: percentage of the population to be selected for crossover
-        :param selection_strategy: strategy to use for selection
+        :param selection_rate: top percentage of the population to be selected for crossover
+        :param selection_strategy: strategy to use for selection, several available
         :param verbose: whether to print iterations status
         :param show_stats: whether to print stats at the end
         :param plot_results: whether to plot results of the run at the end
+        :param excluded_genes: indices of chromosomes that should not be changed during run
         :param n_crossover_points: number of slices to make for the crossover
         :param random_state: optional. whether the random seed should be set
+        :param lru_cache: whether to use lru_cacheing, which is monkeypatched into the class. Requires that the fitness function is hashable.
+        :param hashable_fitness_function: specific fitness function that derives to an ultimately hashable argument.
+        :param scalarizer: chimera scalarizer object initialized to work on the results of fitness function
+        :param prune_duplicates: whether to prune duplicates in each generation
+        :param to_stdout: whether to write output to stdout
+        :param to_file: whether to write output to file
+        :param logger_file: name of the file where output will be written if to_file is True
+        :param progess_bars: whether to monkeypatch progress bars for monitoring run
+        :param problem_type: passing a simple flag from child class for some in built hashable fitness functions.
         """
 
         if isinstance(random_state, int):
@@ -104,7 +113,7 @@ class GenAlgSolver:
         self.generations_ = 0
         self.best_individual_ = None
         self.best_fitness_ = 0
-        self.best_pfitness__ = 0
+        self.best_pfitness_ = 0
         self.population_ = None
         self.fitness_ = None
         self.printable_fitness = None
@@ -267,11 +276,14 @@ class GenAlgSolver:
                 except TypeError:
                     pruned_pop = np.zeros(shape=(1, self.n_genes), dtype=object)
                     pruned_pop[0, :] = population[0, :]
-                    for i in range(self.pop_size):
-                        if not all(population[i, :] == pruned_pop[0, :]):
+                    for i in range(1, self.pop_size):
+                        if not all(population[i, :] == pruned_pop[-1, :]):
                             pruned_pop = np.vstack((pruned_pop, population[i]))
                     nrefill = self.pop_size - pruned_pop.shape[0]
                     if nrefill > 0:
+                        self.logger.debug(
+                            f"Replacing a total of {nrefill} chromosomes due to duplications."
+                        )
                         population = np.vstack(
                             (pruned_pop, self.refill_population(nrefill))
                         )
@@ -279,9 +291,8 @@ class GenAlgSolver:
                 population[1:, :]
             )
             fitness = np.hstack((fitness[0], rest_fitness))
-            printable_fitness = np.hstack(
-                (printable_fitness[0], rest_printable_fitness)
-            )
+            for i in range(1, len(rest_fitness)):
+                printable_fitness = rest_printable_fitness[i]
             fitness, population, printable_fitness = self.sort_by_fitness(
                 fitness, population, printable_fitness
             )
@@ -291,7 +302,7 @@ class GenAlgSolver:
             self.best_fitness_ = fitness[0]
             self.best_pfitness_ = printable_fitness[0]
 
-            if self.verbose and self.generations_ % gen_interval == 0:
+            if self.verbose:
                 self.logger.info("Generation: {0}".format(self.generations_))
                 self.logger.info("Best fitness: {0}".format(self.best_pfitness_))
                 self.logger.trace("Best individual: {0}".format(population[0, :]))
@@ -339,7 +350,7 @@ class GenAlgSolver:
             for i in range(population.shape[0]):
                 fitness[i, :] = self.fitness_function(population[i])
             self.printable_fitness = fitness
-            return self.scalarizer.scalarize(fitness), fitness
+            return self.scalarizer.scalarize(fitness), (fitness)
 
     def select_parents(self, fitness):
         """

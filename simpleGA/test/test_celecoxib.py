@@ -36,7 +36,7 @@ def test_celecoxib_07():
         ),  # See fitness_functions_selfies, this is logp
         max_gen=25,  # This is a simple test and this run is more expensive
         pop_size=10,  # So we reduce the size of everything
-        random_state=42069,
+        random_state=666,
         logger_level="INFO",
         logger_file="celecoxib_logp.log",
         verbose=True,

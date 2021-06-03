@@ -61,11 +61,11 @@ def solve_progress(self, niter=None):
     with alive_bar(niter) as bar:
         for counter in range(niter):
             gen_n = counter + 1
-            if self.verbose and gen_n % gen_interval == 0:
+            if self.verbose:
                 self.logger.info("Iteration: {0}".format(gen_n))
                 self.logger.info(f"Best fitness: {printable_fitness[0]}")
-                self.logger.info(f"Best individual: {population[0,:]}")
-                self.logger.debug(
+                self.logger.trace(f"Best individual: {population[0,:]}")
+                self.logger.trace(
                     "Population at generation: {0}: {1}".format(gen_n, population)
                 )
 
@@ -97,17 +97,20 @@ def solve_progress(self, niter=None):
                 try:
                     population = np.unique(population, axis=0)
                     nrefill = self.pop_size - population.shape[0]
-                    population = np.vstack(
+                    population = np.hstack(
                         (population, self.refill_population(nrefill))
                     )
                 except TypeError:
                     pruned_pop = np.zeros(shape=(1, self.n_genes), dtype=object)
                     pruned_pop[0, :] = population[0, :]
-                    for i in range(self.pop_size):
-                        if not all(population[i, :] == pruned_pop[0, :]):
+                    for i in range(1, self.pop_size - 1):
+                        if not all(population[i, :] == pruned_pop[-1, :]):
                             pruned_pop = np.vstack((pruned_pop, population[i]))
                     nrefill = self.pop_size - pruned_pop.shape[0]
                     if nrefill > 0:
+                        self.logger.debug(
+                            f"Replacing a total of {nrefill} chromosomes due to duplications."
+                        )
                         population = np.vstack(
                             (pruned_pop, self.refill_population(nrefill))
                         )
@@ -116,9 +119,8 @@ def solve_progress(self, niter=None):
                 population[1:, :]
             )
             fitness = np.hstack((fitness[0], rest_fitness))
-            printable_fitness = np.hstack(
-                (printable_fitness[0], rest_printable_fitness)
-            )
+            for i in range(1, len(rest_fitness)):
+                printable_fitness = rest_printable_fitness[i]
             fitness, population, printable_fitness = self.sort_by_fitness(
                 fitness, population, printable_fitness
             )

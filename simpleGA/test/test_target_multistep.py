@@ -57,7 +57,7 @@ def test_target_multistep_17():
         pop_size=20,
         n_crossover_points=3,
         logger_file="multistep.log",
-        random_state=666,
+        random_state=420,
         verbose=False,
         to_file=True,
         progress_bars=True,
