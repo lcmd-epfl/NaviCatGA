@@ -276,8 +276,11 @@ class GenAlgSolver:
                 except TypeError:
                     pruned_pop = np.zeros(shape=(1, self.n_genes), dtype=object)
                     pruned_pop[0, :] = population[0, :]
+                    self.logger.debug(
+                        f"Pruned pop set as {pruned_pop} and population set as {population}"
+                    )
                     for i in range(1, self.pop_size):
-                        if not all(population[i, :] == pruned_pop[-1, :]):
+                        if not list(population[i]) == list(pruned_pop[-1]):
                             pruned_pop = np.vstack((pruned_pop, population[i]))
                     nrefill = self.pop_size - pruned_pop.shape[0]
                     if nrefill > 0:
@@ -304,7 +307,7 @@ class GenAlgSolver:
 
             if self.verbose:
                 self.logger.info("Generation: {0}".format(self.generations_))
-                self.logger.info("Best fitness: {0}".format(self.best_pfitness_))
+                self.logger.info("Best fitness result: {0}".format(self.best_pfitness_))
                 self.logger.trace("Best individual: {0}".format(population[0, :]))
                 self.logger.trace(
                     "Population at generation: {0}: {1}".format(
@@ -343,6 +346,7 @@ class GenAlgSolver:
             for i in range(population.shape[0]):
                 fitness[i, :] = self.fitness_function(population[i])
             self.printable_fitness = fitness
+            self.logger.trace(f"Printable fitness: {fitness}")
             return np.squeeze(fitness), np.squeeze(fitness)
         else:
             nvals = len(self.scalarizer.goals)
@@ -350,6 +354,7 @@ class GenAlgSolver:
             for i in range(population.shape[0]):
                 fitness[i, :] = self.fitness_function(population[i])
             self.printable_fitness = fitness
+            self.logger.trace(f"Printable fitness: {fitness}")
             return self.scalarizer.scalarize(fitness), (fitness)
 
     def select_parents(self, fitness):
