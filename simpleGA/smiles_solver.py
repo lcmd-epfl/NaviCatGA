@@ -24,7 +24,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         n_genes: int,
         starting_smiles: list = [""],
         starting_random: bool = False,
-        substituent_list: list = ["C", "N", "P", "O", "[Si]", "F", "[H]"],
+        alphabet_list: list = ["C", "N", "P", "O", "[Si]", "F", "[H]"],
         fitness_function=None,
         hashable_fitness_function=None,
         scalarizer=None,
@@ -79,10 +79,10 @@ class SmilesGenAlgSolver(GenAlgSolver):
             lru_cache=lru_cache,
             problem_type=problem_type,
         )
-        if all(isinstance(i, list) for i in substituent_list):
-            if not (len(substituent_list) == n_genes):
+        if all(isinstance(i, list) for i in alphabet_list):
+            if not (len(alphabet_list) == n_genes):
                 raise (InvalidInput(exception_messages["AlphabetDimensions"]))
-            self.alphabet = substituent_list
+            self.alphabet = alphabet_list
             self.multi_alphabet = True
             if excluded_genes is not None:
                 raise (InvaludInput(exception_messages["MultiDictExcluded"]))
@@ -103,7 +103,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                     raise (InvalidInput(exception_messages["EquivalenceDimensions"]))
         else:
             self.multi_alphabet = False
-            sorted_list = list(sorted(substituent_list))
+            sorted_list = list(sorted(alphabet_list))
             self.alphabet = [sorted_list] * n_genes
             assert len(self.alphabet) == n_genes
 

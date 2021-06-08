@@ -85,11 +85,38 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             problem_type=problem_type,
         )
 
+        if all(isinstance(i, list) for i in alphabet_list):
+            if not (len(alphabet_list) == n_genes):
+                raise (InvalidInput(exception_messages["AlphabetDimensions"]))
+            self.alphabet = alphabet_list
+            self.multi_alphabet = True
+            if excluded_genes is not None:
+                raise (InvaludInput(exception_messages["MultiDictExcluded"]))
+            if equivalences is None:
+                equivalences = []
+                for j in range(n_genes):
+                    equivalences.append([j])
+                    for k in range(n_genes):
+                        if list(self.alphabet[j]) == list(self.alphabet[k]):
+                            equivalences[j].append(k)
+                tpls = [tuple(x) for x in equivalences]
+                dct = list(dict.fromkeys(tpls))
+                equivalences = [list(x) for x in dct]
+                self.equivalences = equivalences
+                logger.debug(f"Equivalence classes are {equivalences}")
+            else:
+                if len(equivalences) > n_genes:
+                    raise (InvalidInput(exception_messages["EquivalenceDimensions"]))
+        else:
+            self.multi_alphabet = False
+            sorted_list = list(sorted(alphabet_list))
+            self.alphabet = [sorted_list] * n_genes
+            assert len(self.alphabet) == n_genes
+
         if variables_limits is not None:
             set_semantic_constraints(variables_limits)
 
-        self.branching = branching
-        if self.branching:
+        if branching and not self.multi_alphabet:
             tuples = [
                 (i + 1, j + 1) for i in range(self.n_genes) for j in range(self.n_genes)
             ]
@@ -97,9 +124,8 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 if i[0] == i[1]:
                     pass
                 else:
-                    # alphabet.add("[Branch{0}_{1}]".format(i[0], i[1]))
+                    alphabet.add("[Branch{0}_{1}]".format(i[0], i[1]))
                     pass
-        self.alphabet = list(sorted(alphabet_list))
 
         if not isinstance(starting_selfies, list):
             raise (InvalidInput(exception_messages["StartingSelfiesNotAList"]))
@@ -121,7 +147,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             starting_selfies = list([""] * self.pop_size)
             for i in range(self.pop_size):
                 for j in range(random.randint(1, self.n_genes)):
-                    starting_selfies[i] += np.random.choice(self.alphabet, size=1)[0]
+                    starting_selfies[i] += np.random.choice(self.alphabet[j], size=1)[0]
         elif starting_stoned:
             starting_selfies = randomize_selfies(
                 starting_selfies[0], num_random=self.pop_size
@@ -167,7 +193,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         for i in range(nrefill):
             chromosome = get_selfie_chars(self.starting_selfies[i], self.n_genes)
             for j in range(1, self.n_genes):
-                chromosome[j] = np.random.choice(self.alphabet, size=1)[0]
+                chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
             assert check_selfie_chars(chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 
@@ -295,7 +321,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             backup_gene = population[i, j]
             counter = 0
             while not valid_smiles:
-                population[i, j] = np.random.choice(self.alphabet, size=1)[0]
+                population[i, j] = np.random.choice(self.alphabet[j], size=1)[0]
                 logger.trace(
                     "Mutated chromosome attempt {0}: {1}".format(
                         counter, population[i, :]

@@ -13,7 +13,7 @@ def read_database(filename="database.xls") -> pd.DataFrame:
 
 # Get lists from xls
 fdb = read_database("database.xls")
-substituent_list = list(set(fdb.Substituent_1.dropna()))
+alphabet_list = list(set(fdb.Substituent_1.dropna()))
 
 starting_smiles = ["[Ni@]"]
 
@@ -35,7 +35,7 @@ def test_ni_catalyst_24():
         mutation_rate=0.05,
         fitness_function=my_fitness_function(),
         starting_smiles=starting_smiles,
-        substituent_list=substituent_list,
+        alphabet_list=alphabet_list,
         random_state=24,
         starting_random=True,
         logger_level="INFO",
