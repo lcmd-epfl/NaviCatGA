@@ -9,6 +9,9 @@ exception_messages = {
     "ConflictedRandomStoned": "starting_random is not compatible with starting_stoned",
     "ConflictedStonedStarting": "there must be exactly one item in starting_selfies for starting_stoned to work",
     "AlphabetIsEmpty": "at least one element is required in the alphabet for mutation and randomization purposes",
+    "AlphabetDimensions": "the input alphabet seems to be a nested list, from which an alphabet list for each gene is expected",
+    "EquivalenceDimensions": "the input equivalences define more subgroups than genes per chromosome, which is wrong",
+    "MultiDictExcluded": "multiple dictionaries and excluded genes are not compatible. Set up one element dictionaries for exclusion",
     "TooManyCrossoverPoints": "n_crossover_points must be smaller than n_genes",
     "TooFewCrossoverPoints": "n_crossover_points must be at least 1 for the genetic algorithm to work",
 }

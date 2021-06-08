@@ -42,6 +42,7 @@ def test_real_application_16():
         verbose=False,
         progress_bars=True,
         to_file=True,
+        selection_strategy="boltzmann",
         to_stdout=False,
         logger_level="INFO",
         logger_file="real_application.log",

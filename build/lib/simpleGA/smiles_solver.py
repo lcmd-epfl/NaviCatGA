@@ -36,9 +36,10 @@ class SmilesGenAlgSolver(GenAlgSolver):
         verbose: bool = True,
         show_stats: bool = False,
         plot_results: bool = False,
-        excluded_genes: Sequence = [0],
+        excluded_genes: Sequence = None,
         prune_duplicates=False,
         variables_limits: dict = None,
+        equivalences: Sequence = None,
         n_crossover_points: int = 1,
         max_counter: int = 10,
         random_state: int = None,
@@ -48,6 +49,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         to_file: bool = True,
         progress_bars: bool = False,
         lru_cache: bool = False,
+        multi_alphabet: bool = False,
         problem_type="smiles",
     ):
 
@@ -77,7 +79,33 @@ class SmilesGenAlgSolver(GenAlgSolver):
             lru_cache=lru_cache,
             problem_type=problem_type,
         )
-        self.alphabet = list(sorted(substituent_list))
+        if all(isinstance(i, list) for i in substituent_list):
+            if not (len(substituent_list) == n_genes):
+                raise (InvalidInput(exception_messages["AlphabetDimensions"]))
+            self.alphabet = substituent_list
+            self.multi_alphabet = True
+            if excluded_genes is not None:
+                raise (InvaludInput(exception_messages["MultiDictExcluded"]))
+            if equivalences is None:
+                equivalences = []
+                for j in range(n_genes):
+                    equivalences.append([j])
+                    for k in range(n_genes):
+                        if list(self.alphabet[j]) == list(self.alphabet[k]):
+                            equivalences[j].append(k)
+                tpls = [tuple(x) for x in equivalences]
+                dct = list(dict.fromkeys(tpls))
+                equivalences = [list(x) for x in dct]
+                self.equivalences = equivalences
+                logger.debug(f"Equivalence classes are {equivalences}")
+            else:
+                if len(equivalences) > n_genes:
+                    raise (InvalidInput(exception_messages["EquivalenceDimensions"]))
+        else:
+            self.multi_alphabet = False
+            sorted_list = list(sorted(substituent_list))
+            self.alphabet = [sorted_list] * n_genes
+            assert len(self.alphabet) == n_genes
 
         if not isinstance(starting_smiles, list):
             raise (InvalidInput(exception_messages["StartingSmilesNotAList"]))
@@ -115,7 +143,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
             chromosome = get_smiles_chars(self.starting_smiles[i], self.n_genes)
             if self.starting_random:
                 for j in range(1, self.n_genes):
-                    chromosome[j] = np.random.choice(self.alphabet, size=1)[0]
+                    chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
             assert check_smiles_chars(chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
@@ -130,7 +158,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         for i in range(nrefill):
             chromosome = get_smiles_chars(self.starting_smiles[i], self.n_genes)
             for j in range(1, self.n_genes):
-                chromosome[j] = np.random.choice(self.alphabet, size=1)[0]
+                chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
             assert check_smiles_chars(chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 
@@ -157,25 +185,48 @@ class SmilesGenAlgSolver(GenAlgSolver):
         """
         beta = np.random.rand(1)[0]
         gamma = np.random.rand(1)[0]
-        backup_sec_parent = sec_parent
-        backup_first_parent = first_parent
-        if self.allowed_mutation_genes is not None:
-            mask_allowed = np.zeros(first_parent.size, dtype=bool)
-            mask_forbidden = np.ones(first_parent.size, dtype=bool)
-            mask_allowed[self.allowed_mutation_genes] = True
-            mask_forbidden[self.allowed_mutation_genes] = False
-            full_offspring = np.empty_like(first_parent, dtype=object)
-            full_offspring[mask_forbidden] = first_parent[mask_forbidden]
-            first_parent = first_parent[mask_allowed]
-            sec_parent = sec_parent[mask_allowed]
+        if not self.multi_alphabet:
+
+            backup_sec_parent = sec_parent
+            backup_first_parent = first_parent
+            if self.allowed_mutation_genes is not None:
+                mask_allowed = np.zeros(first_parent.size, dtype=bool)
+                mask_forbidden = np.ones(first_parent.size, dtype=bool)
+                mask_allowed[self.allowed_mutation_genes] = True
+                mask_forbidden[self.allowed_mutation_genes] = False
+                full_offspring = np.empty_like(first_parent, dtype=object)
+                full_offspring[mask_forbidden] = first_parent[mask_forbidden]
+                first_parent = first_parent[mask_allowed]
+                sec_parent = sec_parent[mask_allowed]
+            if beta < 0.5:
+                first_parent = first_parent[::-1]
+            if gamma > 0.5:
+                sec_parent = sec_parent[::-1]
+        else:
+            beta = np.random.rand(1)[0]
+            gamma = np.random.rand(1)[0]
+            backup_sec_parent = sec_parent
+            backup_first_parent = first_parent
+            for group in self.equivalences:
+                mask_allowed = np.zeros(backup_first_parent.size, dtype=bool)
+                mask_forbidden = np.ones(backup_first_parent.size, dtype=bool)
+                mask_allowed[group] = True
+                mask_forbidden[group] = False
+                full_offspring = np.empty_like(backup_first_parent, dtype=object)
+                full_offspring[mask_forbidden] = backup_first_parent[mask_forbidden]
+                first_parent = backup_first_parent[mask_allowed]
+                sec_parent = backup_sec_parent[mask_allowed]
+                if beta < 0.5:
+                    first_parent = first_parent[::-1]
+                if gamma > 0.5:
+                    sec_parent = sec_parent[::-1]
+                backup_first_parent[mask_allowed] = first_parent
+                backup_sec_parent[mask_allowed] = sec_parent
+            sec_parent = backup_sec_parent
+            first_parent = backup_first_parent
 
         offspring = np.empty_like(first_parent, dtype=object)
         valid_smiles = False
-
-        if beta < 0.5:
-            first_parent = first_parent[::-1]
-        if gamma > 0.5:
-            sec_parent = sec_parent[::-1]
 
         if offspring_number == "first":
             while not valid_smiles:
@@ -188,7 +239,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                     offspring[c:ci] = first_parent[c:ci]
                     offspring[ci:] = sec_parent[ci:]
                     c = cj
-                if self.allowed_mutation_genes is not None:
+                if not self.multi_alphabet:
                     full_offspring[mask_allowed] = offspring[:]
                     offspring = full_offspring
                 logger.trace(
@@ -221,7 +272,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                     offspring[c:ci] = sec_parent[c:ci]
                     offspring[ci:] = first_parent[ci:]
                     c = cj
-                if self.allowed_mutation_genes is not None:
+                if not self.multi_alphabet:
                     full_offspring[mask_allowed] = offspring[:]
                     offspring = full_offspring
                 logger.trace(
@@ -259,7 +310,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
             backup_gene = population[i, j]
             counter = 0
             while not valid_smiles:
-                population[i, j] = np.random.choice(self.alphabet, size=1)[0]
+                population[i, j] = np.random.choice(self.alphabet[j], size=1)[0]
                 logger.trace(
                     "Mutated chromosome attempt {0}: {1}".format(
                         counter, population[i, :]
@@ -286,6 +337,8 @@ class SmilesGenAlgSolver(GenAlgSolver):
         Print xyz for all the population at the current state.
         """
         for i, j in zip(range(self.pop_size), self.fitness_):
+            for gene in self.population_[i][:]:
+                print(gene)
             sc2depictions(
                 self.population_[i][:],
                 "{0}_{1}_{2}".format(basename, i, np.round(j, 4)),

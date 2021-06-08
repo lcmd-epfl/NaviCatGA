@@ -20,11 +20,6 @@ if __name__ == "__main__":
 
 
 def solve_progress(self, niter=None):
-    """
-    Performs the genetic algorithm optimization according to the parameters
-    provided at initialization.
-    :return: None
-    """
 
     start_time = datetime.datetime.now()
 
@@ -120,7 +115,7 @@ def solve_progress(self, niter=None):
             )
             fitness = np.hstack((fitness[0], rest_fitness))
             for i in range(1, len(rest_fitness)):
-                printable_fitness = rest_printable_fitness[i]
+                printable_fitness[i] = rest_printable_fitness[i]
             fitness, population, printable_fitness = self.sort_by_fitness(
                 fitness, population, printable_fitness
             )

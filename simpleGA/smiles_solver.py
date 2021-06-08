@@ -337,7 +337,8 @@ class SmilesGenAlgSolver(GenAlgSolver):
         Print xyz for all the population at the current state.
         """
         for i, j in zip(range(self.pop_size), self.fitness_):
-            print(self.population_[:].reshape(-1))
+            for gene in self.population_[i][:]:
+                print(gene)
             sc2depictions(
                 self.population_[i][:],
                 "{0}_{1}_{2}".format(basename, i, np.round(j, 4)),
