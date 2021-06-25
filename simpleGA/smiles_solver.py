@@ -3,7 +3,7 @@ import logging
 import random
 import numpy as np
 
-from simpleGA.genetic_algorithm_base import GenAlgSolver
+from simpleGA.base_solver import GenAlgSolver
 from simpleGA.chemistry_smiles import (
     sanitize_multiple_smiles,
     get_smiles_chars,

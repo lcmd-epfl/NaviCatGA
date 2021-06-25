@@ -8,7 +8,7 @@ from selfies import (
     get_semantic_robust_alphabet,
     set_semantic_constraints,
 )
-from simpleGA.genetic_algorithm_base import GenAlgSolver
+from simpleGA.base_solver import GenAlgSolver
 from simpleGA.chemistry_selfies import (
     sanitize_multiple_smiles,
     get_selfie_chars,

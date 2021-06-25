@@ -2,7 +2,7 @@ from typing import Sequence
 import logging
 import numpy as np
 
-from simpleGA.genetic_algorithm_base import GenAlgSolver
+from simpleGA.base_solver import GenAlgSolver
 from simpleGA.chemistry_xyz import (
     get_starting_xyz_from_file,
     get_starting_xyz_from_path,

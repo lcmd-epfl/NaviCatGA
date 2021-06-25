@@ -2,7 +2,7 @@ from typing import Sequence
 
 import numpy as np
 
-from simpleGA.genetic_algorithm_base import GenAlgSolver
+from simpleGA.base_solver import GenAlgSolver
 from simpleGA.helpers import get_input_dimensions
 from simpleGA.fitness_functions_float import fitness_function_float
 
