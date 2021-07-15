@@ -5,7 +5,10 @@ logger = logging.getLogger(__name__)
 
 
 def GaussianModifier(score, target, parameter=1) -> float:
-    sigma = parameter * (target / 2)
+    if not np.isclose(target, 0.0):
+        sigma = parameter * (abs(target) / 2)
+    else:
+        sigma = parameter
     try:
         score = np.exp(-0.5 * np.power((score - target) / sigma, 2.0))
     except Exception as m:
