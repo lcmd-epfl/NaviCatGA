@@ -53,31 +53,59 @@ class GenAlgSolver:
         progress_bars: bool = False,
         problem_type: str = "base",
     ):
-        """
+        """Base solver class for the GA. i
+        Has the core methods and attributes that any GA run will require.
+        However, it lacks a way to create new offspring
+        evaluate fitness, and generate mutations.
+        Those must be defined in a child class.
+
         Parameters:
-        n_genes: number of genes (variables) to have in each chromosome
-        fitness_function: a fitness function that takes a chromosome and returns one (or more) fitness scores
-        max_gen: maximum number of generations to perform the optimization
-        max_conv: maximum number of generations with same max fitness until convergence is assumed
-        pop_size: number of chromosomes in population
-        mutation_rate: rate at which random mutations occur
-        selection_rate: top percentage of the population to be selected for crossover
-        selection_strategy: strategy to use for selection, several available
-        verbose: whether to print iterations status
-        show_stats: whether to print stats at the end
-        plot_results: whether to plot results of the run at the end
-        excluded_genes: indices of chromosomes that should not be changed during run
-        n_crossover_points: number of slices to make for the crossover
-        random_state: optional. whether the random seed should be set
-        lru_cache: whether to use lru_cacheing, which is monkeypatched into the class. Requires that the fitness function is hashable.
-        hashable_fitness_function: specific fitness function that derives to an ultimately hashable argument.
-        scalarizer: chimera scalarizer object initialized to work on the results of fitness function
-        prune_duplicates: whether to prune duplicates in each generation
-        to_stdout: whether to write output to stdout
-        to_file: whether to write output to file
-        logger_file: name of the file where output will be written if to_file is True
-        progess_bars: whether to monkeypatch progress bars for monitoring run
-        problem_type: passing a simple flag from child class for some in built hashable fitness functions.
+        :param n_genes: number of genes (variables) to have in each chromosome
+        :type n_genes: int
+        :param fitness_function: a fitness function that takes a chromosome and returns one (or more) fitness scores
+        :type fitness_function: callable
+        :param max_gen: maximum number of generations to perform the optimization
+        :type max_gen: int
+        :param max_conv: maximum number of generations with same max fitness until convergence is assumed
+        :type max_conv : int
+        :param pop_size: number of chromosomes in population
+        :type pop_size: int
+        :param mutation_rate: rate at which random mutations occur
+        :type mutation_rate: float
+        :param selection_rate: top percentage of the population to be selected for crossover
+        :type selection_rate: float
+        :param selection_strategy: strategy to use for selection, several available
+        :type selection_strategy: string
+        :param verbose: whether to print iterations status
+        :type verbose: int
+        :param show_stats: whether to print stats at the end
+        :type show_stats: bool
+        :param plot_results: whether to plot results of the run at the end
+        :type plot_results: bool
+        :param excluded_genes: indices of chromosomes that should not be changed during run
+        :type excluded_genes: optional, array-like
+        :param n_crossover_points: number of slices to make for the crossover
+        :type n_crossover_points: int
+        :param random_state: fixed the random seed for the run
+        :type random_state: int, optional
+        :param lru_cache: whether to use lru_cacheing, which is monkeypatched into the class. Requires that the fitness function is hashable.
+        :type lru_cache: bool
+        :param hashable_fitness_function: specific fitness function that derives to an ultimately hashable argument
+        :type hashable_fitness_function: callable
+        :param scalarizer: chimera scalarizer object initialized to work on the results of fitness function
+        :type scalarizer: optional, object with a scalarize method that takes in a population fitness and rescales it
+        :param prune_duplicates: whether to prune duplicates in each generation
+        :type prune_duplicates: bool
+        :param to_stdout: whether to write output to stdout
+        :type to_stdout: bool
+        :param to_file: whether to write output to file
+        :type to_file: bool
+        :param logger_file: name of the file where output will be written if to_file is True
+        :type logger_file: string
+        :param progess_bars: whether to monkeypatch progress bars for monitoring run
+        :type progress_bars: bool
+        :param problem_type: passing a simple flag from child class for some in built hashable fitness functions.
+        :type problem_type: string
         """
 
         if isinstance(random_state, int):
@@ -143,13 +171,13 @@ class GenAlgSolver:
         self, fitness_function, selection_strategy, pop_size: int, excluded_genes
     ):
         """
-        Function to check that main arguments have been passed to the GenAlgSolver class if lru_cache is True.
+        Function to check that the main arguments have been passed to the GenAlgSolver instance.
 
         Parameters:
-        hashable_fitness_function : a fitness function that takes a hashable object instead of a chromosome. Check cache.py for info.
-        selection_strategy : a selection strategy string that can be recognized by this class
-        pop_size (int) : the number of chromosomes
-        excluded_genes : a sequence of genes that should not change or mutate
+        :param fitness_function: a fitness function that takes a chromosome and returns a fitness
+        :param selection_strategy: a selection strategy string that can be recognized by this class
+        :param pop_size: the number of chromosomes
+        :param excluded_genes: a sequence of genes that should not change or mutate
         """
 
         if not fitness_function:
@@ -192,13 +220,13 @@ class GenAlgSolver:
         excluded_genes,
     ):
         """
-        Function to check that main arguments have been passed to the GenAlgSolver class.
+        Function to check that the main arguments have been passed to the GenAlgSolver instance if lru_cache is True.
 
         Parameters:
-        fitness_function : a fitness function
-        selection_strategy : a selection strategy string that can be recognized by this class
-        pop_size (int) : the number of chromosomes
-        excluded_genes : a sequence of genes that should not change or mutate
+        :param hashable_fitness_function: a fitness function that takes a hashable object and returns a fitness
+        :param selection_strategy: a selection strategy string that can be recognized by this class
+        :param pop_size: the number of chromosomes
+        :param excluded_genes: a sequence of genes that should not change or mutate
         """
         if not hashable_fitness_function:
             try:
@@ -236,11 +264,11 @@ class GenAlgSolver:
         """
         Performs the genetic algorithm optimization according to the parameters
         loaded in __init__. Will run for max_gen or until it
-        converges for max_conv iterations, or for min(niter,max_gen) iterations if nite
+        converges for max_conv iterations, or for min(niter,max_gen) iterations if niter
         is an integer. Will start using previous state if available.
 
         Parameters:
-        niter (int) : the number of generations to run.
+        :param niter: the number of generations to run
         """
 
         start_time = datetime.datetime.now()
@@ -362,14 +390,14 @@ class GenAlgSolver:
 
     def calculate_fitness(self, population):
         """
-        Calculates the fitness of the population using the defined fitness_function.
+        Calculates the fitness of the population using the defined fitness function.
 
         Parameters:
-        population: population (array of chromosomes)
+        :param population: population (array of chromosomes)
 
         Returns:
-        fitness : scalarized fitness of the current population, will be used.
-        pfitness : not-scalarized fitness of the current population, for printing.
+        :return fitness: scalarized fitness of the current population, will be used
+        :return pfitness: not-scalarized fitness of the current population, for printing
         """
         if self.scalarizer is None:
             nvals = 1
@@ -399,10 +427,10 @@ class GenAlgSolver:
         individuals and then selecting the fittest one from the 3.
 
         Parameters:
-        fitness: the fitness values of the population at a given iteration.
+        :param fitness: the fitness values of the whole population at a given iteration
 
         Returns:
-        ma, pa :  a tuple containing the selected 2 parents for each mating.
+        :return  (ma, pa):  a tuple containing the selected 2 parents for each mating
         """
 
         ma, pa = None, None
@@ -460,9 +488,10 @@ class GenAlgSolver:
         Select based on self.prob_intervals, which are given by the selection strategy.
 
         Parameters:
-        value: random value defining which individual is selected from the probability intervals.
+        :param value: random value defining which individual is selected from the probability intervals
 
-        Returns: the selected individual.
+        Returns:
+        :return: the selected individual from the population
         """
         return np.argmin(value > self.prob_intervals) - 1
 
@@ -471,10 +500,11 @@ class GenAlgSolver:
         Performs tournament selection.
 
         Parameters:
-        fitness: the fitness values of the population at a given iteration.
-        range_max: range of individuals that can be selected for the tournament.
+        :param fitness: the fitness values of the population at a given iteration
+        :param range_max: range of individuals that can be selected for the tournament
 
-        returns: the selected individuals.
+        Returns:
+        :return: the selected individuals
         """
 
         selected_individuals = np.random.choice(range_max, size=(self.n_matings, 3))
@@ -564,9 +594,9 @@ class GenAlgSolver:
         Plots the evolution of the mean and max fitness of the population using matplotlib.
 
         Parameters:
-        mean_fitness: mean fitness array for each generation.
-        max_fitness: max fitness array for each generation.
-        iterations: total number of generations.
+        :param mean_fitness: mean fitness array for each generation
+        :param max_fitness: max fitness array for each generation
+        :param iterations: total number of generations
         """
 
         plt.figure(figsize=(7, 7))
@@ -628,4 +658,7 @@ class GenAlgSolver:
         return mutation_rows, mutation_cols
 
     def close_solve_logger(self):
+        """
+        Closes the logger of this solver. This avoid multiple loggers stacking when another solver is created.
+        """
         close_logger(self.logger)

@@ -53,7 +53,7 @@ def sanitize_multiple_smiles(smiles_list):
 
 
 def timed_sanitizer(smiles):
-    """Convert smiles string to rdkit.mol, call exception and return None if it takes more than 10 seconds to run. """
+    """Convert smiles string to rdkit.mol, call exception and return None if it takes more than 10 seconds to run."""
     with timeout(seconds=10):
         mol = smi2mol(smiles, sanitize=False)
         if mol is not None:

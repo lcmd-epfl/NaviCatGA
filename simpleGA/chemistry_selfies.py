@@ -72,7 +72,7 @@ def decode_selfies_list(selfies_list):
 
 
 def timed_sanitizer(smiles):
-    """Convert smiles string to rdkit.mol, call exception and return None if it takes more than 10 seconds to run. """
+    """Convert smiles string to rdkit.mol, call exception and return None if it takes more than 10 seconds to run."""
     with timeout(seconds=10):
         mol = smi2mol(smiles, sanitize=False)
         if mol is not None:
@@ -87,7 +87,7 @@ def timed_sanitizer(smiles):
 
 
 def timed_decoder(selfie):
-    """Decode a selfies string to smiles using selfies.decoder, call exception and return None if decoder takes more than 10 seconds to run. """
+    """Decode a selfies string to smiles using selfies.decoder, call exception and return None if decoder takes more than 10 seconds to run."""
     with timeout(seconds=10):
         selfie = selfie.replace("[nop]", "")
         smiles = decoder(selfie)

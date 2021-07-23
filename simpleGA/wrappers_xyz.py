@@ -15,7 +15,7 @@ class Hashable_Geometry(Geometry):
         super().__init__(*args, **kw)
 
     def __repr__(self):
-        """ string representation """
+        """string representation"""
         s = ""
         for a in self:
             s += a.__repr__() + "\n"
