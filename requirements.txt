@@ -11,7 +11,6 @@ pandas==1.2.2
 pycairo==1.20.0
 pyparsing==2.4.7
 pyscf==1.7.6.post1
-pytest==0.0.0
 python-dateutil==2.8.1
 reportlab==3.5.59
 scipy==1.6.1
