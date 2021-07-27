@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
-from simpleGA.selfies_solver import SelfiesGenAlgSolver
-from simpleGA.score_modifiers import score_modifier
-from simpleGA.wrappers_selfies import (
+from navicatGA.selfies_solver import SelfiesGenAlgSolver
+from navicatGA.score_modifiers import score_modifier
+from navicatGA.wrappers_selfies import (
     sc2smiles,
     sc2mol_structure,
     mol_structure2depictions,
 )
-from simpleGA.quantum_wrappers_selfies import sc2gap
-from simpleGA.wrappers_selfies import sc2logp, sc2mw
+from navicatGA.quantum_wrappers_selfies import sc2gap
+from navicatGA.wrappers_selfies import sc2logp, sc2mw
 
 
 # In this test, we dont use a chimera scalarizer and we simply define a combined fitness function

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from simpleGA.continuous_solver import ContinuousGenAlgSolver
-from simpleGA.fitness_functions_float import fitness_function_float
+from navicatGA.continuous_solver import ContinuousGenAlgSolver
+from navicatGA.fitness_functions_float import fitness_function_float
 
 
 def test_float_08():

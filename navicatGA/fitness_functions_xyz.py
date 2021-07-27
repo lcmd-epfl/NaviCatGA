@@ -1,7 +1,7 @@
 import logging
 
-from simpleGA.score_modifiers import score_modifier
-from simpleGA.quantum_wrappers_xyz import gl2gap, gl2ehomo, gl2elumo
+from navicatGA.score_modifiers import score_modifier
+from navicatGA.quantum_wrappers_xyz import gl2gap, gl2ehomo, gl2elumo
 
 logger = logging.getLogger(__name__)
 

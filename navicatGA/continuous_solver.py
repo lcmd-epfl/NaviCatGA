@@ -2,9 +2,9 @@ from typing import Sequence
 
 import numpy as np
 
-from simpleGA.base_solver import GenAlgSolver
-from simpleGA.helpers import get_input_dimensions
-from simpleGA.fitness_functions_float import fitness_function_float
+from navicatGA.base_solver import GenAlgSolver
+from navicatGA.helpers import get_input_dimensions
+from navicatGA.fitness_functions_float import fitness_function_float
 
 
 class ContinuousGenAlgSolver(GenAlgSolver):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from simpleGA.smiles_solver import SmilesGenAlgSolver
-from simpleGA.wrappers_smiles import sc2smiles, sc2mol_structure, sc2logp, sc2depictions
+from navicatGA.smiles_solver import SmilesGenAlgSolver
+from navicatGA.wrappers_smiles import sc2smiles, sc2mol_structure, sc2logp, sc2depictions
 import pandas as pd
 import pickle
 

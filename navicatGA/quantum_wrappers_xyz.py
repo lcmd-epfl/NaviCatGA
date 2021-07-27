@@ -1,7 +1,7 @@
 import logging
 import numpy as np
 from pyscf import gto, dft, semiempirical
-from simpleGA.wrappers_xyz import gl2geom
+from navicatGA.wrappers_xyz import gl2geom
 from AaronTools.atoms import Atom
 from AaronTools.geometry import Geometry
 

@@ -1,6 +1,6 @@
 import logging
 import numpy as np
-from simpleGA.timeout import timeout
+from navicatGA.timeout import timeout
 from selfies import decoder, encoder
 from rdkit import Chem, RDLogger
 from rdkit.Chem import AllChem

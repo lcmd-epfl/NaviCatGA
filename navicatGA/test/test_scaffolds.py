@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-from simpleGA.xyz_solver import XYZGenAlgSolver
-from simpleGA.wrappers_xyz import gl2geom
-from simpleGA.wrappers_xyz import geom2dihedral, geom2sub_sterimol
-from simpleGA.quantum_wrappers_xyz import geom2ehomo
+from navicatGA.xyz_solver import XYZGenAlgSolver
+from navicatGA.wrappers_xyz import gl2geom
+from navicatGA.wrappers_xyz import geom2dihedral, geom2sub_sterimol
+from navicatGA.quantum_wrappers_xyz import geom2ehomo
 
 
 def my_fitness_function():

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 from selfies import encoder
-from simpleGA.selfies_solver import SelfiesGenAlgSolver
-from simpleGA.fitness_functions_selfies import fitness_function_target_selfies
-from simpleGA.wrappers_selfies import (
+from navicatGA.selfies_solver import SelfiesGenAlgSolver
+from navicatGA.fitness_functions_selfies import fitness_function_target_selfies
+from navicatGA.wrappers_selfies import (
     sc2smiles,
     sc2mol_structure,
     mol_structure2depictions,

@@ -2,8 +2,8 @@ from typing import Sequence
 import logging
 import numpy as np
 
-from simpleGA.base_solver import GenAlgSolver
-from simpleGA.chemistry_xyz import (
+from navicatGA.base_solver import GenAlgSolver
+from navicatGA.chemistry_xyz import (
     get_starting_xyz_from_file,
     get_starting_xyz_from_path,
     pad_xyz_list,
@@ -12,8 +12,8 @@ from simpleGA.chemistry_xyz import (
     get_dictionary_from_path,
     write_chromosome,
 )
-from simpleGA.exceptions import InvalidInput
-from simpleGA.exception_messages import exception_messages
+from navicatGA.exceptions import InvalidInput
+from navicatGA.exception_messages import exception_messages
 
 
 logger = logging.getLogger(__name__)

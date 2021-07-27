@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from simpleGA.xyz_solver import XYZGenAlgSolver
-from simpleGA.wrappers_xyz import gl2geom
-from simpleGA.quantum_wrappers_xyz import geom2ehl
+from navicatGA.xyz_solver import XYZGenAlgSolver
+from navicatGA.wrappers_xyz import gl2geom
+from navicatGA.quantum_wrappers_xyz import geom2ehl
 from chimera import Chimera
 import os
 

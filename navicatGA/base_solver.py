@@ -6,12 +6,12 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from simpleGA.exceptions import NoFitnessFunction, InvalidInput
-from simpleGA.exception_messages import exception_messages
-from simpleGA.progress_bars import set_progress_bars
-from simpleGA.cache import set_lru_cache
-from simpleGA.helpers import get_elapsed_time
-from simpleGA.logger import configure_logger, close_logger
+from navicatGA.exceptions import NoFitnessFunction, InvalidInput
+from navicatGA.exception_messages import exception_messages
+from navicatGA.progress_bars import set_progress_bars
+from navicatGA.cache import set_lru_cache
+from navicatGA.helpers import get_elapsed_time
+from navicatGA.logger import configure_logger, close_logger
 
 
 allowed_selection_strategies = {

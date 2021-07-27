@@ -8,15 +8,15 @@ from selfies import (
     get_semantic_robust_alphabet,
     set_semantic_constraints,
 )
-from simpleGA.base_solver import GenAlgSolver
-from simpleGA.chemistry_selfies import (
+from navicatGA.base_solver import GenAlgSolver
+from navicatGA.chemistry_selfies import (
     sanitize_multiple_smiles,
     get_selfie_chars,
     check_selfie_chars,
     randomize_selfies,
 )
-from simpleGA.exceptions import InvalidInput
-from simpleGA.exception_messages import exception_messages
+from navicatGA.exceptions import InvalidInput
+from navicatGA.exception_messages import exception_messages
 from rdkit import rdBase
 
 
@@ -370,7 +370,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
 
 
 def test_benzene_selfies():
-    from simpleGA.fitness_functions_selfies import fitness_function_selfies
+    from navicatGA.fitness_functions_selfies import fitness_function_selfies
 
     starting_selfies = ["[C][C=][C][C=][C][C=][Ring1][Branch1_2]"]
     solver = SelfiesGenAlgSolver(

@@ -2,10 +2,10 @@ import numpy as np
 import types
 import logging
 from functools import lru_cache
-from simpleGA.chemistry_selfies import get_selfie_chars
-from simpleGA.wrappers_selfies import sc2selfies
-from simpleGA.wrappers_smiles import sc2smiles
-from simpleGA.wrappers_xyz import gl2geom
+from navicatGA.chemistry_selfies import get_selfie_chars
+from navicatGA.wrappers_selfies import sc2selfies
+from navicatGA.wrappers_smiles import sc2smiles
+from navicatGA.wrappers_xyz import gl2geom
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from simpleGA.selfies_solver import SelfiesGenAlgSolver
-from simpleGA.fitness_functions_selfies import fitness_function_target_property
+from navicatGA.selfies_solver import SelfiesGenAlgSolver
+from navicatGA.fitness_functions_selfies import fitness_function_target_property
 
 
 def test_target_property_18():

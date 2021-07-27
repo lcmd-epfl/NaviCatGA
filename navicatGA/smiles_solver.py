@@ -3,15 +3,15 @@ import logging
 import random
 import numpy as np
 
-from simpleGA.base_solver import GenAlgSolver
-from simpleGA.chemistry_smiles import (
+from navicatGA.base_solver import GenAlgSolver
+from navicatGA.chemistry_smiles import (
     sanitize_multiple_smiles,
     get_smiles_chars,
     randomize_smiles,
 )
-from simpleGA.wrappers_smiles import check_smiles_chars, sc2depictions
-from simpleGA.exceptions import InvalidInput
-from simpleGA.exception_messages import exception_messages
+from navicatGA.wrappers_smiles import check_smiles_chars, sc2depictions
+from navicatGA.exceptions import InvalidInput
+from navicatGA.exception_messages import exception_messages
 from rdkit import rdBase
 
 

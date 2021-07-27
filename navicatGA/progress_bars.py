@@ -5,7 +5,7 @@ import numpy as np
 import alive_progress
 from alive_progress import alive_bar
 
-from simpleGA.helpers import get_elapsed_time
+from navicatGA.helpers import get_elapsed_time
 
 logger = logging.getLogger(__name__)
 

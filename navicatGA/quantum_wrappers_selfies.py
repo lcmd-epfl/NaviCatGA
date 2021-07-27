@@ -2,8 +2,8 @@ import logging
 import numpy as np
 from rdkit import Chem, RDLogger
 from pyscf import gto, dft, semiempirical
-from simpleGA.wrappers_selfies import sc2mol_structure
-from simpleGA.chemistry_selfies import timed_decoder
+from navicatGA.wrappers_selfies import sc2mol_structure
+from navicatGA.chemistry_selfies import timed_decoder
 
 logger = logging.getLogger(__name__)
 lg = RDLogger.logger()

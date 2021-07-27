@@ -2,10 +2,10 @@
 
 import numpy as np
 from selfies import encoder
-from simpleGA.selfies_solver import SelfiesGenAlgSolver
-from simpleGA.exceptions import InvalidInput
-from simpleGA.fitness_functions_selfies import fitness_function_target_selfies
-from simpleGA.wrappers_selfies import sc2selfies, sc2tanimoto_to_target, sc2depictions
+from navicatGA.selfies_solver import SelfiesGenAlgSolver
+from navicatGA.exceptions import InvalidInput
+from navicatGA.fitness_functions_selfies import fitness_function_target_selfies
+from navicatGA.wrappers_selfies import sc2selfies, sc2tanimoto_to_target, sc2depictions
 
 
 def test_rediscover_paracetamol(

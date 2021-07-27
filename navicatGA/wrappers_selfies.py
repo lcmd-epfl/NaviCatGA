@@ -1,6 +1,6 @@
 import logging
 import numpy as np
-from simpleGA.chemistry_selfies import (
+from navicatGA.chemistry_selfies import (
     sanitize_smiles,
     timed_decoder,
     get_structure_ff,

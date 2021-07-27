@@ -4,7 +4,7 @@ from glob import glob
 from AaronTools.geometry import Geometry
 from AaronTools.fileIO import FileReader
 from AaronTools.substituent import Substituent
-from simpleGA.wrappers_xyz import gl2geom
+from navicatGA.wrappers_xyz import gl2geom
 
 logger = logging.getLogger(__name__)
 

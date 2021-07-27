@@ -6,7 +6,7 @@ from AaronTools.fileIO import FileReader, read_types
 from AaronTools.substituent import Substituent
 from AaronTools.theory import Theory, OptimizationJob, Basis, BasisSet, Method
 from AaronTools.job_control import SubmitProcess
-from simpleGA.wrappers_xyz import gl2geom
+from navicatGA.wrappers_xyz import gl2geom
 import subprocess
 import os
 from time import sleep

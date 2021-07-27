@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
 from selfies import encoder
-from simpleGA.selfies_solver import SelfiesGenAlgSolver
-from simpleGA.chemistry_selfies import count_selfie_chars, get_selfie_chars
-from simpleGA.wrappers_selfies import (
+from navicatGA.selfies_solver import SelfiesGenAlgSolver
+from navicatGA.chemistry_selfies import count_selfie_chars, get_selfie_chars
+from navicatGA.wrappers_selfies import (
     sc2smiles,
     sc2mol_structure,
     mol_structure2depictions,
 )
-from simpleGA.quantum_wrappers_selfies import sc2ehomo
+from navicatGA.quantum_wrappers_selfies import sc2ehomo
 
 
 def fitness_function_wrapper():
