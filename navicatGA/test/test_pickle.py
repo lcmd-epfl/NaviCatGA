@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
 from navicatGA.smiles_solver import SmilesGenAlgSolver
-from navicatGA.wrappers_smiles import sc2smiles, sc2mol_structure, sc2logp, sc2depictions
+from navicatGA.wrappers_smiles import (
+    sc2smiles,
+    sc2mol_structure,
+    sc2logp,
+    sc2depictions,
+)
 import pandas as pd
 import pickle
+import os
+
+database = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "navicatGA/test/database.xls"
+)
 
 
 def read_database(filename="database.xls") -> pd.DataFrame:
@@ -13,7 +23,7 @@ def read_database(filename="database.xls") -> pd.DataFrame:
 
 
 # Get lists from xls
-fdb = read_database("database.xls")
+fdb = read_database(database)
 alphabet_list = list(set(fdb.Substituent_1.dropna()))
 
 starting_smiles = ["[Fe@]"]
