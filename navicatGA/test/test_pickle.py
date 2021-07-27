@@ -11,7 +11,7 @@ import pickle
 import os
 
 database = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "navicatGA/test/database.xls"
+    os.path.dirname(os.path.realpath(__file__)),"database.xls"
 )
 
 

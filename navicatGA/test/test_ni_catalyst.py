@@ -2,10 +2,11 @@
 from navicatGA.smiles_solver import SmilesGenAlgSolver
 from navicatGA.wrappers_smiles import sc2smiles, sc2mol_structure, sc2mw, sc2depictions
 import pandas as pd
+import os
 
 
 database = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "navicatGA/test/database.xls"
+    os.path.dirname(os.path.realpath(__file__)),"database.xls"
 )
 
 
