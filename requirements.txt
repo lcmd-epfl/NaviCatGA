@@ -1,36 +1,18 @@
 AaronTools==1.0b7
-alive-progress @ file:///home/conda/feedstock_root/build_artifacts/alive-progress_1610076653321/work
-attrs @ file:///tmp/build/80754af9/attrs_1604765588209/work
+alive-progress==1.6.2
 certifi==2020.12.5
 cycler==0.10.0
 h5py==3.2.1
-importlib-metadata @ file:///home/conda/feedstock_root/build_artifacts/importlib-metadata_1602263269022/work
-iniconfig @ file:///tmp/build/80754af9/iniconfig_1602780191262/work
 Jinja2==3.0.1
-kiwisolver @ file:///home/conda/feedstock_root/build_artifacts/kiwisolver_1610099772044/work
 MarkupSafe==2.0.1
-matplotlib @ file:///home/conda/feedstock_root/build_artifacts/matplotlib-suite_1610582847402/work
 matter-chimera==1.0
-more-itertools @ file:///tmp/build/80754af9/more-itertools_1605111547926/work
-numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1610324551524/work
-olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
-packaging @ file:///tmp/build/80754af9/packaging_1607971725249/work
+numpy==1.21.1
 pandas==1.2.2
-Pillow @ file:///home/conda/feedstock_root/build_artifacts/pillow_1610407359195/work
-pluggy==0.12.0
-py @ file:///tmp/build/80754af9/py_1607971587848/work
 pycairo==1.20.0
 pyparsing==2.4.7
 pyscf==1.7.6.post1
 pytest==0.0.0
 python-dateutil==2.8.1
-pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1608904108784/work
 reportlab==3.5.59
 scipy==1.6.1
-selfies @ file:///home/conda/feedstock_root/build_artifacts/selfies_1610564865139/work
-six @ file:///home/conda/feedstock_root/build_artifacts/six_1590081179328/work
-SQLAlchemy @ file:///home/conda/feedstock_root/build_artifacts/sqlalchemy_1610127208390/work
-toml @ file:///tmp/build/80754af9/toml_1592853716807/work
-tornado @ file:///home/conda/feedstock_root/build_artifacts/tornado_1610094708661/work
-xlrd @ file:///home/conda/feedstock_root/build_artifacts/xlrd_1610224409810/work
-zipp @ file:///tmp/build/80754af9/zipp_1604001098328/work
+selfies==1.0.4
