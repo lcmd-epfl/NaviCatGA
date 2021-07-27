@@ -1,8 +1,6 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: linux-64
-_libgcc_mutex=0.1=conda_forge
-_openmp_mutex=4.5=1_gnu
 aarontools=1.0b7=pypi_0
 alive-progress=1.6.2=pyhd3deb0d_0
 attrs=20.3.0=pyhd3eb1b0_0
