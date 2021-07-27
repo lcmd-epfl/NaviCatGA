@@ -1,9 +1,0 @@
-numpy==1.21.1
-matplotlib==3.4.2
-AaronTools==1.0b7
-alive-progress==1.6.2
-pandas==1.2.2
-pycairo==1.20.0
-pyscf==1.7.6.post1
-matter-chimera==1.0
-selfies==1.0.4
