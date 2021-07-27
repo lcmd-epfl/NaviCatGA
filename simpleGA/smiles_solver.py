@@ -21,37 +21,60 @@ logger = logging.getLogger(__name__)
 class SmilesGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
-        n_genes: int,
         starting_smiles: list = [""],
         starting_random: bool = False,
         alphabet_list: list = ["C", "N", "P", "O", "[Si]", "F", "[H]"],
+        multi_alphabet: bool = False,
+        equivalences: Sequence = None,
+        variables_limits: dict = None,
+        max_counter: int = 10,
+        # Parameters for base class
+        n_genes: int = 1,
         fitness_function=None,
-        hashable_fitness_function=None,
-        scalarizer=None,
         max_gen: int = 500,
+        max_conv: int = 100,
         pop_size: int = 100,
         mutation_rate: float = 0.05,
         selection_rate: float = 0.25,
         selection_strategy: str = "tournament",
+        excluded_genes: Sequence = None,
+        n_crossover_points: int = 1,
+        random_state: int = None,
+        lru_cache: bool = False,
+        hashable_fitness_function=None,
+        scalarizer=None,
+        prune_duplicates=False,
+        # Verbosity and printing options
         verbose: bool = True,
         show_stats: bool = False,
         plot_results: bool = False,
-        excluded_genes: Sequence = None,
-        prune_duplicates=False,
-        variables_limits: dict = None,
-        equivalences: Sequence = None,
-        n_crossover_points: int = 1,
-        max_counter: int = 10,
-        random_state: int = None,
-        logger_file: str = "output.log",
-        logger_level: str = "INFO",
         to_stdout: bool = True,
         to_file: bool = True,
+        logger_file: str = "output.log",
+        logger_level: str = "INFO",
         progress_bars: bool = False,
-        lru_cache: bool = False,
-        multi_alphabet: bool = False,
         problem_type="smiles",
     ):
+        """Example child solver class for the GA.
+        This child solver class is an example meant for a particular purpose,
+        which also shows how to use the GA with SMILES as a core molecular representation.
+        It might require heavy modification for other particular usages.
+        Only the parameters specific for this child class are covered here.
+
+        Parameters:
+        :param starting_smiles: list containing the starting SMILES elements for all chromosomes; overridden by starting_random=True
+        :type starting_selfies: list
+        :param starting_random: whether to initialize all chromosomes with random elements from alphabets; overrides starting_selfies
+        :type starting_random: bool
+        :param alphabet_list: list containing the alphabets for the individual genes; or a single alphabet for all
+        :type alphabet_list: list
+        :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet 
+        :type multi_alphabet: bool
+        :param equivalences: list of integers that set the equivalent genes of a chromosome; see examples for clarification
+        :type equivalences: list
+        :param max_counter: maximum number of times a wrong structure will try to be corrected before skipping
+        :type max_counter: int
+        """
 
         GenAlgSolver.__init__(
             self,
@@ -60,6 +83,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
             scalarizer=scalarizer,
             n_genes=n_genes,
             max_gen=max_gen,
+            max_conv=max_conv,
             pop_size=pop_size,
             mutation_rate=mutation_rate,
             selection_rate=selection_rate,
@@ -133,8 +157,10 @@ class SmilesGenAlgSolver(GenAlgSolver):
         """
         Initializes the population of the problem according to the
         population size and number of genes and according to the problem
-        type (smiles string elements here).
-        :return: a numpy array with a sanitized initialized population
+        type (either integers or floats).
+        
+        Returns:
+        :return: a numpy array with initialized population
         """
 
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype=object)

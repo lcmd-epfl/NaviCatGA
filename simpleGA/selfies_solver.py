@@ -26,38 +26,62 @@ logger = logging.getLogger(__name__)
 class SelfiesGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
-        n_genes: int,
         starting_selfies: list = ["[nop]"],
         starting_random: bool = False,
         starting_stoned: bool = False,
         alphabet_list: list = list(get_semantic_robust_alphabet()),
+        branching: bool = False,
+        variables_limits: bool = False,
+        max_counter: int = 10,
+        # Parameters for base class
+        n_genes: int = 1,
         fitness_function=None,
-        hashable_fitness_function=None,
-        scalarizer=None,
         max_gen: int = 500,
+        max_conv: int = 100,
         pop_size: int = 100,
         mutation_rate: float = 0.05,
         selection_rate: float = 0.25,
         selection_strategy: str = "tournament",
+        excluded_genes: Sequence = None,
+        n_crossover_points: int = 1,
+        random_state: int = None,
+        lru_cache: bool = False,
+        hashable_fitness_function=None,
+        scalarizer=None,
+        prune_duplicates=False,
+        # Verbosity and printing options
         verbose: bool = True,
         show_stats: bool = False,
         plot_results: bool = False,
-        excluded_genes: Sequence = None,
-        prune_duplicates=False,
-        variables_limits: dict = None,
-        n_crossover_points: int = 1,
-        branching: bool = False,
-        max_counter: int = 10,
-        random_state: int = None,
-        logger_file: str = "output.log",
-        logger_level: str = "INFO",
         to_stdout: bool = True,
         to_file: bool = True,
+        logger_file: str = "output.log",
+        logger_level: str = "INFO",
         progress_bars: bool = False,
-        lru_cache: bool = False,
         problem_type="selfies",
     ):
+        """Example child solver class for the GA.
+        This child solver class is an example meant for a particular purpose,
+        which also shows how to use the GA with SELFIES as a core molecular representation.
+        It might require heavy modification for other particular usages.
+        Only the parameters specific for this child class are covered here.
 
+        Parameters:
+        :param starting_selfies: list containing the starting SELFIES elements for all chromosomes; overridden by starting_random=True
+        :type starting_selfies: list
+        :param starting_random: whether to initialize all chromosomes with random elements from alphabet; overrides starting_selfies
+        :type starting_random: bool
+        :param starting_stoned: whether to use the STONED methodology to generate a chemical subspace from starting_selfies; incompatible with starting_random
+        :type starting_stoned: bool
+        :param alphabet_list: list containing the alphabets for the individual genes; or a single alphabet for all
+        :type alphabet_list: list
+        :param branching: whether to add random branches covering all possible branching possibilities to the alphabets 
+        :type branching: bool
+        :param variable_limits: will set semantic constraints on alphabets if set True
+        :type variable_limits: bool
+        :param max_counter: maximum number of times a wrong structure will try to be corrected before skipping
+        :type max_counter: int
+        """
         GenAlgSolver.__init__(
             self,
             fitness_function=fitness_function,
@@ -65,6 +89,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             scalarizer=scalarizer,
             n_genes=n_genes,
             max_gen=max_gen,
+            max_conv=max_conv,
             pop_size=pop_size,
             mutation_rate=mutation_rate,
             selection_rate=selection_rate,
@@ -113,7 +138,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             self.alphabet = [sorted_list] * n_genes
             assert len(self.alphabet) == n_genes
 
-        if variables_limits is not None:
+        if variables_limits:
             set_semantic_constraints(variables_limits)
 
         if branching and not self.multi_alphabet:
@@ -168,8 +193,10 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         """
         Initializes the population of the problem according to the
         population size and number of genes and according to the problem
-        type (SELFIES elements here).
-        :return: a numpy array with a sanitized initialized population
+        type (either integers or floats).
+        
+        Returns:
+        :return: a numpy array with initialized population
         """
 
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype=object)

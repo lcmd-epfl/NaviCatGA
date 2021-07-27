@@ -19,13 +19,14 @@ RDLogger.DisableLog("rdApp.*")
 
 
 def check_smiles_chars(chromosome):
+    """Checks if a chromosome corresponds to a proper SMILES."""
     smiles = sc2smiles(chromosome)
     logger.debug("Checking SMILES {0} from chromosome {1}".format(smiles, chromosome))
     return sanitize_smiles(smiles)[2]
 
 
 def sc2smiles(chromosome):
-    """Generate a smiles string from a list of smiles characters."""
+    """Generate a SMILES string from a list of SMILES characters. To be customized."""
     silyl = "([Si]([C])([C])([C]))"
     core = chromosome[0]
     phosphine_1 = (
@@ -40,6 +41,7 @@ def sc2smiles(chromosome):
 
 
 def sc2depictions(chromosome, root_name="output", lot=0):
+    """Generate 2D and 3D depictions from a chromosome."""
     mol_structure = sc2mol_structure(chromosome, lot=lot)
     mol2pdb(mol_structure, "{0}.pdb".format(root_name))
     mol2xyz(mol_structure, "{0}.xyz".format(root_name))
@@ -67,6 +69,7 @@ def sc2mol_structure(chromosome, lot=0):
 
 
 def smiles2mol_structure(smiles, lot=0):
+    """Generates a rdkit.mol object with 3D coordinates from a SMILES."""
     mol, smi_canon, check = sanitize_smiles(smiles)
     if not check:
         logger.exception("SMILES {0} cannot be sanitized".format(smiles))

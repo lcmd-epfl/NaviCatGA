@@ -1,13 +1,11 @@
 import datetime
 from abc import abstractmethod
 from typing import Sequence
-
 import numpy as np
 import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-
 from simpleGA.exceptions import NoFitnessFunction, InvalidInput
 from simpleGA.exception_messages import exception_messages
 from simpleGA.progress_bars import set_progress_bars
@@ -36,9 +34,6 @@ class GenAlgSolver:
         mutation_rate: float = 0.15,
         selection_rate: float = 0.5,
         selection_strategy: str = "roulette_wheel",
-        verbose: bool = True,
-        show_stats: bool = False,
-        plot_results: bool = False,
         excluded_genes: Sequence = None,
         n_crossover_points: int = 1,
         random_state: int = None,
@@ -46,6 +41,9 @@ class GenAlgSolver:
         hashable_fitness_function=None,
         scalarizer=None,
         prune_duplicates=False,
+        verbose: bool = True,
+        show_stats: bool = False,
+        plot_results: bool = False,
         to_stdout: bool = True,
         to_file: bool = True,
         logger_file: str = "output.log",
@@ -53,7 +51,7 @@ class GenAlgSolver:
         progress_bars: bool = False,
         problem_type: str = "base",
     ):
-        """Base solver class for the GA. i
+        """Base solver class for the GA.
         Has the core methods and attributes that any GA run will require.
         However, it lacks a way to create new offspring
         evaluate fitness, and generate mutations.
@@ -76,12 +74,6 @@ class GenAlgSolver:
         :type selection_rate: float
         :param selection_strategy: strategy to use for selection, several available
         :type selection_strategy: string
-        :param verbose: whether to print iterations status
-        :type verbose: int
-        :param show_stats: whether to print stats at the end
-        :type show_stats: bool
-        :param plot_results: whether to plot results of the run at the end
-        :type plot_results: bool
         :param excluded_genes: indices of chromosomes that should not be changed during run
         :type excluded_genes: optional, array-like
         :param n_crossover_points: number of slices to make for the crossover
@@ -96,6 +88,12 @@ class GenAlgSolver:
         :type scalarizer: optional, object with a scalarize method that takes in a population fitness and rescales it
         :param prune_duplicates: whether to prune duplicates in each generation
         :type prune_duplicates: bool
+        :param verbose: whether to print iterations status
+        :type verbose: int
+        :param show_stats: whether to print stats at the end
+        :type show_stats: bool
+        :param plot_results: whether to plot results of the run at the end
+        :type plot_results: bool
         :param to_stdout: whether to write output to stdout
         :type to_stdout: bool
         :param to_file: whether to write output to file

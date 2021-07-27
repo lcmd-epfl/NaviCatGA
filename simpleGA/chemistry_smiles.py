@@ -17,12 +17,13 @@ def sanitize_smiles(smiles):  # Problems with C1C=CC=CC=1[P-1]=[P-1][P-1] for in
     If there are metals, it will try to fix the bonds as dative.
 
     Parameters:
-    smi (string) : smile string to be canonicalized
-
+    :param smi: smile string to be canonicalized
+    :type smi: str
+    
     Returns:
-    mol (rdkit.Chem.rdchem.Mol) : rdkit mol object, None if exception caught.
-    smi_canon (string)          : Canonicalized smile representation of smi, None if exception caught.
-    conversion_successful (bool): True if no exception caught, False if exception caught.
+    :return mol: rdkit mol object, None if exception caught
+    :return smi_canon: canonicalized smile representation of smi, None if exception caught.
+    :return conversion_successful: True if no exception caught, False if exception caught.
     """
     try:
         mol, smi_canon, conversion_successful = timed_sanitizer(smiles)
@@ -38,10 +39,10 @@ def sanitize_multiple_smiles(smiles_list):
     """Calls sanitize_smiles for every item in a list.
 
     Parameters:
-    smiles_list (list) : list of smile strings to be sanitized.
+    :param smiles_list: list of smile strings to be sanitized.
 
     Returns:
-    sanitized_smiles (list) : list of sanitized smile strings with None in errors.
+    :return sanitized_smiles: list of sanitized smile strings or None in case a smiles led to error
     """
     sanitized_smiles = []
     for smi in smiles_list:
@@ -91,12 +92,13 @@ def get_structure_ff(mol, n_confs=5):
     It will try to sample several conformations and get the minima.
 
     Parameters:
-    mol (rdkit.mol) : An rdkit mol object.
-    n_confs (int) : The number of conformations to sample.
+    :param mol: an rdkit mol object
+    :type mol: rdkit.mol 
+    :param n_confs: number of conformations to sample
+    :type n_confs: int
 
     Returns:
-    mol_structure (rdkit.mol) : The same rdkit mol with 3D coordinates.
-
+    :return mol_structure: mol with 3D coordinate information set
     """
     Chem.SanitizeMol(mol)
     mol = Chem.AddHs(mol)
@@ -112,7 +114,7 @@ def get_structure_ff(mol, n_confs=5):
                 enforceChirality=True,
             )
         except:
-            logger.warning("Method 1 failed to generate conformations.")
+            logger.debug("Method 1 failed to generate conformations.")
         else:
             if all([conformer_id >= 0 for conformer_id in conformer_ids]):
                 coordinates_added = True
@@ -125,7 +127,7 @@ def get_structure_ff(mol, n_confs=5):
                 mol, numConfs=n_confs, params=params
             )
         except:
-            logger.warning("Method 2 failed to generate conformations.")
+            logger.debug("Method 2 failed to generate conformations.")
         else:
             if all([conformer_id >= 0 for conformer_id in conformer_ids]):
                 coordinates_added = True
@@ -142,7 +144,7 @@ def get_structure_ff(mol, n_confs=5):
                 ignoreSmoothingFailures=True,
             )
         except:
-            logger.warning("Method 3 failed to generate conformations.")
+            logger.debug("Method 3 failed to generate conformations.")
         else:
             if all([conformer_id >= 0 for conformer_id in conformer_ids]):
                 coordinates_added = True

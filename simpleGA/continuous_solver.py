@@ -10,43 +10,43 @@ from simpleGA.fitness_functions_float import fitness_function_float
 class ContinuousGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
-        n_genes: int,
-        fitness_function=None,
-        max_gen: int = 1000,
-        pop_size: int = 100,
-        mutation_rate: float = 0.15,
-        selection_rate: float = 0.5,
-        selection_strategy: str = "roulette_wheel",
-        verbose: bool = False,
-        show_stats: bool = False,
-        plot_results: bool = False,
-        excluded_genes: Sequence = None,
         variables_limits=(-10, 10),
-        problem_type=float,
+        # Parameters for base class
+        n_genes: int = 1,
+        fitness_function=None,
+        max_gen: int = 500,
+        max_conv: int = 100,
+        pop_size: int = 100,
+        mutation_rate: float = 0.05,
+        selection_rate: float = 0.25,
+        selection_strategy: str = "roulette-wheel",
+        excluded_genes: Sequence = None,
         n_crossover_points: int = 1,
         random_state: int = None,
-        logger_file: str = "output.log",
-        logger_level: str = "INFO",
+        lru_cache: bool = False,
+        hashable_fitness_function=None,
+        scalarizer=None,
+        prune_duplicates=False,
+        # Verbosity and printing options
+        verbose: bool = True,
+        show_stats: bool = False,
+        plot_results: bool = False,
         to_stdout: bool = True,
         to_file: bool = True,
+        logger_file: str = "output.log",
+        logger_level: str = "INFO",
         progress_bars: bool = False,
+        problem_type="float",
     ):
-        """
-        :param fitness_function: can either be a fitness function or
-        a class implementing a fitness function + methods to override
-        the default ones: create_offspring, mutate_population, initialize_population
-        :param n_genes: number of genes (variables) to have in each chromosome
-        :param max_gen: maximum number of generations to perform the optimization
-        :param pop_size: population size
-        :param mutation_rate: rate at which random mutations occur
-        :param selection_rate: percentage of the population to be selected for crossover
-        :param selection_strategy: strategy to use for selection
-        :param verbose: whether to print iterations status
-        :param show_stats: whether to print stats at the end
-        :param plot_results: whether to plot results of the run at the end
-        :param variables_limits: limits for each variable [(x1_min, x1_max), (x2_min, x2_max), ...].
-        If only one tuple is provided, then it is assumed the same for every variable
-        :param problem_type: whether problem is of float or integer type
+        """Example child solver class for the GA.
+        This child solver class is an example meant for a particular purpose,
+        which in this case is optimizing a numerical function with float parameters.
+        It might require heavy modification for other particular usages.
+        Only the parameters specific for this child class are covered here.
+
+        Parameters:
+        :param variables_limits: limits for each variable [(x1_min, x1_max), (x2_min, x2_max), ...]
+        :type variables_limits: tuple, list of tuples
         """
 
         GenAlgSolver.__init__(
@@ -86,6 +86,8 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         Initializes the population of the problem according to the
         population size and number of genes and according to the problem
         type (either integers or floats).
+        
+        Returns:
         :return: a numpy array with a randomized initialized population
         """
 
@@ -126,11 +128,14 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         where beta is a random number between 0 and 1, and can be either positive or negative
         depending on if it's the first or second offspring
         http://index-of.es/z0ro-Repository-3/Genetic-Algorithm/R.L.Haupt,%20S.E.Haupt%20-%20Practical%20Genetic%20Algorithms.pdf
+        
+        Parameters:
         :param first_parent: first parent's chromosome
         :param sec_parent: second parent's chromosome
         :param crossover_pt: point(s) at which to perform the crossover
         :param offspring_number: whether it's the first or second offspring from a pair of parents.
-        Important if there's different logic to be applied to each case.
+        
+        Returns:
         :return: the resulting offspring.
         """
 
@@ -159,8 +164,12 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         """
         Mutates the population by randomizing specific positions of the
         population individuals.
+        
+        Parameters:
         :param population: the population at a given iteration
-        :param n_mutations: number of mutations to be performed.
+        :param n_mutations: number of mutations to be performed
+        
+        Returns:
         :return: the mutated population
         """
 

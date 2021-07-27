@@ -18,12 +18,13 @@ def sanitize_smiles(smiles):  # Problems with C1C=CC=CC=1[P-1]=[P-1][P-1] for in
     If there are metals, it will try to fix the bonds as dative.
 
     Parameters:
-    smi (string) : smile string to be canonicalized
+    :param smi: smiles string to be sanitized
+    :type smi: smiles string
 
     Returns:
-    mol (rdkit.Chem.rdchem.Mol) : rdkit mol object, None if exception caught.
-    smi_canon (string)          : Canonicalized smile representation of smi, None if exception caught.
-    conversion_successful (bool): True if no exception caught, False if exception caught.
+    :return mol: corresponding rdkit.mol object, None if exception caught
+    :return smi_canon: canonicalized smile representation of smi, None if exception caught
+    :return conversion_successful: True if no exception caught, False if exception caught
     """
     try:
         mol, smi_canon, conversion_successful = timed_sanitizer(smiles)
@@ -39,10 +40,10 @@ def sanitize_multiple_smiles(smiles_list):
     """Calls sanitize_smiles for every item in a list.
 
     Parameters:
-    smiles_list (list) : list of smile strings to be sanitized.
+    :param smiles_list list of smiles strings to be sanitized
 
     Returns:
-    sanitized_smiles (list) : list of sanitized smile strings with None in errors.
+    :return sanitized_smiles: list of sanitized smile strings with None in errors
     """
     sanitized_smiles = []
     for smi in smiles_list:
@@ -98,10 +99,10 @@ def check_selfie_chars(chromosome):
     """Check if a list of selfies characters leads to a valid smiles string. Uses sanitize_smiles to check the smiles string from selfies.decoder.
 
     Parameters:
-    chromosome (list) : list of selfie characters.
+    :param chromosome: list of selfie characters
 
     Returns:
-    True if the smiles string is deemed valid by sanitize_smiles, False otherwise.
+    :return: True if the smiles string is deemed valid by sanitize_smiles, False otherwise
     """
     selfie = "".join(x for x in list(chromosome))
     smiles = timed_decoder(selfie)
@@ -116,17 +117,13 @@ def get_selfie_chars(selfie, maxchars=25):
     padded to maxchars with [nop]s.
 
     Parameters:
-    selfie (string) : A selfie string - representing a molecule.
-    maxchars (int) : Maximum number of elements in the list.
-
-    Example:
-    >>> get_selfie_chars('[C][=C][C][=C][C][=C][Ring1][Branch1_1]')
-    ['[C]', '[=C]', '[C]', '[=C]', '[C]', '[=C]', '[Ring1]', '[Branch1_1]']
+    :param selfie: a selfie string representing a molecule
+    :param maxchars: maximum number of elements in the list
 
     Returns:
-    chars_selfie (list): list of selfie characters present in molecule selfie.
+    :return chars_selfie: list of selfie characters present in molecule selfie
     """
-    chars_selfie = []  # A list of all SELFIE sybols from string selfie
+    chars_selfie = []
     while selfie != "":
         chars_selfie.append(selfie[selfie.find("[") : selfie.find("]") + 1])
         selfie = selfie[selfie.find("]") + 1 :]
@@ -158,12 +155,11 @@ def get_structure_ff(mol, n_confs=5):
     It will try to sample several conformations and get the minima.
 
     Parameters:
-    mol (rdkit.mol) : An rdkit mol object.
-    n_confs (int) : The number of conformations to sample.
+    :type mol: a rdkit.mol object
+    :type n_confs: the number of conformations to sample
 
     Returns:
-    mol_structure (rdkit.mol) : The same rdkit mol with 3D coordinates.
-
+    :return mol_structure: the same rdkit mol with 3D coordinates
     """
     Chem.SanitizeMol(mol)
     mol = Chem.AddHs(mol)

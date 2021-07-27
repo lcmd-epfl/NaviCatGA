@@ -10,6 +10,8 @@ COORD_THRESHOLD = 0.2
 
 
 class Hashable_Geometry(Geometry):
+    """This is a modified version of the Geometry class in AaronTools.py, which is identical but hashable."""
+
     def __init__(self, *args, **kw):
         object.__setattr__(self, "_hashed", False)
         super().__init__(*args, **kw)
@@ -52,24 +54,14 @@ class Hashable_Geometry(Geometry):
             object.__setattr__(self, attr, val)
         else:
             object.__setattr__(self, attr, val)
-            # raise RuntimeError(
-            #    "%s has been hashed and can no longer be changed\n" % self.name
-            #    + "setattr was called to set %s to %s" % (attr, val)
-            # )
 
     def __delattr__(self, attr):
         if not self._hashed:
             object.__del__(self, attr)
         else:
             object.__del__(self, attr)
-            # raise RuntimeError(
-            #    "%s has been hashed and can no longer be changed\n" % self.name
-            #    + "del was called to delete %s" % attr
-            # )
 
     def __hash__(self):
-        # hash depends on atom elements, connectivity, order, and coordinates
-        # reorient along principle axes
         coords = self.coords
         coords -= self.COM()
         _, ax = self.get_principle_axes()
@@ -77,30 +69,24 @@ class Hashable_Geometry(Geometry):
 
         t = []
         for atom, coord in zip(self.atoms, coords):
-            # only use the first 3 decimal places of coordinates b/c numerical issues
             t.append(
                 (int(atom.get_neighbor_id()), tuple([int(x * 1e3) for x in coord]))
             )
-            # make sure atoms don't move
-            # if atoms move, the hash value could change making it impossible to access
-            # items in a dictionary with this instance as the key
             if not isinstance(atom.coords, tuple):
                 atom.coords = tuple(atom.coords)
             if not isinstance(atom.connected, frozenset):
                 atom.connected = frozenset(atom.connected)
             atom._hashed = True
 
-        # make sure self's atoms don't change
         if not isinstance(self.atoms, tuple):
             self.atoms = tuple(self.atoms)
-        # _hashed == True can cause errors for setting to deleting certain attributes
         self._hashed = True
 
         return hash(tuple(t))
 
 
 def gl2geom(chromosome, h_positions="19-20"):
-    """Check if a list of Geometries can lead to a valid structure."""
+    """Check if a chromosome (list of geometries) can lead to a valid structure."""
     logger.trace("Checking chromosome using scaffold:\n{0}".format(chromosome[0]))
     scaffold = deepcopy(chromosome[0])
     target_list = []
@@ -111,7 +97,6 @@ def gl2geom(chromosome, h_positions="19-20"):
         if gene is None:
             target_list.append(None)
     h_positions = scaffold.find("H", h_positions)
-    # h_positions = h_positions[::-1]
 
     assert len(h_positions) >= len(target_list)
     try:

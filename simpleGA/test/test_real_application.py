@@ -11,6 +11,7 @@ from simpleGA.quantum_wrappers_selfies import sc2gap
 from simpleGA.wrappers_selfies import sc2logp, sc2mw
 
 
+# In this test, we dont use a chimera scalarizer and we simply define a combined fitness function
 def fitness_function_wrapper(target_1, target_2, target_3):
 
     return (
@@ -31,7 +32,7 @@ def test_real_application_16():
         max_gen=10,
         fitness_function=fitness_function_wrapper(
             target_1=0.05, target_2=0.1, target_3=65
-        ),  # homo-lumo gap, logp
+        ),  # homo-lumo gap, logp, mw
         starting_selfies=starting_selfies,
         starting_stoned=True,
         prune_duplicates=True,

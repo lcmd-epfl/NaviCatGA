@@ -19,6 +19,8 @@ QUEUE_TYPE = os.getenv("QUEUE_TYPE").upper()
 
 
 class FixedSubmitProcess(SubmitProcess):
+    """This is a lightly modified version of the SubmitProcess class in AaronTools.py."""
+
     def submit(self, wait=False, quiet=True):
 
         job_file = os.path.join(self.directory, self.name + ".job")
@@ -70,7 +72,6 @@ class FixedSubmitProcess(SubmitProcess):
                 wait_time = abs(wait)
 
             while len(self.unfinished_jobs_in_dir(self.directory)) != 0:
-                # print(self.unfinished_jobs_in_dir(self.directory))
                 sleep(wait_time)
 
         return

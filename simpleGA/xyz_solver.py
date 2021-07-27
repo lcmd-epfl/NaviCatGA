@@ -22,42 +22,63 @@ logger = logging.getLogger(__name__)
 class XYZGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
-        n_genes: int,
         starting_scaffolds: list = [],
         path_scaffolds: str = "",
         starting_xyz: list = [],
         starting_random: bool = False,
-        starting_stoned: bool = False,
         alphabet_choice: str = "default",
         h_positions="19-20",
+        max_counter: int = 10,
+        # Parameters for base class
+        n_genes: int = 1,
         fitness_function=None,
-        hashable_fitness_function=None,
-        scalarizer=None,
-        max_gen: int = 5,
+        max_gen: int = 15,
+        max_conv: int = 100,
         pop_size: int = 5,
-        mutation_rate: float = 0.05,
+        mutation_rate: float = 0.10,
         selection_rate: float = 0.25,
         selection_strategy: str = "tournament",
+        excluded_genes: Sequence = [0],
+        n_crossover_points: int = 1,
+        random_state: int = None,
+        lru_cache: bool = False,
+        hashable_fitness_function=None,
+        scalarizer=None,
+        prune_duplicates=False,
+        # Verbosity and printing options
         verbose: bool = True,
         show_stats: bool = False,
         plot_results: bool = False,
-        excluded_genes: Sequence = [0],
-        prune_duplicates=False,
-        variables_limits: dict = None,
-        n_crossover_points: int = 1,
-        max_counter: int = 10,
-        random_state: int = None,
-        logger_file: str = "output.log",
-        logger_level: str = "INFO",
         to_stdout: bool = True,
         to_file: bool = True,
+        logger_file: str = "output.log",
+        logger_level: str = "INFO",
         progress_bars: bool = False,
-        lru_cache: bool = False,
         problem_type: str = "xyz",
     ):
+        """Example child solver class for the GA.
+        This child solver class is an example meant for a particular purpose,
+        which also shows how to use the GA with xyz coordinate fragments using AaronTools.py.
+        It might require heavy modification for other particular usages.
+        Only the parameters specific for this child class are covered here.
+
+        Parameters:
+        :param starting_scaffolds: list containing the starting scaffolds; can be left empty if path_scaffolds is defined
+        :type starting_scaffolds: list
+        :param path_scaffolds: string pointing to a directory containing the starting scaffolds xyz files
+        :type path_scaffolds: str
+        :param starting_xyz: list containing the starting substituents; will be overridden by starting_random 
+        :type starting_xyz: list
+        :param alphabet_choice: either default ot a path to a directory with xyz files which will be the alphabet
+        :type alphabet_choice: list or str
+        :param h_positions: string defining the h positions to substitute in order to generate final structures
+        :type h_positions: str
+        :param max_counter: maximum number of times a wrong structure will try to be corrected before skipping
+        :type max_counter: int
+        """
         if starting_scaffolds:
             starting_xyz = get_starting_xyz_from_file(starting_scaffolds)
-        if path_scaffolds:
+        elif path_scaffolds:
             starting_xyz = get_starting_xyz_from_path(path_scaffolds)
         alphabet = []
         if alphabet_choice == "default":
@@ -76,6 +97,7 @@ class XYZGenAlgSolver(GenAlgSolver):
             scalarizer=scalarizer,
             n_genes=n_genes,
             max_gen=max_gen,
+            max_conv=max_conv,
             pop_size=pop_size,
             mutation_rate=mutation_rate,
             selection_rate=selection_rate,
@@ -96,34 +118,23 @@ class XYZGenAlgSolver(GenAlgSolver):
             problem_type=problem_type,
         )
 
-        if variables_limits is not None:
-            pass  # TBD
-
         if not isinstance(starting_xyz, list):
             raise (InvalidInput(exception_messages["StartingXYZNotAList"]))
         if self.n_crossover_points > self.n_genes:
             raise (InvalidInput(exception_messages["TooManyCrossoverPoints"]))
         if self.n_crossover_points < 1:
             raise (InvalidInput(exception_messages["TooFewCrossoverPoints"]))
-        if starting_random and starting_stoned:
-            raise (InvalidInput(exception_messages["ConflictedRandomStoned"]))
-        if starting_stoned and (len(starting_xyz) != 1):
-            raise (InvalidInput(exception_messages["ConflictedStonedStarting"]))
 
-        if starting_stoned:
-            pass  # TBD
         if len(starting_xyz) < self.pop_size:
             n_patch = self.pop_size - len(starting_xyz)
             for i in range(n_patch):
-                starting_xyz.append(
-                    np.random.choice(starting_xyz, size=1)[0]
-                )  # OKAYISH
+                starting_xyz.append(np.random.choice(starting_xyz, size=1)[0])  # Ok
         elif len(starting_xyz) > self.pop_size:
             n_remove = len(starting_xyz) - self.pop_size
             for i in range(n_remove):
                 starting_xyz.remove(
                     np.random.choice(starting_xyz, size=1)[0]
-                )  # MIGHT BE IMPROVABLE
+                )  # Might be improvable
         assert len(starting_xyz) == self.pop_size
         self.starting_random = starting_random
         self.h_positions = h_positions
@@ -134,7 +145,7 @@ class XYZGenAlgSolver(GenAlgSolver):
         """
         Initializes the population of the problem according to the
         population size and number of genes and according to the problem
-        type (XYZ fragmenta here).
+        type (XYZ fragments here).
         :return: a numpy array with a sanitized initialized population
         """
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype=object)

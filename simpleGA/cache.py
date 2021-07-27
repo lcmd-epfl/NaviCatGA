@@ -20,7 +20,9 @@ if __name__ == "__main__":
 
 def calculate_fitness_cache_selfies(self, population):
     """
-    Calculates the fitness of the population
+    Calculates the fitness of the population using a SELFIES adapted cache.
+    
+    Parameters:
     :param population: population state at a given iteration
     :return: the fitness of the current population
     """
@@ -47,7 +49,9 @@ def calculate_fitness_cache_selfies(self, population):
 
 def calculate_fitness_cache_smiles(self, population):
     """
-    Calculates the fitness of the population
+    Calculates the fitness of the population using a SMILES adapted cache.
+    
+    Parameters:
     :param population: population state at a given iteration
     :return: the fitness of the current population
     """
@@ -74,7 +78,9 @@ def calculate_fitness_cache_smiles(self, population):
 
 def calculate_fitness_cache_xyz(self, population):
     """
-    Calculates the fitness of the population
+    Calculates the fitness of the population using a XYZ adapted cache.
+    
+    Parameters:
     :param population: population state at a given iteration
     :return: the fitness of the current population
     """
@@ -98,6 +104,13 @@ def calculate_fitness_cache_xyz(self, population):
 
 
 def calculate_fitness_cache(self, population):
+    """
+    Calculates the fitness of the population using a hashable fitness function.
+    
+    Parameters:
+    :param population: population state at a given iteration
+    :return: the fitness of the current population
+    """
     if self.scalarizer is None:
         nvals = 1
     else:
@@ -132,6 +145,13 @@ def calculate_one_fitness_cache_xyz(geom, hashable_fitness_function):
 
 
 def set_lru_cache(self):
+    """
+    Monkeypatches the calculate_fitness method of the base solver class in order to use a lru cache.
+    If a specific wrapper exists for a given solver, it will try to use the unique expression of genes
+    given by that wrapper to generate a hashable fitness function. If not, it will require
+    a hashable fitness function given by the user AND expect the given fitness_function to generate
+    a unique hash from a gene.
+    """
     if self.problem_type == "selfies":
         self.calculate_fitness = types.MethodType(calculate_fitness_cache_selfies, self)
     elif self.problem_type == "smiles":

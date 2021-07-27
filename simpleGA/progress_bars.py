@@ -20,9 +20,16 @@ if __name__ == "__main__":
 
 
 def solve_progress(self, niter=None):
+    """
+    Performs the genetic algorithm optimization according to the parameters
+    loaded in __init__. Will run for max_gen or until it
+    converges for max_conv iterations, or for min(niter,max_gen) iterations if niter
+    is an integer. Will start using previous state if available.
 
+    Parameters:
+    :param niter: the number of generations to run
+    """
     start_time = datetime.datetime.now()
-
     if self.mean_fitness_ is None:
         mean_fitness = np.ndarray(shape=(1, 0))
     else:
@@ -37,9 +44,7 @@ def solve_progress(self, niter=None):
         population = self.initialize_population()
     else:
         self.logger.info("Continuing run with previous population in memory.")
-
-    # initialize the population
-    population = self.initialize_population()
+        population = self.initialize_population()
 
     fitness, printable_fitness = self.calculate_fitness(population)
     fitness, population, printable_fitness = self.sort_by_fitness(
@@ -47,69 +52,57 @@ def solve_progress(self, niter=None):
     )
 
     gen_interval = max(round(self.max_gen / 10), 1)
-    if niter is None:
-        niter = self.max_gen
-    else:
-        niter = int(min(self.max_gen, niter, 1))
+    gen_n = 1
     conv = 0
+    if isinstance(niter, int):
+        niter = min(self.max_gen, niter)
+    else:
+        niter = self.max_gen
 
     with alive_bar(niter) as bar:
         for counter in range(niter):
             gen_n = counter + 1
-            if self.verbose:
-                self.logger.info("Iteration: {0}".format(gen_n))
-                self.logger.info(f"Best fitness: {printable_fitness[0]}")
-                self.logger.trace(f"Best individual: {population[0,:]}")
-                self.logger.trace(
-                    "Population at generation: {0}: {1}".format(gen_n, population)
-                )
+            self.generations_ += 1
 
             mean_fitness = np.append(mean_fitness, fitness.mean())
             max_fitness = np.append(max_fitness, fitness[0])
-
             ma, pa = self.select_parents(fitness)
-
             ix = np.arange(0, self.pop_size - self.pop_keep - 1, 2)
-
             xp = np.array(
                 list(map(lambda _: self.get_crossover_points(), range(self.n_matings)))
             )
 
             for i in range(xp.shape[0]):
-
-                # create first offspring
                 population[-1 - ix[i], :] = self.create_offspring(
                     population[ma[i], :], population[pa[i], :], xp[i], "first"
                 )
-
-                # create second offspring
                 population[-1 - ix[i] - 1, :] = self.create_offspring(
                     population[pa[i], :], population[ma[i], :], xp[i], "second"
                 )
 
             population = self.mutate_population(population, self.n_mutations)
             if self.prune_duplicates:
-                try:
-                    population = np.unique(population, axis=0)
-                    nrefill = self.pop_size - population.shape[0]
-                    population = np.hstack(
-                        (population, self.refill_population(nrefill))
-                    )
-                except TypeError:
-                    pruned_pop = np.zeros(shape=(1, self.n_genes), dtype=object)
-                    pruned_pop[0, :] = population[0, :]
-                    for i in range(1, self.pop_size - 1):
-                        if not all(population[i, :] == pruned_pop[-1, :]):
+                pruned_pop = np.zeros(shape=(1, self.n_genes), dtype=object)
+                pruned_pop[0, :] = population[0, :]
+                self.logger.debug(
+                    f"Pruned pop set as {pruned_pop} and population set as {population}"
+                )
+                for i in range(1, self.pop_size):
+                    try:
+                        if not list(population[i]) == list(pruned_pop[-1]):
                             pruned_pop = np.vstack((pruned_pop, population[i]))
-                    nrefill = self.pop_size - pruned_pop.shape[0]
-                    if nrefill > 0:
+                    except Exception as m:
                         self.logger.debug(
-                            f"Replacing a total of {nrefill} chromosomes due to duplications."
+                            f"Population comparison for pruning failed: {m}"
                         )
-                        population = np.vstack(
-                            (pruned_pop, self.refill_population(nrefill))
-                        )
-
+                nrefill = self.pop_size - pruned_pop.shape[0]
+                if nrefill > 0:
+                    self.logger.debug(
+                        f"Replacing a total of {nrefill} chromosomes due to duplications."
+                    )
+                    population = np.vstack(
+                        (pruned_pop, self.refill_population(nrefill))
+                    )
             rest_fitness, rest_printable_fitness = self.calculate_fitness(
                 population[1:, :]
             )
@@ -119,28 +112,41 @@ def solve_progress(self, niter=None):
             fitness, population, printable_fitness = self.sort_by_fitness(
                 fitness, population, printable_fitness
             )
+            self.best_individual_ = population[0, :]
+            if np.isclose(self.best_fitness_, fitness[0]):
+                conv += 1
+            self.best_fitness_ = fitness[0]
+            self.best_pfitness_ = printable_fitness[0]
 
-            bar()
+            if self.verbose:
+                self.logger.info("Generation: {0}".format(self.generations_))
+                self.logger.info("Best fitness result: {0}".format(self.best_pfitness_))
+                self.logger.trace("Best individual: {0}".format(population[0, :]))
+                self.logger.trace(
+                    "Population at generation: {0}: {1}".format(
+                        self.generations_, population
+                    )
+                )
 
-        self.generations_ = gen_n
-        self.fitness_ = fitness
-        self.best_individual_ = population[0, :]
-        if np.isclose(self.best_fitness_, fitness[0]):
-            conv += 1
-        self.best_fitness_ = fitness[0]
-        self.best_pfitness_ = printable_fitness[0]
+            if gen_n >= niter or conv > self.max_conv:
+                break
+
         self.population_ = population
+        self.fitness_ = fitness
+        self.printable_fitness = printable_fitness
+        self.mean_fitness_ = mean_fitness
+        self.max_fitness_ = max_fitness
 
         if self.plot_results:
-            self.plot_fitness_results(mean_fitness, max_fitness, gen_n)
+            self.plot_fitness_results(
+                self.mean_fitness_, self.max_fitness_, self.generations_
+            )
 
         end_time = datetime.datetime.now()
         self.runtime_, time_str = get_elapsed_time(start_time, end_time)
 
         if self.show_stats:
             self.print_stats(time_str)
-
-        self.close_solve_logger()
 
 
 def set_progress_bars(self):
