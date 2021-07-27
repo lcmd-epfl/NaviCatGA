@@ -17,11 +17,11 @@ def get_starting_xyz_from_path(path="scaffolds"):
     dictionary_directory = os.path.join(path, "*.xyz")
     for i in glob(dictionary_directory):
         geom = Geometry(FileReader(i))
-        if reference:
-            geom.RMSD(ref_geom, align=True, heavy_only=True, sort=True)
-        else:
+        if not reference:
             ref_geom = geom
             reference = True
+        else:
+            geom.RMSD(ref_geom, align=True, heavy_only=True, sort=True)
         xyz_list.append(geom)
     return xyz_list
 
@@ -31,11 +31,11 @@ def get_starting_xyz_from_file(file_list):
     xyz_list = []
     for i in file_list:
         geom = Geometry(FileReader(i))
-        if reference:
-            geom.RMSD(ref_geom, align=True, heavy_only=True, sort=True)
-        else:
+        if not reference:
             ref_geom = geom
             reference = True
+        else:
+            geom.RMSD(ref_geom, align=True, heavy_only=True, sort=True)
         xyz_list.append(geom)
     assert len(file_list) == len(xyz_list)
     return xyz_list
@@ -46,11 +46,11 @@ def get_starting_xyz_from_smi(smiles_list):
     xyz_list = []
     for i in smiles_list:
         geom = Geometry.from_string(i)
-        if reference:
-            geom.RMSD(ref_geom, align=True, heavy_only=True, sort=True)
-        else:
+        if not reference:
             ref_geom = geom
             reference = True
+        else:
+            geom.RMSD(ref_geom, align=True, heavy_only=True, sort=True)
         xyz_list.append(geom)
     assert len(smiles_list) == len(xyz_list)
     return xyz_list

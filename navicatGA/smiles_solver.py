@@ -109,7 +109,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
             self.alphabet = alphabet_list
             self.multi_alphabet = True
             if excluded_genes is not None:
-                raise (InvaludInput(exception_messages["MultiDictExcluded"]))
+                raise (InvalidInput(exception_messages["MultiDictExcluded"]))
             if equivalences is None:
                 equivalences = []
                 for j in range(n_genes):

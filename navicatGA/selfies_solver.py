@@ -30,6 +30,8 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         starting_random: bool = False,
         starting_stoned: bool = False,
         alphabet_list: list = list(get_semantic_robust_alphabet()),
+        multi_alphabet: bool = False,
+        equivalences: Sequence = None,
         branching: bool = False,
         variables_limits: bool = False,
         max_counter: int = 10,
@@ -75,6 +77,10 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         :type starting_stoned: bool
         :param alphabet_list: list containing the alphabets for the individual genes; or a single alphabet for all
         :type alphabet_list: list
+        :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet 
+        :type multi_alphabet: bool
+        :param equivalences: list of integers that set the equivalent genes of a chromosome; see examples for clarification
+        :type equivalences: list
         :param branching: whether to add random branches covering all possible branching possibilities to the alphabets 
         :type branching: bool
         :param variable_limits: will set semantic constraints on alphabets if set True
@@ -116,7 +122,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             self.alphabet = alphabet_list
             self.multi_alphabet = True
             if excluded_genes is not None:
-                raise (InvaludInput(exception_messages["MultiDictExcluded"]))
+                raise (InvalidInput(exception_messages["MultiDictExcluded"]))
             if equivalences is None:
                 equivalences = []
                 for j in range(n_genes):
@@ -149,7 +155,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 if i[0] == i[1]:
                     pass
                 else:
-                    alphabet.add("[Branch{0}_{1}]".format(i[0], i[1]))
+                    self.alphabet.add("[Branch{0}_{1}]".format(i[0], i[1]))
                     pass
 
         if not isinstance(starting_selfies, list):
