@@ -8,6 +8,25 @@ def get_input_dimensions(lst, n_dim=0):
         return n_dim
 
 
+def check_error(func, *args, **kw):
+    try:
+        func(*args, **kw)
+        return True
+    except Exception:
+        return False
+
+
+def concatenate_list():
+    """Default chromosome manipulator: concatenates all elements of a list."""
+
+    def sc2str(chromosome):
+        """Generates a SMILES string from a chromosome (list of arbitrary SMILES fragments)."""
+        string = "".join(str(gene) for gene in chromosome)
+        return string
+
+    return sc2str
+
+
 def get_elapsed_time(start_time, end_time):
 
     runtime = (end_time - start_time).seconds

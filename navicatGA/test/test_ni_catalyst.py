@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 from navicatGA.smiles_solver import SmilesGenAlgSolver
-from navicatGA.wrappers_smiles import sc2smiles, sc2mol_structure, sc2mw, sc2depictions
+from navicatGA.wrappers_smiles import (
+    sc2smiles,
+    sc2mol_structure,
+    sc2mw,
+    sc2depictions,
+    chromosome_to_smiles,
+)
 import pandas as pd
 import os
 
 
-database = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),"database.xls"
-)
+database = os.path.join(os.path.dirname(os.path.realpath(__file__)), "database.xls")
 
 
 def read_database(filename="database.xls") -> pd.DataFrame:
@@ -21,7 +25,7 @@ def read_database(filename="database.xls") -> pd.DataFrame:
 fdb = read_database(database)
 alphabet_list = list(set(fdb.Substituent_1.dropna()))
 
-starting_smiles = ["[Ni@]"]
+starting_smiles = [["[Ni@]"]]
 
 
 def my_fitness_function():
@@ -40,10 +44,11 @@ def test_ni_catalyst_24():
         max_gen=10,
         mutation_rate=0.05,
         fitness_function=my_fitness_function(),
-        starting_smiles=starting_smiles,
+        chromosome_to_smiles=chromosome_to_smiles,
+        excluded_genes=[0],
+        starting_population=starting_smiles,
         alphabet_list=alphabet_list,
         random_state=24,
-        starting_random=True,
         logger_level="INFO",
         n_crossover_points=2,
         verbose=True,

@@ -9,16 +9,14 @@ from selfies import (
     set_semantic_constraints,
 )
 from navicatGA.base_solver import GenAlgSolver
+from navicatGA.helpers import check_error, concatenate_list
 from navicatGA.chemistry_selfies import (
     sanitize_multiple_smiles,
-    get_selfie_chars,
-    check_selfie_chars,
     randomize_selfies,
+    draw_selfies,
 )
 from navicatGA.exceptions import InvalidInput
 from navicatGA.exception_messages import exception_messages
-from rdkit import rdBase
-
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +28,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         starting_random: bool = False,
         starting_stoned: bool = False,
         alphabet_list: list = list(get_semantic_robust_alphabet()),
+        chromosome_to_selfies=concatenate_list,
         multi_alphabet: bool = False,
         equivalences: Sequence = None,
         branching: bool = False,
@@ -171,15 +170,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         if starting_stoned and (len(starting_selfies) != 1):
             raise (InvalidInput(exception_messages["ConflictedStonedStarting"]))
 
-        if starting_random:
-            logger.warning(
-                "Randomizing starting population. Any starting chromosomes will be overwritten."
-            )
-            starting_selfies = list([""] * self.pop_size)
-            for i in range(self.pop_size):
-                for j in range(random.randint(1, self.n_genes)):
-                    starting_selfies[i] += np.random.choice(self.alphabet[j], size=1)[0]
-        elif starting_stoned:
+        if starting_stoned:
             starting_selfies = randomize_selfies(
                 starting_selfies[0], num_random=self.pop_size
             )
@@ -194,6 +185,11 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         assert len(starting_selfies) == self.pop_size
         self.starting_selfies = starting_selfies
         self.max_counter = int(max_counter)
+        self.starting_random = starting_random
+        if chromosome_to_selfies is None:
+            raise (InvalidInput("No smiles builder provided."))
+        else:
+            self.chromosome_to_selfies = chromosome_to_selfies
 
     def initialize_population(self):
         """
@@ -208,11 +204,15 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype=object)
 
         for i in range(self.pop_size):
-            logger.debug(
-                "Getting selfie chars from {0}".format(self.starting_selfies[i])
-            )
-            chromosome = get_selfie_chars(self.starting_selfies[i], self.n_genes)
-            assert check_selfie_chars(chromosome)
+            chromosome = self.chromosomize(self.starting_selfies[i])
+            if self.starting_random:
+                logger.warning(
+                    "Randomizing starting population. Any starting chromosomes will be overwritten."
+                )
+                for n, j in enumerate(range(self.n_genes)):
+                    if n in self.allowed_mutation_genes:
+                        chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
+            assert check_error(self.chromosome_to_selfies(), chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Initial population: {0}".format(population))
@@ -224,10 +224,10 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         ref_pop = np.zeros(shape=(nrefill, self.n_genes), dtype=object)
 
         for i in range(nrefill):
-            chromosome = get_selfie_chars(self.starting_selfies[i], self.n_genes)
+            chromosome = self.chromosomize(self.starting_selfies[i])
             for j in range(1, self.n_genes):
                 chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_selfie_chars(chromosome)
+            assert check_error(self.chromosome_to_selfies(), chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Refill subset for population:\n{0}".format(ref_pop))
@@ -266,7 +266,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             sec_parent = sec_parent[mask_allowed]
 
         offspring = np.empty_like(first_parent, dtype=object)
-        valid_smiles = False
+        valid_selfies = False
 
         if beta < 0.5:
             first_parent = first_parent[::-1]
@@ -274,7 +274,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             sec_parent = sec_parent[::-1]
 
         if offspring_number == "first":
-            while not valid_smiles:
+            while not valid_selfies:
                 offspring = np.empty_like(first_parent, dtype=object)
                 counter = 0
                 c = int(0)
@@ -290,7 +290,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_smiles = check_selfie_chars(offspring)
+                valid_selfies = check_error(self.chromosome_to_selfies(), offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -299,13 +299,13 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                             self.max_counter
                         )
                     )
-                    valid_smiles = True
+                    valid_selfies = True
                     offspring = backup_first_parent
             logger.trace("Final offspring chromosome: {0}".format(offspring))
             return offspring
 
         if offspring_number == "second":
-            while not valid_smiles:
+            while not valid_selfies:
                 offspring = np.empty_like(first_parent, dtype=object)
                 counter = 0
                 c = int(0)
@@ -323,7 +323,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_smiles = check_selfie_chars(offspring)
+                valid_selfies = check_error(self.chromosome_to_selfies(), offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -332,7 +332,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                             self.max_counter
                         )
                     )
-                    valid_smiles = True
+                    valid_selfies = True
                     offspring = backup_sec_parent
             logger.trace("Final offspring chromosome: {0}".format(offspring))
             return offspring
@@ -346,21 +346,23 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         :return: the mutated population
         """
 
-        valid_smiles = False
+        valid_selfies = False
         mutation_rows, mutation_cols = super(
             SelfiesGenAlgSolver, self
         ).mutate_population(population, n_mutations)
         for i, j in zip(mutation_rows, mutation_cols):
             backup_gene = population[i, j]
             counter = 0
-            while not valid_smiles:
+            while not valid_selfies:
                 population[i, j] = np.random.choice(self.alphabet[j], size=1)[0]
                 logger.trace(
                     "Mutated chromosome attempt {0}: {1}".format(
                         counter, population[i, :]
                     )
                 )
-                valid_smiles = check_selfie_chars(population[i, :])
+                valid_selfies = check_error(
+                    self.chromosome_to_selfies(), population[i, :]
+                )
                 counter += 1
                 if counter > self.max_counter:
                     logger.debug(
@@ -369,10 +371,50 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                         )
                     )
                     population[i, j] = backup_gene
-                    valid_smiles = True
-            valid_smiles = False
+                    valid_selfies = True
+            valid_selfies = False
 
         return population
+
+    def write_population(self, basename="chromosome"):
+        """
+        Print xyz for all the population at the current state.
+        """
+        for i, j in zip(range(self.pop_size), self.fitness_):
+            selfies = self.chromosome_to_selfies(self.population_[i][:])
+            draw_selfies(selfies, f"{basename}_{i}_{np.round(j,4)}")
+
+    def chromosomize(self, str_list):
+        """Pad or truncate starting_population chromosome to build a population chromosome."""
+        chromosome = []
+        if isinstance(str_list, list):
+            for i in range(min(self.n_genes, len(str_list))):
+                chromosome.append(str_list[i])
+            if len(str_list) > self.n_genes:
+                logger.warning("Exceedingly long SELFIES produced. Will be truncated.")
+            if len(chromosome) < self.n_genes:
+                logger.warning(
+                    "Exceedingly short SELFIES produced. Will be randomly completed."
+                )
+                for i in range(self.n_genes - len(chromosome)):
+                    chromosome.append(np.random.choice(self.alphabet[i], size=1)[0])
+            return chromosome
+        elif isinstance(str_list, str):
+            while str_list != "":
+                chromosome.append(str_list[str_list.find("[") : str_list.find("]") + 1])
+                str_list = str_list[str_list.find("]") + 1 :]
+            if len(str_list) > self.n_genes:
+                logger.warning("Exceedingly long SELFIES produced. Will be truncated.")
+                chromosome = chromosome[0 : self.n_genes - 1]
+            if len(chromosome) < self.n_genes:
+                chromosome += ["[nop]"] * (self.n_genes - len(chromosome))
+            return chromosome
+        else:
+            raise (
+                InvalidInput(
+                    "Starting SELFIES is not a list of lists or a list of strings."
+                )
+            )
 
 
 def test_benzene_selfies():

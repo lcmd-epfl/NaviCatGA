@@ -25,6 +25,25 @@ def check_smiles_chars(chromosome):
     return sanitize_smiles(smiles)[2]
 
 
+def chromosome_to_smiles():
+    """Wrapper function for simplicity."""
+
+    def sc2smi(chromosome):
+        """Generate a SMILES string from a list of SMILES characters. To be customized."""
+        silyl = "([Si]([C])([C])([C]))"
+        core = chromosome[0]
+        phosphine_1 = (
+            "(P(" + chromosome[1] + ")(" + chromosome[2] + ")(" + chromosome[3] + "))"
+        )
+        phosphine_2 = (
+            "(P(" + chromosome[4] + ")(" + chromosome[5] + ")(" + chromosome[6] + "))"
+        )
+        smiles = "{0}{1}{2}{3}".format(core, phosphine_1, phosphine_2, silyl)
+        return smiles
+
+    return sc2smi
+
+
 def sc2smiles(chromosome):
     """Generate a SMILES string from a list of SMILES characters. To be customized."""
     silyl = "([Si]([C])([C])([C]))"

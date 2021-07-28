@@ -281,6 +281,7 @@ class GenAlgSolver:
             self.logger.info("Continuing run with previous max fitness in memory.")
             max_fitness = self.max_fitness_
         if self.population_ is None:
+            self.logger.info("Initializing population.")
             population = self.initialize_population()
         else:
             self.logger.info("Continuing run with previous population in memory.")

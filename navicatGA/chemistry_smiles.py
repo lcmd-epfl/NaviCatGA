@@ -2,9 +2,11 @@ import logging
 import numpy as np
 from navicatGA.timeout import timeout
 from rdkit import Chem, RDLogger
-from rdkit.Chem import AllChem
+from rdkit.Chem import AllChem, Draw
 from rdkit.Chem.rdmolfiles import MolToSmiles as mol2smi
 from rdkit.Chem.rdmolfiles import MolFromSmiles as smi2mol
+from rdkit.Chem.rdmolfiles import MolToPDBFile as mol2pdb
+from rdkit.Chem.rdmolfiles import MolToXYZFile as mol2xyz
 
 logger = logging.getLogger(__name__)
 lg = RDLogger.logger()
@@ -66,23 +68,6 @@ def timed_sanitizer(smiles):
         else:
             logger.debug("Smiles {0} could not be understood by rdkit.".format(smiles))
             return (None, None, False)
-
-
-def get_smiles_chars(smiles, maxchars):
-    chars_smiles = []  # A list of all SELFIE sybols from string selfie
-    while smiles != "":
-        chars_smiles.append(smiles[smiles.find("[") : smiles.find("]") + 1])
-        smiles = smiles[smiles.find("]") + 1 :]
-    if len(chars_smiles) > maxchars:
-        logger.warning(
-            "Exceedingly long SMILES produced. Will be truncated. Value :{0}".format(
-                chars_smiles
-            )
-        )
-        chars_smiles = chars_smiles[0 : maxchars - 1]
-    if len(chars_smiles) < maxchars:
-        chars_smiles += [""] * (maxchars - len(chars_smiles))
-    return chars_smiles
 
 
 def get_structure_ff(mol, n_confs=5):
@@ -160,6 +145,15 @@ def get_structure_ff(mol, n_confs=5):
     else:
         mol_structure = get_confs_ff(mol, maxiters=250)
         return mol_structure
+
+
+def draw_smiles(smiles, root_name):
+    mol, smi_canon, ok = timed_sanitizer(smiles)
+    mol_structure = get_structure_ff(mol)
+    mol2pdb(mol_structure, "{0}.pdb".format(root_name))
+    mol2xyz(mol_structure, "{0}.xyz".format(root_name))
+    Draw.MolToFile(mol_structure, "{0}.png".format(root_name))
+    logger.info("Generated depictions with root name {0}".format(root_name))
 
 
 def get_confs_ff(mol, maxiters=250):

@@ -223,6 +223,15 @@ def get_structure_ff(mol, n_confs=5):
         return mol_structure
 
 
+def draw_selfies(selfies, root_name):
+    mol, smi_canon, ok = timed_sanitizer(timed_decoder(selfies))
+    mol_structure = get_structure_ff(mol)
+    mol2pdb(mol_structure, "{0}.pdb".format(root_name))
+    mol2xyz(mol_structure, "{0}.xyz".format(root_name))
+    Draw.MolToFile(mol_structure, "{0}.png".format(root_name))
+    logger.info("Generated depictions with root name {0}".format(root_name))
+
+
 def get_confs_ff(mol, maxiters=250):
     mol_structure = Chem.Mol(mol)
     mol_structure.RemoveAllConformers()
