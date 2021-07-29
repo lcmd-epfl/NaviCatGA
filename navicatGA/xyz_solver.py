@@ -4,14 +4,12 @@ import numpy as np
 
 from navicatGA.base_solver import GenAlgSolver
 from navicatGA.chemistry_xyz import (
-    get_starting_xyz_from_file,
-    get_starting_xyz_from_path,
-    pad_xyz_list,
-    check_xyz,
-    get_default_dictionary,
-    get_dictionary_from_path,
-    write_chromosome,
+    get_default_alphabet,
+    get_alphabet_from_path,
+    random_merge_xyz,
+    draw_xyz,
 )
+from navicatGA.helpers import check_error
 from navicatGA.exceptions import InvalidInput
 from navicatGA.exception_messages import exception_messages
 
@@ -22,12 +20,12 @@ logger = logging.getLogger(__name__)
 class XYZGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
-        starting_scaffolds: list = [],
-        path_scaffolds: str = "",
-        starting_xyz: list = [],
+        starting_population: list = [[None]],
         starting_random: bool = False,
-        alphabet_choice: str = "default",
-        h_positions="19-20",
+        alphabet_list: list = get_default_alphabet(),
+        chromosome_to_xyz=random_merge_xyz,
+        multi_alphabet: bool = False,
+        equivalences: Sequence = None,
         max_counter: int = 10,
         # Parameters for base class
         n_genes: int = 1,
@@ -38,11 +36,10 @@ class XYZGenAlgSolver(GenAlgSolver):
         mutation_rate: float = 0.10,
         selection_rate: float = 0.25,
         selection_strategy: str = "tournament",
-        excluded_genes: Sequence = [0],
+        excluded_genes: Sequence = None,
         n_crossover_points: int = 1,
         random_state: int = None,
         lru_cache: bool = False,
-        hashable_fitness_function=None,
         scalarizer=None,
         prune_duplicates=False,
         # Verbosity and printing options
@@ -63,37 +60,26 @@ class XYZGenAlgSolver(GenAlgSolver):
         Only the parameters specific for this child class are covered here.
 
         Parameters:
-        :param starting_scaffolds: list containing the starting scaffolds; can be left empty if path_scaffolds is defined
-        :type starting_scaffolds: list
-        :param path_scaffolds: string pointing to a directory containing the starting scaffolds xyz files
-        :type path_scaffolds: str
-        :param starting_xyz: list containing the starting substituents; will be overridden by starting_random 
-        :type starting_xyz: list
-        :param alphabet_choice: either default ot a path to a directory with xyz files which will be the alphabet
-        :type alphabet_choice: list or str
-        :param h_positions: string defining the h positions to substitute in order to generate final structures
-        :type h_positions: str
+        :param starting_population: list containing the starting AaronTools.py interpretable elements for all chromosomes; overridden by starting_random=True
+        :type starting_population: list
+        :param starting_random: whether to initialize all chromosomes with random elements from alphabet; overrides starting_selfies
+        :type starting_random: bool
+        :param alphabet_list: list containing the alphabets for the individual genes; or a single alphabet for all; can be a path directing to a directory containing xyz files
+        :type alphabet_list: list
+        :param chromosome_to_xyz: object that when called returns a function that can take a chromosome and generate an AaronTools.py geometry object
+        :type chromosome_to_xyz: object
+        :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet 
+        :type multi_alphabet: bool
+        :param equivalences: list of integers that set the equivalent genes of a chromosome; see examples for clarification
+        :type equivalences: list
         :param max_counter: maximum number of times a wrong structure will try to be corrected before skipping
         :type max_counter: int
         """
-        if starting_scaffolds:
-            starting_xyz = get_starting_xyz_from_file(starting_scaffolds)
-        elif path_scaffolds:
-            starting_xyz = get_starting_xyz_from_path(path_scaffolds)
-        alphabet = []
-        if alphabet_choice == "default":
-            alphabet = get_default_dictionary()
-        else:
-            alphabet = get_dictionary_from_path(alphabet_choice)
-        alphabet.append(None)
-        self.alphabet = alphabet
-        if len(self.alphabet) < 2:
-            raise (InvalidInput(exception_messages["AlphabetIsEmpty"]))
 
         GenAlgSolver.__init__(
             self,
             fitness_function=fitness_function,
-            hashable_fitness_function=hashable_fitness_function,
+            assembler=chromosome_to_xyz,
             scalarizer=scalarizer,
             n_genes=n_genes,
             max_gen=max_gen,
@@ -117,29 +103,68 @@ class XYZGenAlgSolver(GenAlgSolver):
             lru_cache=lru_cache,
             problem_type=problem_type,
         )
+        if isinstance(alphabet_list, str):
+            alphabet = get_alphabet_from_path(alphabet_list)
+        elif isinstance(alphabet_list, list):
+            alphabet = alphabet_list
+        else:
+            raise (
+                InvalidInput("The alphabet_list provided is neither a path nor a list.")
+            )
 
-        if not isinstance(starting_xyz, list):
-            raise (InvalidInput(exception_messages["StartingXYZNotAList"]))
+        if all(isinstance(i, list) for i in alphabet):
+            if not (len(alphabet_list) == n_genes):
+                raise (InvalidInput(exception_messages["AlphabetDimensions"]))
+            self.alphabet = alphabet_list
+            self.multi_alphabet = True
+            if excluded_genes is not None:
+                raise (InvalidInput(exception_messages["MultiDictExcluded"]))
+            if equivalences is None:
+                equivalences = []
+                for j in range(n_genes):
+                    equivalences.append([j])
+                    for k in range(n_genes):
+                        if list(self.alphabet[j]) == list(self.alphabet[k]):
+                            equivalences[j].append(k)
+                tpls = [tuple(x) for x in equivalences]
+                dct = list(dict.fromkeys(tpls))
+                equivalences = [list(x) for x in dct]
+                self.equivalences = equivalences
+                logger.debug(f"Equivalence classes are {equivalences}")
+            else:
+                if len(equivalences) > n_genes:
+                    raise (InvalidInput(exception_messages["EquivalenceDimensions"]))
+        else:
+            self.multi_alphabet = False
+            sorted_list = list(alphabet_list)
+            self.alphabet = [sorted_list] * n_genes
+            assert len(self.alphabet) == n_genes
+
+        if not isinstance(starting_population, list):
+            raise (InvalidInput(exception_messages["StartingPopulationNotAList"]))
         if self.n_crossover_points > self.n_genes:
             raise (InvalidInput(exception_messages["TooManyCrossoverPoints"]))
         if self.n_crossover_points < 1:
             raise (InvalidInput(exception_messages["TooFewCrossoverPoints"]))
 
-        if len(starting_xyz) < self.pop_size:
-            n_patch = self.pop_size - len(starting_xyz)
+        if len(starting_population) < self.pop_size:
+            n_patch = self.pop_size - len(starting_population)
             for i in range(n_patch):
-                starting_xyz.append(np.random.choice(starting_xyz, size=1)[0])  # Ok
-        elif len(starting_xyz) > self.pop_size:
-            n_remove = len(starting_xyz) - self.pop_size
+                j = np.random.choice(range(len(starting_population)), size=1)[0]
+                starting_population.append(starting_population[j])
+        elif len(starting_population) > self.pop_size:
+            n_remove = len(starting_population) - self.pop_size
             for i in range(n_remove):
-                starting_xyz.remove(
-                    np.random.choice(starting_xyz, size=1)[0]
-                )  # Might be improvable
-        assert len(starting_xyz) == self.pop_size
+                j = np.random.choice(range(len(starting_population)), size=1)[0]
+                starting_population.remove(starting_population[j])
+        assert len(starting_population) == self.pop_size
         self.starting_random = starting_random
-        self.h_positions = h_positions
-        self.starting_xyz = starting_xyz
+        self.starting_population = starting_population
         self.max_counter = int(max_counter)
+        if chromosome_to_xyz is None:
+            raise (InvalidInput("No xyz builder provided."))
+        else:
+            self.chromosome_to_xyz = chromosome_to_xyz
 
     def initialize_population(self):
         """
@@ -151,12 +176,15 @@ class XYZGenAlgSolver(GenAlgSolver):
         population = np.zeros(shape=(self.pop_size, self.n_genes), dtype=object)
 
         for i in range(self.pop_size):
-            logger.debug("Getting scaffold from:\n{0}".format(self.starting_xyz[i]))
-            chromosome = pad_xyz_list(self.starting_xyz[i], self.n_genes)
+            chromosome = self.chromosomize(self.starting_population[i])
             if self.starting_random:
-                for j in range(1, self.n_genes):
-                    chromosome[j] = np.random.choice(self.alphabet, size=1)[0]
-            assert check_xyz(chromosome)
+                logger.warning(
+                    "Randomizing starting population. Any starting chromosomes will be overwritten."
+                )
+                for n, j in enumerate(range(self.n_genes)):
+                    if n in self.allowed_mutation_genes:
+                        chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
+            assert check_error(self.chromosome_to_xyz(), chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Initial population:\n{0}".format(population))
@@ -168,12 +196,17 @@ class XYZGenAlgSolver(GenAlgSolver):
         ref_pop = np.zeros(shape=(nrefill, self.n_genes), dtype=object)
 
         for i in range(nrefill):
-            logger.debug("Getting scaffold from:\n{0}".format(self.starting_xyz[i]))
-            chromosome = pad_xyz_list(self.starting_xyz[i], self.n_genes)
-            for j in range(1, self.n_genes):
-                chromosome[j] = np.random.choice(self.alphabet, size=1)[0]
-            assert check_xyz(chromosome)
+            chromosome = self.chromosomize(self.starting_population[i])
+            if self.starting_random:
+                logger.warning(
+                    "Randomizing starting population. Any starting chromosomes will be overwritten."
+                )
+                for n, j in enumerate(range(self.n_genes)):
+                    if n in self.allowed_mutation_genes:
+                        chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
+            assert check_error(self.chromosome_to_xyz(), chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
+
         self.logger.debug("Refill subset for population:\n{0}".format(ref_pop))
         return ref_pop
 
@@ -182,10 +215,8 @@ class XYZGenAlgSolver(GenAlgSolver):
         Print  xyz for all the population at the current state.
         """
         for i, j in zip(range(self.pop_size), self.fitness_):
-            write_chromosome(
-                "{0}_{1}_{2}".format(basename, i, np.round(j, 4)),
-                self.population_[i][:],
-            )
+            xyz = self.chromosome_to_xyz(self.population_[i][:])
+            draw_xyz(xyz, f"{basename}_{i}_{np.round(j,4)}")
 
     def get_crossover_points(self):
         """
@@ -246,7 +277,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}:\n{1}".format(counter, offspring)
                 )
-                valid = check_xyz(offspring)
+                valid = check_error(self.chromosome_to_xyz(), offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -279,7 +310,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}:\n{1}".format(counter, offspring)
                 )
-                valid = check_xyz(offspring)
+                valid = check_error(self.chromosome_to_xyz(), offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -312,15 +343,13 @@ class XYZGenAlgSolver(GenAlgSolver):
             backup_gene = population[i, j]
             counter = 0
             while not valid:
-                population[i, j] = np.random.choice(self.alphabet, size=1)[0]
+                population[i, j] = np.random.choice(self.alphabet[j], size=1)[0]
                 logger.trace(
                     "Mutated chromosome attempt {0}:\n{1}".format(
                         counter, population[i, :]
                     )
                 )
-                if alpha < sm_rate:
-                    population[i, 0] = np.random.choice(self.starting_xyz, size=1)[0]
-                valid = check_xyz(population[i, :])
+                valid = check_error(self.chromosome_to_xyz(), population[i, :])
                 counter += 1
                 if counter > self.max_counter:
                     logger.debug(
@@ -333,3 +362,23 @@ class XYZGenAlgSolver(GenAlgSolver):
             valid = False
 
         return population
+
+    def chromosomize(self, str_list):
+        """Pad or truncate starting_population chromosome to build a population chromosome."""
+        chromosome = []
+        if isinstance(str_list, list):
+            for i in range(min(self.n_genes, len(str_list))):
+                chromosome.append(str_list[i])
+            if len(str_list) > self.n_genes:
+                logger.warning(
+                    "Exceedingly long list of geometries produced. Will be truncated."
+                )
+            if len(chromosome) < self.n_genes:
+                logger.warning(
+                    "Exceedingly short list of geometries produced. Will be filled."
+                )
+                for i in range(self.n_genes - len(chromosome)):
+                    chromosome.append(np.random.choice(self.alphabet[i], size=1)[0])
+            return chromosome
+        else:
+            raise (InvalidInput("Starting population is not a list of lists."))

@@ -3,13 +3,14 @@ from typing import Sequence
 import numpy as np
 
 from navicatGA.base_solver import GenAlgSolver
-from navicatGA.helpers import get_input_dimensions
+from navicatGA.helpers import get_input_dimensions, make_array
 from navicatGA.fitness_functions_float import fitness_function_float
 
 
 class ContinuousGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
+        chromosome_to_array=make_array,
         variables_limits=(-10, 10),
         # Parameters for base class
         n_genes: int = 1,
@@ -24,7 +25,6 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         n_crossover_points: int = 1,
         random_state: int = None,
         lru_cache: bool = False,
-        hashable_fitness_function=None,
         scalarizer=None,
         prune_duplicates=False,
         # Verbosity and printing options
@@ -45,6 +45,8 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         Only the parameters specific for this child class are covered here.
 
         Parameters:
+        :param chromosome_to_array: object that when called returns a function that can take a chromosome and generate a np.array
+        :type chromosome_to_array: object
         :param variables_limits: limits for each variable [(x1_min, x1_max), (x2_min, x2_max), ...]
         :type variables_limits: tuple, list of tuples
         """
@@ -52,6 +54,7 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         GenAlgSolver.__init__(
             self,
             fitness_function=fitness_function,
+            assembler=chromosome_to_array,
             n_genes=n_genes,
             max_gen=max_gen,
             pop_size=pop_size,

@@ -1,21 +1,20 @@
 import logging
-import numpy as np
-import subprocess
-from AaronTools.geometry import Geometry
-from AaronTools.fileIO import FileReader, read_types
-from AaronTools.substituent import Substituent
-from AaronTools.theory import Theory, OptimizationJob, Basis, BasisSet, Method
-from AaronTools.job_control import SubmitProcess
-from navicatGA.wrappers_xyz import gl2geom
 import subprocess
 import os
 from time import sleep
-
+from AaronTools.geometry import Geometry
+from AaronTools.theory import Theory, OptimizationJob
+from AaronTools.job_control import SubmitProcess
 
 logger = logging.getLogger(__name__)
 
+queue_env_var = os.getenv("QUEUE_TYPE")
+COORD_THRESHOLD = 0.2
 USER = os.getenv("USER")
-QUEUE_TYPE = os.getenv("QUEUE_TYPE").upper()
+if queue_env_var is not None:
+    QUEUE_TYPE = queue_env_var.upper()
+else:
+    os.environ["QUEUE_TYPE"] = "NOQUEUE"
 
 
 class FixedSubmitProcess(SubmitProcess):

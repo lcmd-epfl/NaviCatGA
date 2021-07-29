@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
+import os
 from navicatGA.xyz_solver import XYZGenAlgSolver
-from navicatGA.wrappers_xyz import gl2geom
-from navicatGA.wrappers_xyz import geom2dihedral, geom2sub_sterimol
+from navicatGA.chemistry_xyz import get_alphabet_from_path, get_default_alphabet
+from navicatGA.wrappers_xyz import geom2dihedral, geom2sub_sterimol, chromosome_to_xyz
 from navicatGA.quantum_wrappers_xyz import geom2ehomo
 
 
 def my_fitness_function():
-    return lambda chromosome: (mlr(gl2geom(chromosome)[1]))
+    return lambda geom: (mlr(geom))
+
+
+database = os.path.join(os.path.dirname(os.path.realpath(__file__)), "scaffolds/")
+
+alphabet_list = [
+    get_alphabet_from_path(database),
+    get_default_alphabet(),
+    get_default_alphabet(),
+]
 
 
 def mlr(geom, lot=0):
@@ -29,10 +39,11 @@ def test_scaffolds_23():
         max_gen=5,
         mutation_rate=0.15,
         fitness_function=my_fitness_function(),
-        path_scaffolds="scaffolds",
+        chromosome_to_xyz=chromosome_to_xyz,
+        alphabet_list=alphabet_list,
         random_state=24,
         starting_random=True,
-        logger_level="DEBUG",
+        logger_level="INFO",
         n_crossover_points=1,
         verbose=True,
         progress_bars=True,

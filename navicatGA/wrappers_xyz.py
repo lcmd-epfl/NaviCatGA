@@ -1,12 +1,19 @@
 import logging
 import numpy as np
+import os
 from copy import deepcopy
 from AaronTools.geometry import Geometry
 from AaronTools.substituent import Substituent
 
 logger = logging.getLogger(__name__)
 
+queue_env_var = os.getenv("QUEUE_TYPE")
 COORD_THRESHOLD = 0.2
+USER = os.getenv("USER")
+if queue_env_var is not None:
+    QUEUE_TYPE = queue_env_var.upper()
+else:
+    os.environ["QUEUE_TYPE"] = "NOQUEUE"
 
 
 class Hashable_Geometry(Geometry):
@@ -83,6 +90,32 @@ class Hashable_Geometry(Geometry):
         self._hashed = True
 
         return hash(tuple(t))
+
+
+def chromosome_to_xyz():
+    """Wrapper function for simplicity."""
+
+    def sc2xyz(chromosome):
+        """Generate a XYZ string from a list particular geometry objects. To be customized."""
+        h_positions = "19-20"
+        scaffold = deepcopy(chromosome[0])
+        target_list = []
+        for gene in chromosome[1:]:
+            if gene is not None:
+                deepgene = deepcopy(Substituent(gene))
+                target_list.append(deepgene)
+            if gene is None:
+                target_list.append(None)
+        h_positions = scaffold.find("H", h_positions)
+        assert len(h_positions) >= len(target_list)
+        for i, j in enumerate(target_list):
+            if j is not None:
+                scaffold.substitute(j, h_positions[i], minimize=True)
+        geom = Hashable_Geometry(scaffold)
+        geom.minimize()
+        return geom
+
+    return sc2xyz
 
 
 def gl2geom(chromosome, h_positions="19-20"):

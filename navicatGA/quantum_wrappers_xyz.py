@@ -3,7 +3,6 @@ import numpy as np
 from pyscf import gto, dft, semiempirical
 from navicatGA.wrappers_xyz import gl2geom
 from AaronTools.atoms import Atom
-from AaronTools.geometry import Geometry
 
 
 logger = logging.getLogger(__name__)
@@ -191,11 +190,12 @@ def geom2pyscf(geom, lot=0):
     pyscfmol = gto.Mole()
     pyscfmol.atom = ""
     nelectron = pyscfmol.atom_charges().sum()
-    pyscfmol.spin = 0
     if nelectron % 2 == 0:
         pyscfmol.charge = 0
+        pyscfmol.spin = 0
     else:
         pyscfmol.charge = -1
+        pyscfmol.spin = 1
     for atom in geom:
         symbol = atom.element
         p = atom.coords

@@ -1,11 +1,10 @@
 from typing import Sequence
 import logging
-import random
 import numpy as np
 
 from navicatGA.base_solver import GenAlgSolver
 from navicatGA.helpers import check_error, concatenate_list
-from navicatGA.chemistry_smiles import sanitize_multiple_smiles, draw_smiles
+from navicatGA.chemistry_smiles import draw_smiles
 from navicatGA.exceptions import InvalidInput
 from navicatGA.exception_messages import exception_messages
 
@@ -21,7 +20,6 @@ class SmilesGenAlgSolver(GenAlgSolver):
         chromosome_to_smiles=concatenate_list,
         multi_alphabet: bool = False,
         equivalences: Sequence = None,
-        variables_limits: dict = None,
         max_counter: int = 10,
         # Parameters for base class
         n_genes: int = 1,
@@ -36,7 +34,6 @@ class SmilesGenAlgSolver(GenAlgSolver):
         n_crossover_points: int = 1,
         random_state: int = None,
         lru_cache: bool = False,
-        hashable_fitness_function=None,
         scalarizer=None,
         prune_duplicates=False,
         # Verbosity and printing options
@@ -63,6 +60,8 @@ class SmilesGenAlgSolver(GenAlgSolver):
         :type starting_random: bool
         :param alphabet_list: list containing the alphabets for the individual genes; or a single alphabet for all
         :type alphabet_list: list
+        :param chromosome_to_smiles: object that when called returns a function that can take a chromosome and generate a smiles string
+        :type chromosome_to_smiles: object
         :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet 
         :type multi_alphabet: bool
         :param equivalences: list of integers that set the equivalent genes of a chromosome; see examples for clarification
@@ -74,7 +73,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         GenAlgSolver.__init__(
             self,
             fitness_function=fitness_function,
-            hashable_fitness_function=hashable_fitness_function,
+            assembler=chromosome_to_smiles,
             scalarizer=scalarizer,
             n_genes=n_genes,
             max_gen=max_gen,
@@ -127,7 +126,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
             assert len(self.alphabet) == n_genes
 
         if not isinstance(starting_population, list):
-            raise (InvalidInput(exception_messages["StartingSmilesNotAList"]))
+            raise (InvalidInput(exception_messages["StartingPopulationNotAList"]))
         if not self.alphabet:
             raise (InvalidInput(exception_messages["AlphabetIsEmpty"]))
         if self.n_crossover_points > self.n_genes:
@@ -188,8 +187,13 @@ class SmilesGenAlgSolver(GenAlgSolver):
 
         for i in range(nrefill):
             chromosome = self.chromosomize(self.starting_population[i])
-            for j in range(1, self.n_genes):
-                chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
+            if self.starting_random:
+                logger.warning(
+                    "Randomizing starting population. Any starting chromosomes will be overwritten."
+                )
+                for n, j in enumerate(range(self.n_genes)):
+                    if n in self.allowed_mutation_genes:
+                        chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
             assert check_error(self.chromosome_to_smiles(), chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 

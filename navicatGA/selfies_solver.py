@@ -1,6 +1,5 @@
 from typing import Sequence
 import logging
-import random
 import numpy as np
 
 from selfies import (
@@ -10,11 +9,7 @@ from selfies import (
 )
 from navicatGA.base_solver import GenAlgSolver
 from navicatGA.helpers import check_error, concatenate_list
-from navicatGA.chemistry_selfies import (
-    sanitize_multiple_smiles,
-    randomize_selfies,
-    draw_selfies,
-)
+from navicatGA.chemistry_selfies import randomize_selfies, draw_selfies
 from navicatGA.exceptions import InvalidInput
 from navicatGA.exception_messages import exception_messages
 
@@ -47,7 +42,6 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         n_crossover_points: int = 1,
         random_state: int = None,
         lru_cache: bool = False,
-        hashable_fitness_function=None,
         scalarizer=None,
         prune_duplicates=False,
         # Verbosity and printing options
@@ -76,6 +70,8 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         :type starting_stoned: bool
         :param alphabet_list: list containing the alphabets for the individual genes; or a single alphabet for all
         :type alphabet_list: list
+        :param chromosome_to_selfies: object that when called returns a function that can take a chromosome and generate a selfies string
+        :type chromosome_to_selfies: object
         :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet 
         :type multi_alphabet: bool
         :param equivalences: list of integers that set the equivalent genes of a chromosome; see examples for clarification
@@ -90,7 +86,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         GenAlgSolver.__init__(
             self,
             fitness_function=fitness_function,
-            hashable_fitness_function=hashable_fitness_function,
+            assembler=chromosome_to_selfies,
             scalarizer=scalarizer,
             n_genes=n_genes,
             max_gen=max_gen,
@@ -158,7 +154,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                     pass
 
         if not isinstance(starting_selfies, list):
-            raise (InvalidInput(exception_messages["StartingSelfiesNotAList"]))
+            raise (InvalidInput(exception_messages["StartingPopulationNotAList"]))
         if not self.alphabet:
             raise (InvalidInput(exception_messages["AlphabetIsEmpty"]))
         if self.n_crossover_points > self.n_genes:
@@ -225,8 +221,13 @@ class SelfiesGenAlgSolver(GenAlgSolver):
 
         for i in range(nrefill):
             chromosome = self.chromosomize(self.starting_selfies[i])
-            for j in range(1, self.n_genes):
-                chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
+            if self.starting_random:
+                logger.warning(
+                    "Randomizing starting population. Any starting chromosomes will be overwritten."
+                )
+                for n, j in enumerate(range(self.n_genes)):
+                    if n in self.allowed_mutation_genes:
+                        chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
             assert check_error(self.chromosome_to_selfies(), chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 

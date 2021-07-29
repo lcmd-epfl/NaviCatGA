@@ -28,6 +28,7 @@ class GenAlgSolver:
         self,
         n_genes: int,
         fitness_function=None,
+        assembler=None,
         max_gen: int = 1000,
         max_conv: int = 100,
         pop_size: int = 100,
@@ -38,7 +39,6 @@ class GenAlgSolver:
         n_crossover_points: int = 1,
         random_state: int = None,
         lru_cache: bool = False,
-        hashable_fitness_function=None,
         scalarizer=None,
         prune_duplicates=False,
         verbose: bool = True,
@@ -60,8 +60,10 @@ class GenAlgSolver:
         Parameters:
         :param n_genes: number of genes (variables) to have in each chromosome
         :type n_genes: int
-        :param fitness_function: a fitness function that takes a chromosome and returns one (or more) fitness scores
-        :type fitness_function: callable
+        :param fitness_function: a fitness function that takes assembler()(chromosome) and returns one (or more) fitness scores
+        :type fitness_function: object
+        :param assembler: a function that takes a chromosome and returns an (ideally hashable) object to be evaluated
+        :type assembler: object
         :param max_gen: maximum number of generations to perform the optimization
         :type max_gen: int
         :param max_conv: maximum number of generations with same max fitness until convergence is assumed
@@ -82,8 +84,6 @@ class GenAlgSolver:
         :type random_state: int, optional
         :param lru_cache: whether to use lru_cacheing, which is monkeypatched into the class. Requires that the fitness function is hashable.
         :type lru_cache: bool
-        :param hashable_fitness_function: specific fitness function that derives to an ultimately hashable argument
-        :type hashable_fitness_function: callable
         :param scalarizer: chimera scalarizer object initialized to work on the results of fitness function
         :type scalarizer: optional, object with a scalarize method that takes in a population fitness and rescales it
         :param prune_duplicates: whether to prune duplicates in each generation
@@ -126,15 +126,10 @@ class GenAlgSolver:
         self.max_fitness_ = None
         self.n_genes = n_genes
         self.allowed_mutation_genes = np.arange(self.n_genes)
-        if fitness_function is None and hashable_fitness_function is not None:
-            fitness_function = hashable_fitness_function
+        self.assembler = assembler
         self.check_input_base(
             fitness_function, selection_strategy, pop_size, excluded_genes
         )
-        if lru_cache:
-            self.check_input_base_cache(
-                hashable_fitness_function, selection_strategy, pop_size, excluded_genes
-            )
         self.scalarizer = scalarizer
         self.selection_strategy = selection_strategy
         self.max_gen = max_gen
@@ -155,7 +150,6 @@ class GenAlgSolver:
         self.runtime_ = 0.0
         self.problem_type = problem_type
         self.prune_duplicates = prune_duplicates
-        self.hashable_fitness_function = hashable_fitness_function
         self.temperature = 100
 
         if progress_bars:
@@ -187,54 +181,6 @@ class GenAlgSolver:
                 )
         else:
             self.fitness_function = fitness_function
-
-        if selection_strategy not in allowed_selection_strategies:
-            raise InvalidInput(
-                exception_messages["InvalidSelectionStrategy"](
-                    selection_strategy, allowed_selection_strategies
-                )
-            )
-
-        if pop_size < 2:
-            raise (InvalidInput(exception_messages["InvalidPopulationSize"]))
-
-        if isinstance(excluded_genes, (list, tuple, np.ndarray)):
-            self.allowed_mutation_genes = [
-                item
-                for item in self.allowed_mutation_genes
-                if item not in excluded_genes
-            ]
-
-        elif excluded_genes is not None:
-            raise InvalidInput(
-                exception_messages["InvalidExcludedGenes"](excluded_genes)
-            )
-
-    def check_input_base_cache(
-        self,
-        hashable_fitness_function,
-        selection_strategy,
-        pop_size: int,
-        excluded_genes,
-    ):
-        """
-        Function to check that the main arguments have been passed to the GenAlgSolver instance if lru_cache is True.
-
-        Parameters:
-        :param hashable_fitness_function: a fitness function that takes a hashable object and returns a fitness
-        :param selection_strategy: a selection strategy string that can be recognized by this class
-        :param pop_size: the number of chromosomes
-        :param excluded_genes: a sequence of genes that should not change or mutate
-        """
-        if not hashable_fitness_function:
-            try:
-                getattr(self, "hashable_fitness_function")
-            except AttributeError:
-                raise NoFitnessFunction(
-                    "A hashable fitness function must be defined or provided as an argument"
-                )
-        else:
-            self.hashable_fitness_function = hashable_fitness_function
 
         if selection_strategy not in allowed_selection_strategies:
             raise InvalidInput(
@@ -402,14 +348,14 @@ class GenAlgSolver:
             nvals = 1
             fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
             for i in range(population.shape[0]):
-                fitness[i, :] = self.fitness_function(population[i])
+                fitness[i, :] = self.fitness_function(self.assembler()(population[i]))
             fitness = np.squeeze(fitness)
             pfitness = fitness
         else:
             nvals = len(self.scalarizer.goals)
             fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
             for i in range(population.shape[0]):
-                fitness[i, :] = self.fitness_function(population[i])
+                fitness[i, :] = self.fitness_function(self.assembler()(population[i]))
             pfitness = fitness
             fitness = self.scalarizer.scalarize(fitness)
         return fitness, pfitness
