@@ -98,6 +98,14 @@ def smiles2mol_structure(smiles, lot=0):
         return get_structure_ff(mol, n_confs=10)
 
 
+def smiles2logp(smiles):
+    mol, smiles_canon, done = sanitize_smiles(smiles)
+    if smiles_canon == "" or not done or mol is None:
+        return -1e6
+    logp = Descriptors.MolLogP(mol)
+    return logp
+
+
 def sc2logp(chromosome):
     smiles = sc2smiles(chromosome)
     mol, smiles_canon, done = sanitize_smiles(smiles)

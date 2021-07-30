@@ -1,12 +1,6 @@
 #!/usr/bin/env python3
 from navicatGA.smiles_solver import SmilesGenAlgSolver
-from navicatGA.wrappers_smiles import (
-    sc2smiles,
-    sc2mol_structure,
-    sc2logp,
-    sc2depictions,
-    chromosome_to_smiles,
-)
+from navicatGA.wrappers_smiles import chromosome_to_smiles, smiles2logp
 import pandas as pd
 import pickle
 import os
@@ -25,16 +19,11 @@ def read_database(filename="database.xls") -> pd.DataFrame:
 fdb = read_database(database)
 alphabet_list = list(set(fdb.Substituent_1.dropna()))
 
-starting_smiles = [["[Fe@]"]]
+starting_smiles = [["[Fe]"]]
 
 
 def my_fitness_function():
-    return lambda chromosome: (krr(chromosome))
-
-
-def krr(chromosome):
-    val = sc2logp(chromosome)
-    return val
+    return lambda smiles: (smiles2logp(smiles))
 
 
 def test_pickle_25():
@@ -49,7 +38,7 @@ def test_pickle_25():
         alphabet_list=alphabet_list,
         random_state=24,
         excluded_genes=[0],
-        logger_level="DEBUG",
+        logger_level="TRACE",
         n_crossover_points=1,
         verbose=True,
         to_file=False,
@@ -58,6 +47,7 @@ def test_pickle_25():
     solver.solve(10)
     file = open("solver.pkl", "wb")
     solver.fitness_function = None
+    solver.assembler = None
     solver.chromosome_to_smiles = None
     pickle.dump(solver, file, pickle.HIGHEST_PROTOCOL)
     del solver
@@ -66,7 +56,7 @@ def test_pickle_25():
     solver = pickle.load(file)
     file.close()
     solver.fitness_function = my_fitness_function()
-    solver.chromosome_to_smiles = chromosome_to_smiles
+    solver.assembler = chromosome_to_smiles()
     solver.solve(10)
     sc2depictions(solver.best_individual_, "best_fe_soluble")
 

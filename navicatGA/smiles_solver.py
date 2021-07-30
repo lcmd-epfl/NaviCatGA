@@ -369,6 +369,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
 
     def chromosomize(self, str_list):
         """Pad or truncate starting_population chromosome to build a population chromosome."""
+        logger.debug(f"Chromosomizing {str_list} to conform to n_genes {self.n_genes}")
         chromosome = np.empty(self.n_genes, dtype=object)
         if isinstance(str_list, list):
             for i in range(min(self.n_genes, len(str_list))):
@@ -379,7 +380,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                 logger.debug(
                     "Exceedingly short SMILES produced. Will be randomly completed."
                 )
-                for i in range(self.n_genes - len(chromosome)):
+                for i in range(1, self.n_genes - len(str_list) + 1):
                     chromosome[-i] = np.random.choice(self.alphabet[-i], size=1)[0]
             return chromosome
         else:
