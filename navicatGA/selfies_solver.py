@@ -23,7 +23,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         starting_random: bool = False,
         starting_stoned: bool = False,
         alphabet_list: list = list(get_semantic_robust_alphabet()),
-        chromosome_to_selfies=concatenate_list,
+        chromosome_to_selfies=concatenate_list(),
         multi_alphabet: bool = False,
         equivalences: Sequence = None,
         branching: bool = False,
@@ -70,7 +70,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         :type starting_stoned: bool
         :param alphabet_list: list containing the alphabets for the individual genes; or a single alphabet for all
         :type alphabet_list: list
-        :param chromosome_to_selfies: object that when called returns a function that can take a chromosome and generate a selfies string
+        :param chromosome_to_selfies: object that can take a chromosome and generate a selfies string
         :type chromosome_to_selfies: object
         :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet
         :type multi_alphabet: bool
@@ -206,7 +206,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 for n, j in enumerate(range(self.n_genes)):
                     if n in self.allowed_mutation_genes:
                         chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_selfies(), chromosome)
+            assert check_error(self.chromosome_to_selfies, chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Initial population: {0}".format(population))
@@ -222,7 +222,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             for n, j in enumerate(range(self.n_genes)):
                 if n in self.allowed_mutation_genes:
                     chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_selfies(), chromosome)
+            assert check_error(self.chromosome_to_selfies, chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Refill subset for population:\n{0}".format(ref_pop))
@@ -285,7 +285,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_selfies = check_error(self.chromosome_to_selfies(), offspring)
+                valid_selfies = check_error(self.chromosome_to_selfies, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -318,7 +318,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_selfies = check_error(self.chromosome_to_selfies(), offspring)
+                valid_selfies = check_error(self.chromosome_to_selfies, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -356,7 +356,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                     )
                 )
                 valid_selfies = check_error(
-                    self.chromosome_to_selfies(), population[i, :]
+                    self.chromosome_to_selfies, population[i, :]
                 )
                 counter += 1
                 if counter > self.max_counter:
@@ -381,57 +381,33 @@ class SelfiesGenAlgSolver(GenAlgSolver):
 
     def chromosomize(self, str_list):
         """Pad or truncate starting_population chromosome to build a population chromosome."""
-        chromosome = []
         if isinstance(str_list, list):
+            chromosome = np.empty(self.n_genes, dtype=object)
             for i in range(min(self.n_genes, len(str_list))):
-                chromosome.append(str_list[i])
+                chromosome[i] = str_list[i]
             if len(str_list) > self.n_genes:
-                logger.warning("Exceedingly long SELFIES produced. Will be truncated.")
-            if len(chromosome) < self.n_genes:
-                logger.warning(
+                logger.debug("Exceedingly long SELFIES produced. Will be truncated.")
+            if len(str_list) < self.n_genes:
+                logger.debug(
                     "Exceedingly short SELFIES produced. Will be randomly completed."
                 )
                 for i in range(self.n_genes - len(chromosome)):
-                    chromosome.append(np.random.choice(self.alphabet[i], size=1)[0])
+                    chromosome[-i] = np.random.choice(self.alphabet[-i], size=1)[0]
             return chromosome
         elif isinstance(str_list, str):
+            chromosome = []
             while str_list != "":
                 chromosome.append(str_list[str_list.find("[") : str_list.find("]") + 1])
                 str_list = str_list[str_list.find("]") + 1 :]
             if len(str_list) > self.n_genes:
-                logger.warning("Exceedingly long SELFIES produced. Will be truncated.")
+                logger.debug("Exceedingly long SELFIES produced. Will be truncated.")
                 chromosome = chromosome[0 : self.n_genes - 1]
             if len(chromosome) < self.n_genes:
                 chromosome += ["[nop]"] * (self.n_genes - len(chromosome))
-            return chromosome
+            return np.array(chromosome, dtype=object)
         else:
             raise (
                 InvalidInput(
                     "Starting SELFIES is not a list of lists or a list of strings."
                 )
             )
-
-
-def test_benzene_selfies():
-    from navicatGA.fitness_functions_selfies import fitness_function_selfies
-
-    starting_selfies = ["[C][C=][C][C=][C][C=][Ring1][Branch1_2]"]
-    solver = SelfiesGenAlgSolver(
-        n_genes=16,
-        pop_size=5,
-        max_gen=10,
-        fitness_function=fitness_function_selfies(2),
-        starting_selfies=starting_selfies,
-        excluded_genes=[0, 1, 2, 3, 4, 5, 6, 7, 8],
-        logger_level="INFO",
-        n_crossover_points=2,
-        verbose=False,
-        progress_bars=True,
-        to_file=False,
-        to_stdout=True,
-    )
-    solver.solve()
-
-
-if __name__ == "__main__":
-    test_benzene_selfies()

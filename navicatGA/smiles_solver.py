@@ -17,7 +17,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         starting_population: list = [[""]],
         starting_random: bool = False,
         alphabet_list: list = ["C", "N", "P", "O", "[Si]", "F", "[H]"],
-        chromosome_to_smiles=concatenate_list,
+        chromosome_to_smiles=concatenate_list(),
         multi_alphabet: bool = False,
         equivalences: Sequence = None,
         max_counter: int = 10,
@@ -60,7 +60,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
         :type starting_random: bool
         :param alphabet_list: list containing the alphabets for the individual genes; or a single alphabet for all
         :type alphabet_list: list
-        :param chromosome_to_smiles: object that when called returns a function that can take a chromosome and generate a smiles string
+        :param chromosome_to_smiles: object that can take a chromosome and generate a smiles string
         :type chromosome_to_smiles: object
         :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet
         :type multi_alphabet: bool
@@ -172,7 +172,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                 for n, j in enumerate(range(self.n_genes)):
                     if n in self.allowed_mutation_genes:
                         chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_smiles(), chromosome)
+            assert check_error(self.chromosome_to_smiles, chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Initial population: {0}".format(population))
@@ -188,7 +188,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
             for n, j in enumerate(range(self.n_genes)):
                 if n in self.allowed_mutation_genes:
                     chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_smiles(), chromosome)
+            assert check_error(self.chromosome_to_smiles, chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Refill subset for population:\n{0}".format(ref_pop))
@@ -274,7 +274,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_smiles = check_error(self.chromosome_to_smiles(), offspring)
+                valid_smiles = check_error(self.chromosome_to_smiles, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -307,7 +307,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_smiles = check_error(self.chromosome_to_smiles(), offspring)
+                valid_smiles = check_error(self.chromosome_to_smiles, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -345,9 +345,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                         counter, population[i, :]
                     )
                 )
-                valid_smiles = check_error(
-                    self.chromosome_to_smiles(), population[i, :]
-                )
+                valid_smiles = check_error(self.chromosome_to_smiles, population[i, :])
                 counter += 1
                 if counter > self.max_counter:
                     logger.debug(
@@ -371,18 +369,18 @@ class SmilesGenAlgSolver(GenAlgSolver):
 
     def chromosomize(self, str_list):
         """Pad or truncate starting_population chromosome to build a population chromosome."""
-        chromosome = []
+        chromosome = np.empty(self.n_genes, dtype=object)
         if isinstance(str_list, list):
             for i in range(min(self.n_genes, len(str_list))):
-                chromosome.append(str_list[i])
+                chromosome[i] = str_list[i]
             if len(str_list) > self.n_genes:
-                logger.warning("Exceedingly long SMILES produced. Will be truncated.")
-            if len(chromosome) < self.n_genes:
-                logger.warning(
+                logger.debug("Exceedingly long SMILES produced. Will be truncated.")
+            if len(str_list) < self.n_genes:
+                logger.debug(
                     "Exceedingly short SMILES produced. Will be randomly completed."
                 )
                 for i in range(self.n_genes - len(chromosome)):
-                    chromosome.append(np.random.choice(self.alphabet[i], size=1)[0])
+                    chromosome[-i] = np.random.choice(self.alphabet[-i], size=1)[0]
             return chromosome
         else:
             raise (

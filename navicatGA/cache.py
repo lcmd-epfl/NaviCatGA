@@ -29,7 +29,7 @@ def calculate_fitness_cache(self, population):
     fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
     for i in range(population.shape[0]):
         chromosome = population[i][0 : self.n_genes]
-        hashable = self.assembler()(chromosome)
+        hashable = self.assembler(chromosome)
         fitness[i, :] = calculate_one_fitness_cache(hashable, self.fitness_function)
     logger.trace(calculate_one_fitness_cache.cache_info())
     if self.scalarizer is None:

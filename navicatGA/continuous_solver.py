@@ -10,7 +10,7 @@ from navicatGA.fitness_functions_float import fitness_function_float
 class ContinuousGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
-        chromosome_to_array=make_array,
+        chromosome_to_array=make_array(),
         variables_limits=(-10, 10),
         # Parameters for base class
         n_genes: int = 1,

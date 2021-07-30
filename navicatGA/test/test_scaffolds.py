@@ -39,7 +39,7 @@ def test_scaffolds_23():
         max_gen=5,
         mutation_rate=0.15,
         fitness_function=my_fitness_function(),
-        chromosome_to_xyz=chromosome_to_xyz,
+        chromosome_to_xyz=chromosome_to_xyz(),
         alphabet_list=alphabet_list,
         random_state=24,
         starting_random=True,

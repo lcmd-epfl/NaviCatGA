@@ -44,7 +44,7 @@ def test_pickle_25():
         mutation_rate=0.15,
         prune_duplicates=True,
         fitness_function=my_fitness_function(),
-        chromosome_to_smiles=chromosome_to_smiles,
+        chromosome_to_smiles=chromosome_to_smiles(),
         starting_population=starting_smiles,
         alphabet_list=alphabet_list,
         random_state=24,

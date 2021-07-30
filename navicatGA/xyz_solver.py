@@ -23,7 +23,7 @@ class XYZGenAlgSolver(GenAlgSolver):
         starting_population: list = [[None]],
         starting_random: bool = False,
         alphabet_list: list = get_default_alphabet(),
-        chromosome_to_xyz=random_merge_xyz,
+        chromosome_to_xyz=random_merge_xyz(),
         multi_alphabet: bool = False,
         equivalences: Sequence = None,
         max_counter: int = 10,
@@ -66,7 +66,7 @@ class XYZGenAlgSolver(GenAlgSolver):
         :type starting_random: bool
         :param alphabet_list: list containing the alphabets for the individual genes; or a single alphabet for all; can be a path directing to a directory containing xyz files
         :type alphabet_list: list
-        :param chromosome_to_xyz: object that when called returns a function that can take a chromosome and generate an AaronTools.py geometry object
+        :param chromosome_to_xyz: object that can take a chromosome and generate an AaronTools.py geometry object
         :type chromosome_to_xyz: object
         :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet
         :type multi_alphabet: bool
@@ -182,7 +182,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                 for n, j in enumerate(range(self.n_genes)):
                     if n in self.allowed_mutation_genes:
                         chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_xyz(), chromosome)
+            assert check_error(self.chromosome_to_xyz, chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Initial population:\n{0}".format(population))
@@ -198,7 +198,7 @@ class XYZGenAlgSolver(GenAlgSolver):
             for n, j in enumerate(range(self.n_genes)):
                 if n in self.allowed_mutation_genes:
                     chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_xyz(), chromosome)
+            assert check_error(self.chromosome_to_xyz, chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Refill subset for population:\n{0}".format(ref_pop))
@@ -271,7 +271,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}:\n{1}".format(counter, offspring)
                 )
-                valid = check_error(self.chromosome_to_xyz(), offspring)
+                valid = check_error(self.chromosome_to_xyz, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -304,7 +304,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}:\n{1}".format(counter, offspring)
                 )
-                valid = check_error(self.chromosome_to_xyz(), offspring)
+                valid = check_error(self.chromosome_to_xyz, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -343,7 +343,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                         counter, population[i, :]
                     )
                 )
-                valid = check_error(self.chromosome_to_xyz(), population[i, :])
+                valid = check_error(self.chromosome_to_xyz, population[i, :])
                 counter += 1
                 if counter > self.max_counter:
                     logger.debug(
@@ -362,17 +362,17 @@ class XYZGenAlgSolver(GenAlgSolver):
         chromosome = []
         if isinstance(str_list, list):
             for i in range(min(self.n_genes, len(str_list))):
-                chromosome.append(str_list[i])
+                chromosome[i] = str_list[i]
             if len(str_list) > self.n_genes:
-                logger.warning(
-                    "Exceedingly long list of geometries produced. Will be truncated."
+                logger.debug(
+                    "Exceedingly long list of XYZ structures produced. Will be truncated."
                 )
-            if len(chromosome) < self.n_genes:
-                logger.warning(
-                    "Exceedingly short list of geometries produced. Will be filled."
+            if len(str_list) < self.n_genes:
+                logger.debug(
+                    "Exceedingly short list of XYZ structures produced. Will be randomly completed."
                 )
                 for i in range(self.n_genes - len(chromosome)):
-                    chromosome.append(np.random.choice(self.alphabet[i], size=1)[0])
+                    chromosome[-i] = np.random.choice(self.alphabet[-i], size=1)[0]
             return chromosome
         else:
             raise (InvalidInput("Starting population is not a list of lists."))

@@ -60,7 +60,7 @@ class GenAlgSolver:
         Parameters:
         :param n_genes: number of genes (variables) to have in each chromosome
         :type n_genes: int
-        :param fitness_function: a fitness function that takes assembler()(chromosome) and returns one (or more) fitness scores
+        :param fitness_function: a fitness function that takes assembler(chromosome) and returns one (or more) fitness scores
         :type fitness_function: object
         :param assembler: a function that takes a chromosome and returns an (ideally hashable) object to be evaluated
         :type assembler: object
@@ -348,14 +348,14 @@ class GenAlgSolver:
             nvals = 1
             fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
             for i in range(population.shape[0]):
-                fitness[i, :] = self.fitness_function(self.assembler()(population[i]))
+                fitness[i, :] = self.fitness_function(self.assembler(population[i]))
             fitness = np.squeeze(fitness)
             pfitness = fitness
         else:
             nvals = len(self.scalarizer.goals)
             fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
             for i in range(population.shape[0]):
-                fitness[i, :] = self.fitness_function(self.assembler()(population[i]))
+                fitness[i, :] = self.fitness_function(self.assembler(population[i]))
             pfitness = fitness
             fitness = self.scalarizer.scalarize(fitness)
         return fitness, pfitness

@@ -29,12 +29,7 @@ starting_smiles = [["[Ni@]"]]
 
 
 def my_fitness_function():
-    return lambda chromosome: (krr(chromosome))
-
-
-def krr(chromosome):
-    val = sc2mw(chromosome)
-    return val
+    return lambda chromosome: (sc2mw(chromosome))
 
 
 def test_ni_catalyst_24():
@@ -44,7 +39,7 @@ def test_ni_catalyst_24():
         max_gen=10,
         mutation_rate=0.05,
         fitness_function=my_fitness_function(),
-        chromosome_to_smiles=chromosome_to_smiles,
+        chromosome_to_smiles=chromosome_to_smiles(),
         excluded_genes=[0],
         starting_population=starting_smiles,
         alphabet_list=alphabet_list,
