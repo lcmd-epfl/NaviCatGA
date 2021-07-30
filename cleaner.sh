@@ -1,1 +1,1 @@
-rm -rf *.log *.pdb *.xyz *.png
+rm -rf *.log *.pdb *.xyz *.png *.pkl
