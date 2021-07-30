@@ -89,7 +89,7 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         Initializes the population of the problem according to the
         population size and number of genes and according to the problem
         type (either integers or floats).
-        
+
         Returns:
         :return: a numpy array with a randomized initialized population
         """
@@ -131,13 +131,13 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         where beta is a random number between 0 and 1, and can be either positive or negative
         depending on if it's the first or second offspring
         http://index-of.es/z0ro-Repository-3/Genetic-Algorithm/R.L.Haupt,%20S.E.Haupt%20-%20Practical%20Genetic%20Algorithms.pdf
-        
+
         Parameters:
         :param first_parent: first parent's chromosome
         :param sec_parent: second parent's chromosome
         :param crossover_pt: point(s) at which to perform the crossover
         :param offspring_number: whether it's the first or second offspring from a pair of parents.
-        
+
         Returns:
         :return: the resulting offspring.
         """
@@ -167,11 +167,11 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         """
         Mutates the population by randomizing specific positions of the
         population individuals.
-        
+
         Parameters:
         :param population: the population at a given iteration
         :param n_mutations: number of mutations to be performed
-        
+
         Returns:
         :return: the mutated population
         """

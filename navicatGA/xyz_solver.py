@@ -68,7 +68,7 @@ class XYZGenAlgSolver(GenAlgSolver):
         :type alphabet_list: list
         :param chromosome_to_xyz: object that when called returns a function that can take a chromosome and generate an AaronTools.py geometry object
         :type chromosome_to_xyz: object
-        :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet 
+        :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet
         :type multi_alphabet: bool
         :param equivalences: list of integers that set the equivalent genes of a chromosome; see examples for clarification
         :type equivalences: list
@@ -178,9 +178,7 @@ class XYZGenAlgSolver(GenAlgSolver):
         for i in range(self.pop_size):
             chromosome = self.chromosomize(self.starting_population[i])
             if self.starting_random:
-                logger.warning(
-                    "Randomizing starting population. Any starting chromosomes will be overwritten."
-                )
+                logger.debug("Randomizing starting chromosome.")
                 for n, j in enumerate(range(self.n_genes)):
                     if n in self.allowed_mutation_genes:
                         chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
@@ -197,13 +195,9 @@ class XYZGenAlgSolver(GenAlgSolver):
 
         for i in range(nrefill):
             chromosome = self.chromosomize(self.starting_population[i])
-            if self.starting_random:
-                logger.warning(
-                    "Randomizing starting population. Any starting chromosomes will be overwritten."
-                )
-                for n, j in enumerate(range(self.n_genes)):
-                    if n in self.allowed_mutation_genes:
-                        chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
+            for n, j in enumerate(range(self.n_genes)):
+                if n in self.allowed_mutation_genes:
+                    chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
             assert check_error(self.chromosome_to_xyz(), chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 

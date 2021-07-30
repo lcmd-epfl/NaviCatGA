@@ -17,7 +17,7 @@ if __name__ == "__main__":
 def calculate_fitness_cache(self, population):
     """
     Calculates the fitness of the population using a hashable fitness function.
-    
+
     Parameters:
     :param population: population state at a given iteration
     :return: the fitness of the current population

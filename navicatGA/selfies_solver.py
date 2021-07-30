@@ -72,11 +72,11 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         :type alphabet_list: list
         :param chromosome_to_selfies: object that when called returns a function that can take a chromosome and generate a selfies string
         :type chromosome_to_selfies: object
-        :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet 
+        :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet
         :type multi_alphabet: bool
         :param equivalences: list of integers that set the equivalent genes of a chromosome; see examples for clarification
         :type equivalences: list
-        :param branching: whether to add random branches covering all possible branching possibilities to the alphabets 
+        :param branching: whether to add random branches covering all possible branching possibilities to the alphabets
         :type branching: bool
         :param variable_limits: will set semantic constraints on alphabets if set True
         :type variable_limits: bool
@@ -192,7 +192,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         Initializes the population of the problem according to the
         population size and number of genes and according to the problem
         type (either integers or floats).
-        
+
         Returns:
         :return: a numpy array with initialized population
         """
@@ -202,9 +202,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         for i in range(self.pop_size):
             chromosome = self.chromosomize(self.starting_selfies[i])
             if self.starting_random:
-                logger.warning(
-                    "Randomizing starting population. Any starting chromosomes will be overwritten."
-                )
+                logger.warning("Randomizing starting chromosome.")
                 for n, j in enumerate(range(self.n_genes)):
                     if n in self.allowed_mutation_genes:
                         chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
@@ -221,13 +219,9 @@ class SelfiesGenAlgSolver(GenAlgSolver):
 
         for i in range(nrefill):
             chromosome = self.chromosomize(self.starting_selfies[i])
-            if self.starting_random:
-                logger.warning(
-                    "Randomizing starting population. Any starting chromosomes will be overwritten."
-                )
-                for n, j in enumerate(range(self.n_genes)):
-                    if n in self.allowed_mutation_genes:
-                        chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
+            for n, j in enumerate(range(self.n_genes)):
+                if n in self.allowed_mutation_genes:
+                    chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
             assert check_error(self.chromosome_to_selfies(), chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 

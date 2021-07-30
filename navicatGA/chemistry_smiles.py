@@ -21,7 +21,7 @@ def sanitize_smiles(smiles):  # Problems with C1C=CC=CC=1[P-1]=[P-1][P-1] for in
     Parameters:
     :param smi: smile string to be canonicalized
     :type smi: str
-    
+
     Returns:
     :return mol: rdkit mol object, None if exception caught
     :return smi_canon: canonicalized smile representation of smi, None if exception caught.
@@ -78,7 +78,7 @@ def get_structure_ff(mol, n_confs=5):
 
     Parameters:
     :param mol: an rdkit mol object
-    :type mol: rdkit.mol 
+    :type mol: rdkit.mol
     :param n_confs: number of conformations to sample
     :type n_confs: int
 

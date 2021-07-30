@@ -6,7 +6,9 @@ from navicatGA.quantum_wrappers_xyz import gl2gap, gl2ehomo, gl2elumo
 logger = logging.getLogger(__name__)
 
 
-def fitness_function_xyz(function_number=1,):
+def fitness_function_xyz(
+    function_number=1,
+):
 
     if function_number == 1:  # gl2gap
 
