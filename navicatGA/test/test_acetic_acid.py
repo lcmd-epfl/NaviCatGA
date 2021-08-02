@@ -49,6 +49,7 @@ def test_acetic_acid_01():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, "acetic_acid_ehomo")
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

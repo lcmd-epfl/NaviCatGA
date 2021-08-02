@@ -83,6 +83,8 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         :param max_counter: maximum number of times a wrong structure will try to be corrected before skipping
         :type max_counter: int
         """
+        if chromosome_to_selfies is None:
+            raise (InvalidInput("No smiles builder provided."))
         GenAlgSolver.__init__(
             self,
             fitness_function=fitness_function,
@@ -182,10 +184,6 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         self.starting_selfies = starting_selfies
         self.max_counter = int(max_counter)
         self.starting_random = starting_random
-        if chromosome_to_selfies is None:
-            raise (InvalidInput("No smiles builder provided."))
-        else:
-            self.chromosome_to_selfies = chromosome_to_selfies
 
     def initialize_population(self):
         """
@@ -206,10 +204,11 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 for n, j in enumerate(range(self.n_genes)):
                     if n in self.allowed_mutation_genes:
                         chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_selfies, chromosome)
+            assert check_error(self.assembler, chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Initial population: {0}".format(population))
+        self.starting_population = population
         return population
 
     def refill_population(self, nrefill=0):
@@ -222,7 +221,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
             for n, j in enumerate(range(self.n_genes)):
                 if n in self.allowed_mutation_genes:
                     chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_selfies, chromosome)
+            assert check_error(self.assembler, chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Refill subset for population:\n{0}".format(ref_pop))
@@ -285,7 +284,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_selfies = check_error(self.chromosome_to_selfies, offspring)
+                valid_selfies = check_error(self.assembler, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -318,7 +317,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_selfies = check_error(self.chromosome_to_selfies, offspring)
+                valid_selfies = check_error(self.assembler, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -355,9 +354,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
                         counter, population[i, :]
                     )
                 )
-                valid_selfies = check_error(
-                    self.chromosome_to_selfies, population[i, :]
-                )
+                valid_selfies = check_error(self.assembler, population[i, :])
                 counter += 1
                 if counter > self.max_counter:
                     logger.debug(
@@ -376,7 +373,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         Print xyz for all the population at the current state.
         """
         for i, j in zip(range(self.pop_size), self.fitness_):
-            selfies = self.chromosome_to_selfies(self.population_[i][:])
+            selfies = self.assembler(self.population_[i][:])
             draw_selfies(selfies, f"{basename}_{i}_{np.round(j,4)}")
 
     def chromosomize(self, str_list):

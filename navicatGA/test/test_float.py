@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-from navicatGA.continuous_solver import ContinuousGenAlgSolver
+from navicatGA.float_solver import FloatGenAlgSolver
 from navicatGA.fitness_functions_float import fitness_function_float
 
 
 def test_float_08():
-    solver = ContinuousGenAlgSolver(
+    solver = FloatGenAlgSolver(
         n_genes=6,
         pop_size=50,
         max_gen=50,
@@ -14,10 +14,10 @@ def test_float_08():
         variables_limits=(0, 1),
         fitness_function=fitness_function_float(10),
         selection_strategy="roulette_wheel",
+        logger_level="TRACE",
         n_crossover_points=1,
         random_state=420,
         to_file=False,
-        progress_bars=True,
         verbose=True,
     )
     solver.solve()
@@ -34,10 +34,11 @@ def test_float_08():
             solver.best_individual_[5],
         )
     )
+    solver.close_solver_logger()
 
 
 def test_float_09():
-    solver = ContinuousGenAlgSolver(
+    solver = FloatGenAlgSolver(
         n_genes=6,
         pop_size=50,
         max_gen=50,
@@ -46,10 +47,10 @@ def test_float_09():
         variables_limits=(0, 1),
         fitness_function=fitness_function_float(10),
         selection_strategy="tournament",
+        logger_level="TRACE",
         n_crossover_points=2,
         random_state=420,
         to_file=False,
-        progress_bars=True,
         verbose=True,
     )
     solver.solve()
@@ -66,10 +67,11 @@ def test_float_09():
             solver.best_individual_[5],
         )
     )
+    solver.close_solver_logger()
 
 
 def test_float_10():
-    solver = ContinuousGenAlgSolver(
+    solver = FloatGenAlgSolver(
         n_genes=6,
         pop_size=50,
         max_gen=50,
@@ -78,10 +80,10 @@ def test_float_10():
         variables_limits=(0, 1),
         fitness_function=fitness_function_float(10),
         selection_strategy="random",
+        logger_level="TRACE",
         n_crossover_points=3,
         random_state=420,
         to_file=False,
-        progress_bars=True,
         verbose=True,
     )
     solver.solve()
@@ -98,6 +100,7 @@ def test_float_10():
             solver.best_individual_[5],
         )
     )
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

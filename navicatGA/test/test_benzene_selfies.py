@@ -22,6 +22,7 @@ def test_benzene_selfies_04():
         to_stdout=True,
     )
     solver.solve()
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

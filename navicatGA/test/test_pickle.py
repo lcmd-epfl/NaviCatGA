@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from navicatGA.smiles_solver import SmilesGenAlgSolver
-from navicatGA.wrappers_smiles import chromosome_to_smiles, smiles2logp
+from navicatGA.wrappers_smiles import chromosome_to_smiles, smiles2logp, sc2depictions
 import pandas as pd
 import pickle
 import os
@@ -38,7 +38,7 @@ def test_pickle_25():
         alphabet_list=alphabet_list,
         random_state=24,
         excluded_genes=[0],
-        logger_level="TRACE",
+        logger_level="DEBUG",
         n_crossover_points=1,
         verbose=True,
         to_file=False,
@@ -57,8 +57,12 @@ def test_pickle_25():
     file.close()
     solver.fitness_function = my_fitness_function()
     solver.assembler = chromosome_to_smiles()
+    print(
+        f"Solver has still n_genes {solver.n_genes} and pop_size {solver.pop_size} and so on."
+    )
     solver.solve(10)
     sc2depictions(solver.best_individual_, "best_fe_soluble")
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

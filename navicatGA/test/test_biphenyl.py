@@ -53,6 +53,7 @@ def test_biphenyl_05():
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="biphenyl_mv")
     print("The corresponding mv is : {0}".format(sc2mv(solver.best_individual_)))
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

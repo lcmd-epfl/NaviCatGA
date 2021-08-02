@@ -48,6 +48,7 @@ def test_rediscover_paracetamol(
         solver.best_individual_,
         "benchmark_{0}_{1}_{2}".format(n_crossover_points, mutation_rate, max_gen),
     )
+    solver.close_solver_logger()
     return sc2tanimoto_to_target(solver.best_individual_, target_selfies)
 
 

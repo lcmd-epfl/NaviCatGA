@@ -46,6 +46,7 @@ def test_tanimoto_methane_19():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="tanimoto_methane")
+    solver.close_solver_logger()
 
 
 def test_tanimoto_random_20():
@@ -84,6 +85,7 @@ def test_tanimoto_random_20():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="tanimoto_random")
+    solver.close_solver_logger()
 
 
 def test_levenshtein_methane_21():
@@ -117,6 +119,7 @@ def test_levenshtein_methane_21():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="levenshtein_methane")
+    solver.close_solver_logger()
 
 
 def test_levenshtein_random_22():
@@ -150,6 +153,7 @@ def test_levenshtein_random_22():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="levenshtein_random")
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

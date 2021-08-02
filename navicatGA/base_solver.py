@@ -602,7 +602,7 @@ class GenAlgSolver:
         )
         return mutation_rows, mutation_cols
 
-    def close_solve_logger(self):
+    def close_solver_logger(self):
         """
         Closes the logger of this solver. This avoid multiple loggers stacking when another solver is created.
         """

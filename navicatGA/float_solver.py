@@ -7,11 +7,11 @@ from navicatGA.helpers import get_input_dimensions, make_array
 from navicatGA.fitness_functions_float import fitness_function_float
 
 
-class ContinuousGenAlgSolver(GenAlgSolver):
+class FloatGenAlgSolver(GenAlgSolver):
     def __init__(
         self,
         chromosome_to_array=make_array(),
-        variables_limits=(-10, 10),
+        variables_limits=None,
         # Parameters for base class
         n_genes: int = 1,
         fitness_function=None,
@@ -93,19 +93,28 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         Returns:
         :return: a numpy array with a randomized initialized population
         """
-
-        population = np.empty(shape=(self.pop_size, self.n_genes))
+        if self.problem_type == "float":
+            population = np.empty(shape=(self.pop_size, self.n_genes), dtype=float)
+        else:
+            population = np.empty(shape=(self.pop_size, self.n_genes), dtype=int)
 
         for i, variable_limits in enumerate(self.variables_limits):
-            if self.problem_type == float:
+            if self.problem_type == "float":
+                self.logger.debug(
+                    f"Sampling floats between {variable_limits[0]} and {variable_limits[1]}."
+                )
                 population[:, i] = np.random.uniform(
                     variable_limits[0], variable_limits[1], size=self.pop_size
                 )
             else:
+                self.logger.debug(
+                    f"Sampling integers between {variable_limits[0]} and {variable_limits[1]}."
+                )
                 population[:, i] = np.random.randint(
                     variable_limits[0], variable_limits[1] + 1, size=self.pop_size
                 )
 
+        self.logger.debug("Initial population: {0}".format(population))
         return population
 
     def get_crossover_points(self):
@@ -150,7 +159,7 @@ class ContinuousGenAlgSolver(GenAlgSolver):
             else -np.random.rand(1)[0]
         )
 
-        if self.problem_type == float:
+        if self.problem_type == "float":
             p_new = first_parent[crossover_pt] - beta * (
                 first_parent[crossover_pt] - sec_parent[crossover_pt]
             )
@@ -176,19 +185,20 @@ class ContinuousGenAlgSolver(GenAlgSolver):
         :return: the mutated population
         """
 
-        mutation_rows, mutation_cols = super(
-            ContinuousGenAlgSolver, self
-        ).mutate_population(population, n_mutations)
+        mutation_rows, mutation_cols = super(FloatGenAlgSolver, self).mutate_population(
+            population, n_mutations
+        )
 
         population[mutation_rows, mutation_cols] = self.initialize_population()[
             mutation_rows, mutation_cols
         ]
 
+        self.logger.debug("Mutated population: {0}".format(population))
         return population
 
 
 def test_bohachevsky():
-    solver = ContinuousGenAlgSolver(
+    solver = FloatGenAlgSolver(
         n_genes=2,
         pop_size=100,
         max_gen=250,

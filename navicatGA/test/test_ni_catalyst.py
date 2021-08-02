@@ -53,6 +53,7 @@ def test_ni_catalyst_24():
     )
     solver.solve()
     sc2depictions(solver.best_individual_, "best_ni_catalyst")
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

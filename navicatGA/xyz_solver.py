@@ -75,7 +75,8 @@ class XYZGenAlgSolver(GenAlgSolver):
         :param max_counter: maximum number of times a wrong structure will try to be corrected before skipping
         :type max_counter: int
         """
-
+        if chromosome_to_xyz is None:
+            raise (InvalidInput("No xyz builder provided."))
         GenAlgSolver.__init__(
             self,
             fitness_function=fitness_function,
@@ -161,10 +162,6 @@ class XYZGenAlgSolver(GenAlgSolver):
         self.starting_random = starting_random
         self.starting_population = starting_population
         self.max_counter = int(max_counter)
-        if chromosome_to_xyz is None:
-            raise (InvalidInput("No xyz builder provided."))
-        else:
-            self.chromosome_to_xyz = chromosome_to_xyz
 
     def initialize_population(self):
         """
@@ -182,10 +179,11 @@ class XYZGenAlgSolver(GenAlgSolver):
                 for n, j in enumerate(range(self.n_genes)):
                     if n in self.allowed_mutation_genes:
                         chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_xyz, chromosome)
+            assert check_error(self.assembler, chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Initial population:\n{0}".format(population))
+        self.starting_population = population
         return population
 
     def refill_population(self, nrefill=0):
@@ -198,7 +196,7 @@ class XYZGenAlgSolver(GenAlgSolver):
             for n, j in enumerate(range(self.n_genes)):
                 if n in self.allowed_mutation_genes:
                     chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_xyz, chromosome)
+            assert check_error(self.assembler, chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Refill subset for population:\n{0}".format(ref_pop))
@@ -209,7 +207,7 @@ class XYZGenAlgSolver(GenAlgSolver):
         Print  xyz for all the population at the current state.
         """
         for i, j in zip(range(self.pop_size), self.fitness_):
-            xyz = self.chromosome_to_xyz(self.population_[i][:])
+            xyz = self.assembler(self.population_[i][:])
             draw_xyz(xyz, f"{basename}_{i}_{np.round(j,4)}")
 
     def get_crossover_points(self):
@@ -271,7 +269,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}:\n{1}".format(counter, offspring)
                 )
-                valid = check_error(self.chromosome_to_xyz, offspring)
+                valid = check_error(self.assembler, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -304,7 +302,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}:\n{1}".format(counter, offspring)
                 )
-                valid = check_error(self.chromosome_to_xyz, offspring)
+                valid = check_error(self.assembler, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -343,7 +341,7 @@ class XYZGenAlgSolver(GenAlgSolver):
                         counter, population[i, :]
                     )
                 )
-                valid = check_error(self.chromosome_to_xyz, population[i, :])
+                valid = check_error(self.assembler, population[i, :])
                 counter += 1
                 if counter > self.max_counter:
                     logger.debug(

@@ -46,6 +46,7 @@ def test_scalarizer_26():
     )
     solver.solve()
     print(solver.printable_fitness)
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

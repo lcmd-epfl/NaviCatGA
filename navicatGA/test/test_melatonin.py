@@ -45,6 +45,7 @@ def test_melatonin_logp_11():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="melatonin_logp")
+    solver.close_solver_logger()
 
 
 def test_melatonin_ilogp_12():
@@ -83,6 +84,7 @@ def test_melatonin_ilogp_12():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="melatonin_ilogp")
+    solver.close_solver_logger()
 
 
 def test_melatonin_mw_13():
@@ -121,6 +123,7 @@ def test_melatonin_mw_13():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="melatonin_mw")
+    solver.close_solver_logger()
 
 
 def test_melatonin_mv_14():
@@ -161,6 +164,7 @@ def test_melatonin_mv_14():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="melatonin_mv")
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

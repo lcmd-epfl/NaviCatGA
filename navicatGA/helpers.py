@@ -33,8 +33,7 @@ def make_array():
 
     def sc2ndarray(chromosome):
         """Generates a float vector from a chromosome (list of arbitrary floats)."""
-        v = np.array(chromosome, dtype=float)
-        return v
+        return chromosome
 
     return sc2ndarray
 

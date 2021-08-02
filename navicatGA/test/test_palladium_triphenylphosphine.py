@@ -51,6 +51,7 @@ def test_palladium_triphenylphosphine_15():
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="palladium_triphenylphosphine_mv")
     print("The corresponding mv is : {0}".format(sc2mv(solver.best_individual_)))
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

@@ -45,6 +45,7 @@ def test_target_multistep_17():
             )
         )
         starting_selfies.append(selfies)
+        solver.close_solver_logger()
 
     solver = SelfiesGenAlgSolver(
         starting_selfies=starting_selfies,
@@ -71,6 +72,7 @@ def test_target_multistep_17():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="multistep")
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

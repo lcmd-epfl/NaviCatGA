@@ -70,6 +70,8 @@ class SmilesGenAlgSolver(GenAlgSolver):
         :type max_counter: int
         """
 
+        if chromosome_to_smiles is None:
+            raise (InvalidInput("No smiles builder provided."))
         GenAlgSolver.__init__(
             self,
             fitness_function=fitness_function,
@@ -148,10 +150,6 @@ class SmilesGenAlgSolver(GenAlgSolver):
         self.starting_population = starting_population
         self.max_counter = int(max_counter)
         self.starting_random = starting_random
-        if chromosome_to_smiles is None:
-            raise (InvalidInput("No smiles builder provided."))
-        else:
-            self.chromosome_to_smiles = chromosome_to_smiles
 
     def initialize_population(self):
         """
@@ -172,10 +170,11 @@ class SmilesGenAlgSolver(GenAlgSolver):
                 for n, j in enumerate(range(self.n_genes)):
                     if n in self.allowed_mutation_genes:
                         chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_smiles, chromosome)
+            assert check_error(self.assembler, chromosome)
             population[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Initial population: {0}".format(population))
+        self.starting_population = population
         return population
 
     def refill_population(self, nrefill=0):
@@ -188,7 +187,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
             for n, j in enumerate(range(self.n_genes)):
                 if n in self.allowed_mutation_genes:
                     chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.chromosome_to_smiles, chromosome)
+            assert check_error(self.assembler, chromosome)
             ref_pop[i][:] = chromosome[0 : self.n_genes]
 
         self.logger.debug("Refill subset for population:\n{0}".format(ref_pop))
@@ -258,9 +257,9 @@ class SmilesGenAlgSolver(GenAlgSolver):
         valid_smiles = False
 
         if offspring_number == "first":
+            counter = 0
             while not valid_smiles:
                 offspring = np.empty_like(first_parent, dtype=object)
-                counter = 0
                 c = int(0)
                 offspring[c : crossover_pt[0]] = first_parent[c : crossover_pt[0]]
                 offspring[crossover_pt[0] :] = sec_parent[crossover_pt[0] :]
@@ -274,7 +273,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_smiles = check_error(self.chromosome_to_smiles, offspring)
+                valid_smiles = check_error(self.assembler, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -289,9 +288,9 @@ class SmilesGenAlgSolver(GenAlgSolver):
             return offspring
 
         if offspring_number == "second":
+            counter = 0
             while not valid_smiles:
                 offspring = np.empty_like(first_parent, dtype=object)
-                counter = 0
                 c = int(0)
                 offspring[c : crossover_pt[0]] = sec_parent[c : crossover_pt[0]]
                 offspring[crossover_pt[0] :] = first_parent[crossover_pt[0] :]
@@ -307,7 +306,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                 logger.trace(
                     "Offspring chromosome attempt {0}: {1}".format(counter, offspring)
                 )
-                valid_smiles = check_error(self.chromosome_to_smiles, offspring)
+                valid_smiles = check_error(self.assembler, offspring)
                 crossover_pt = self.get_crossover_points()
                 counter += 1
                 if counter > self.max_counter:
@@ -345,7 +344,7 @@ class SmilesGenAlgSolver(GenAlgSolver):
                         counter, population[i, :]
                     )
                 )
-                valid_smiles = check_error(self.chromosome_to_smiles, population[i, :])
+                valid_smiles = check_error(self.assembler, population[i, :])
                 counter += 1
                 if counter > self.max_counter:
                     logger.debug(
@@ -364,14 +363,14 @@ class SmilesGenAlgSolver(GenAlgSolver):
         Print xyz for all the population at the current state.
         """
         for i, j in zip(range(self.pop_size), self.fitness_):
-            smiles = self.chromosome_to_smiles(self.population_[i][:])
+            smiles = self.assembler(self.population_[i][:])
             draw_smiles(smiles, f"{basename}_{i}_{np.round(j,4)}")
 
     def chromosomize(self, str_list):
         """Pad or truncate starting_population chromosome to build a population chromosome."""
         logger.debug(f"Chromosomizing {str_list} to conform to n_genes {self.n_genes}")
         chromosome = np.empty(self.n_genes, dtype=object)
-        if isinstance(str_list, list):
+        if isinstance(str_list, (list, np.ndarray)):
             for i in range(min(self.n_genes, len(str_list))):
                 chromosome[i] = str_list[i]
             if len(str_list) > self.n_genes:

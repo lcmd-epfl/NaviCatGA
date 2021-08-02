@@ -54,6 +54,7 @@ def test_celecoxib_07():
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, root_name="celecoxib_logp")
     print("The corresponding logp is : {0}".format(sc2logp(solver.best_individual_)))
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":

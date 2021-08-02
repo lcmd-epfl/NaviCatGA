@@ -64,6 +64,7 @@ def test_real_application_16():
     )
     mol = sc2mol_structure(solver.best_individual_)
     mol_structure2depictions(mol, "real_application")
+    solver.close_solver_logger()
 
 
 if __name__ == "__main__":
