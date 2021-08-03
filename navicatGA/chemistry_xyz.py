@@ -205,5 +205,5 @@ def pad_xyz_list(xyz, maxchars):
     return xyz_list
 
 
-def draw_xyz(outname, geom):
+def draw_xyz(geom, outname):
     geom.write(outname)
