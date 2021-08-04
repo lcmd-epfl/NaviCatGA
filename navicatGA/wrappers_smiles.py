@@ -99,7 +99,7 @@ def smiles2mol_structure(smiles, lot=0):
 
 
 def smiles2xyz(smiles, root_name="output", lot=0):
-    mol_structure = smiles2mol_struture(smiles, lot)
+    mol_structure = smiles2mol_structure(smiles, lot)
     mol2xyz(mol_structure, "{0}.xyz".format(outname))
 
 
