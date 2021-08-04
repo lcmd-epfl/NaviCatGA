@@ -98,6 +98,11 @@ def smiles2mol_structure(smiles, lot=0):
         return get_structure_ff(mol, n_confs=10)
 
 
+def smiles2xyz(smiles, root_name="output", lot=0):
+    mol_structure = smiles2mol_struture(smiles, lot)
+    mol2xyz(mol_structure, "{0}.xyz".format(outname))
+
+
 def smiles2logp(smiles):
     mol, smiles_canon, done = sanitize_smiles(smiles)
     if smiles_canon == "" or not done or mol is None:
