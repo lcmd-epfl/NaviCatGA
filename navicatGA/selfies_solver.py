@@ -379,7 +379,7 @@ class SelfiesGenAlgSolver(GenAlgSolver):
     def chromosomize(self, str_list):
         """Pad or truncate starting_population chromosome to build a population chromosome."""
         logger.debug(f"Chromosomizing {str_list} to conform to n_genes {self.n_genes}")
-        if isinstance(str_list, list):
+        if isinstance(str_list, (list, np.ndarray)):
             chromosome = np.empty(self.n_genes, dtype=object)
             for i in range(min(self.n_genes, len(str_list))):
                 chromosome[i] = str_list[i]
