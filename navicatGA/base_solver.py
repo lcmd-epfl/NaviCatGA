@@ -520,8 +520,8 @@ class GenAlgSolver:
         population = population[sorted_fitness, :]
         fitness = fitness[sorted_fitness]
         pfitness = np.empty_like(printable_fitness)
-        for i in sorted_fitness:
-            pfitness[i] = printable_fitness[i]
+        for i, j in enumerate(sorted_fitness):
+            pfitness[i] = printable_fitness[j]
         return fitness, population, pfitness
 
     def get_crossover_points(self):
