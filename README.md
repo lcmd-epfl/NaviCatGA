@@ -1,5 +1,5 @@
-NavicatGA: A flexible Genetic Algorithm Optimizer for the NaviCat project
-================================================================
+NaviCatGA: A flexible Genetic Algorithm Optimizer for the NaviCat project
+=========================================================================
 
 ![NaviCatGA logo](./images/navicatga_logo.png)
 

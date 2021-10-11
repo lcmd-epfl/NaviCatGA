@@ -1,0 +1,1329 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>NaviCatGA: A flexible Genetic Algorithm Optimizer for the NaviCat project &#8212; navicatGA 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="navicatga-a-flexible-genetic-algorithm-optimizer-for-the-navicat-project">
+<h1>NaviCatGA: A flexible Genetic Algorithm Optimizer for the NaviCat project<a class="headerlink" href="#navicatga-a-flexible-genetic-algorithm-optimizer-for-the-navicat-project" title="Permalink to this headline">¶</a></h1>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#about"><span class="std std-ref">About</span></a></p></li>
+<li><p><a class="reference internal" href="#install"><span class="std std-ref">Install</span></a></p></li>
+<li><p><a class="reference internal" href="#documentation"><span class="std std-ref">Documentation</span></a></p></li>
+<li><p><a class="reference internal" href="#examples"><span class="std std-ref">Examples</span></a></p></li>
+</ul>
+</section>
+<section id="about">
+<span id="id1"></span><h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
+<p>The code runs on pure python and is thus not extremely optimized. However, it is easy to adapt for particular applications.
+Dependencies are minimal for the base class:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matplotlib</span></code></p></li>
+</ul>
+<p>The library is projected as base class containing the core methods, which are inherited by child classes to define the problem.</p>
+<img alt="Inheritance diagram" src="_images/inheritance.png" />
+<p>Several child solver classes are provided as fairly complete examples, but might need to be adapted or monkeypatched for particular applications.</p>
+<p>The child classes and some functionalities have additional dependencies:</p>
+<ul class="simple">
+<li><p>The selfies_solver class implementation requires <code class="docutils literal notranslate"><span class="pre">selfies</span></code> (<a class="reference external" href="https://github.com/aspuru-guzik-group/selfies">https://github.com/aspuru-guzik-group/selfies</a>) and <code class="docutils literal notranslate"><span class="pre">rdkit</span></code> (<a class="reference external" href="https://www.rdkit.org/">https://www.rdkit.org/</a>). <code class="docutils literal notranslate"><span class="pre">rdkit</span></code> may be replaced manually by openbabel python bindings or other chemoinformatic modules.</p></li>
+<li><p>The smiles_solver class implementation requires <code class="docutils literal notranslate"><span class="pre">rdkit</span></code> (<a class="reference external" href="https://www.rdkit.org/">https://www.rdkit.org/</a>). <code class="docutils literal notranslate"><span class="pre">rdkit</span></code> may be replaced manually by openbabel python bindings or other chemoinformatic modules.</p></li>
+<li><p>The xyz_solver class implementation requires <code class="docutils literal notranslate"><span class="pre">AaronTools</span></code> (<a class="reference external" href="https://github.com/QChASM/AaronTools.py">https://github.com/QChASM/AaronTools.py</a>).</p></li>
+<li><p>Wrappers and chemistry modules contain functions that depend on <code class="docutils literal notranslate"><span class="pre">pyscf</span></code> to solve the electronic structure problem. However, these are provided for exemplary purposes and not a core functionality.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matter-chimera</span></code> (<a class="reference external" href="https://github.com/aspuru-guzik-group/chimera">https://github.com/aspuru-guzik-group/chimera</a>) is recommended for scalarization. Alternatively, a scalarizer object with a scalarize method can be passed to the solver.</p></li>
+</ul>
+<p>Additional features require <code class="docutils literal notranslate"><span class="pre">alive-progress</span></code> (for progress bars, very useful for CLI usage). However, these are implemented by monkeypatching the base class, and thus no functionality is lost without them.</p>
+</section>
+<section id="install">
+<span id="id2"></span><h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<p>Installation is as simple as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">record</span> <span class="n">files</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>This ensures easy uninstall. Just remove all files listed in files.txt using:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm <span class="k">$(</span>cat files.txt<span class="k">)</span>
+</pre></div>
+</div>
+</section>
+<section id="documentation">
+<span id="id3"></span><h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>The documentation is available <a class="reference external" href="https://navicatga.readthedocs.io/">here</a>.</p>
+</section>
+<section id="examples">
+<span id="id4"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The tests subdirectory contains a copious amount of tests which double as examples.</p>
+<hr class="docutils" />
+</section>
+</section>
+<hr class="docutils" />
+<section id="module-navicatGA">
+<span id="module-contents"></span><h1>Module contents:<a class="headerlink" href="#module-navicatGA" title="Permalink to this headline">¶</a></h1>
+<section id="module-navicatGA.base_solver">
+<span id="navicatga-base-solver-module"></span><h2>navicatGA.base_solver module<a class="headerlink" href="#module-navicatGA.base_solver" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">navicatGA.base_solver.</span></span><span class="sig-name descname"><span class="pre">GenAlgSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_genes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitness_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assembler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_gen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_conv</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_rate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_rate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_strategy</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'roulette_wheel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excluded_genes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_crossover_points</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lru_cache</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prune_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_stats</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_results</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_stdout</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'output.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_level</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bars</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'base'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.calculate_fitness">
+<span class="sig-name descname"><span class="pre">calculate_fitness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.calculate_fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the fitness of the population using the defined fitness function.</p>
+<p>Parameters:
+:param population: population (array of chromosomes)</p>
+<p>Returns:
+:return fitness: scalarized fitness of the current population, will be used
+:return pfitness: not-scalarized fitness of the current population, for printing</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.check_input_base">
+<span class="sig-name descname"><span class="pre">check_input_base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fitness_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excluded_genes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.check_input_base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to check that the main arguments have been passed to the GenAlgSolver instance.</p>
+<p>Parameters:
+:param fitness_function: a fitness function that takes a chromosome and returns a fitness
+:param selection_strategy: a selection strategy string that can be recognized by this class
+:param pop_size: the number of chromosomes
+:param excluded_genes: a sequence of genes that should not change or mutate</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.close_solve_logger">
+<span class="sig-name descname"><span class="pre">close_solve_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.close_solve_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the logger of this solver. This avoid multiple loggers stacking when another solver is created.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.create_offspring">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">create_offspring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec_parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crossover_pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offspring_number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.create_offspring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an offspring from 2 parent chromosomes. It uses the crossover point(s)
+to determine how to perform the crossover. To be implemented on each child class.
+Must return the resulting offspring chromosome.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.get_boltzmann_probabilities">
+<span class="sig-name descname"><span class="pre">get_boltzmann_probabilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fitness</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.get_boltzmann_probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates selection probabilities according to a fitness Boltzmann distribution with an increasing temperature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.get_crossover_points">
+<span class="sig-name descname"><span class="pre">get_crossover_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.get_crossover_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves random crossover points.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.get_number_mutations">
+<span class="sig-name descname"><span class="pre">get_number_mutations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.get_number_mutations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of mutations that need to be performed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.get_selection_probabilities">
+<span class="sig-name descname"><span class="pre">get_selection_probabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.get_selection_probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates selection probabilities either randomly or scaled by position.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.initialize_population">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">initialize_population</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.initialize_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the population of the problem. To be implemented in each child class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.interval_selection">
+<span class="sig-name descname"><span class="pre">interval_selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.interval_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select based on self.prob_intervals, which are given by the selection strategy.</p>
+<p>Parameters:
+:param value: random value defining which individual is selected from the probability intervals</p>
+<p>Returns:
+:return: the selected individual from the population</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.mutate_population">
+<span class="sig-name descname"><span class="pre">mutate_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_mutations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.mutate_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutates the population according to a given user defined rule.
+To be defined further in each child class. Each direct child class can call
+this super method to retrieve the mutation rows and mutations columns in population.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.plot_fitness_results">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">plot_fitness_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean_fitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_fitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.plot_fitness_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the evolution of the mean and max fitness of the population using matplotlib.</p>
+<p>Parameters:
+:param mean_fitness: mean fitness array for each generation
+:param max_fitness: max fitness array for each generation
+:param iterations: total number of generations</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.print_stats">
+<span class="sig-name descname"><span class="pre">print_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.print_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the statistics of the optimization run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.select_parents">
+<span class="sig-name descname"><span class="pre">select_parents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fitness</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.select_parents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects the parents according to a given selection strategy.
+Options are:
+roulette_wheel: Selects individuals from mating pool giving
+higher probabilities to fitter individuals.
+two_by_two: Pairs fittest individuals two by two
+random: Selects individuals from mating pool randomly.
+tournament: Selects individuals by choosing groups of 3 candidate
+individuals and then selecting the fittest one from the 3.</p>
+<p>Parameters:
+:param fitness: the fitness values of the whole population at a given iteration</p>
+<p>Returns:
+:return  (ma, pa):  a tuple containing the selected 2 parents for each mating</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the genetic algorithm optimization according to the parameters
+loaded in __init__. Will run for max_gen or until it
+converges for max_conv iterations, or for min(niter,max_gen) iterations if niter
+is an integer. Will start using previous state if available.</p>
+<p>Parameters:
+:param niter: the number of generations to run</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.sort_by_fitness">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">sort_by_fitness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printable_fitness</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.sort_by_fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts fitness, population and printable fitness according to fitness.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.tournament_selection">
+<span class="sig-name descname"><span class="pre">tournament_selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_max</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.tournament_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs tournament selection.</p>
+<p>Parameters:
+:param fitness: the fitness values of the population at a given iteration
+:param range_max: range of individuals that can be selected for the tournament</p>
+<p>Returns:
+:return: the selected individuals</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.base_solver.GenAlgSolver.tournament_selection_helper">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">tournament_selection_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected_individuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitness</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.base_solver.GenAlgSolver.tournament_selection_helper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper for tournament selection method. Selects the fittest individual
+from a pool of candidate individuals.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-navicatGA.cache">
+<span id="navicatga-cache-module"></span><h2>navicatGA.cache module<a class="headerlink" href="#module-navicatGA.cache" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.cache.calculate_fitness_cache">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.cache.</span></span><span class="sig-name descname"><span class="pre">calculate_fitness_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.cache.calculate_fitness_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the fitness of the population using a hashable fitness function.</p>
+<p>Parameters:
+:param population: population state at a given iteration
+:return: the fitness of the current population</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.cache.calculate_one_fitness_cache">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.cache.</span></span><span class="sig-name descname"><span class="pre">calculate_one_fitness_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hashable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitness_function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.cache.calculate_one_fitness_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.cache.set_lru_cache">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.cache.</span></span><span class="sig-name descname"><span class="pre">set_lru_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.cache.set_lru_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Monkeypatches the calculate_fitness method of the base solver class in order to use a lru cache.
+If a specific wrapper exists for a given solver, it will try to use the unique expression of genes
+given by that wrapper to generate a hashable fitness function. If not, it will require
+a hashable fitness function given by the user AND expect the given fitness_function to generate
+a unique hash from a gene.</p>
+</dd></dl>
+
+</section>
+<section id="module-navicatGA.chemistry_selfies">
+<span id="navicatga-chemistry-selfies-module"></span><h2>navicatGA.chemistry_selfies module<a class="headerlink" href="#module-navicatGA.chemistry_selfies" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.check_selfie_chars">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">check_selfie_chars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.check_selfie_chars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a list of selfies characters leads to a valid smiles string. Uses sanitize_smiles to check the smiles string from selfies.decoder.</p>
+<p>Parameters:
+:param chromosome: list of selfie characters</p>
+<p>Returns:
+:return: True if the smiles string is deemed valid by sanitize_smiles, False otherwise</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.count_selfie_chars">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">count_selfie_chars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selfie</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.count_selfie_chars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count the number of selfie characters in a selfie string. Returns the number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.decode_selfies_list">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">decode_selfies_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selfies_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.decode_selfies_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a list of smiles to a list of selfies using timed_decoder.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.diagnose_mol">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">diagnose_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.diagnose_mol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to identify and print to logger whatever was or is wrong with the chemistry_selfies of an rdkit.mol object.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.draw_selfies">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">draw_selfies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selfies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.draw_selfies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.encode_smiles_list">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">encode_smiles_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.encode_smiles_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a list of smiles to a list of selfies using selfies.encoder.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.get_ECFP4">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">get_ECFP4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.get_ECFP4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.get_conformer_rmsd">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">get_conformer_rmsd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.get_conformer_rmsd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.get_confs_ff">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">get_confs_ff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">250</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.get_confs_ff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.get_interatomic_distances">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">get_interatomic_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.get_interatomic_distances" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.get_selfie_chars">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">get_selfie_chars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selfie</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxchars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.get_selfie_chars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain an ordered list of all selfie characters in string selfie
+padded to maxchars with [nop]s.</p>
+<p>Parameters:
+:param selfie: a selfie string representing a molecule
+:param maxchars: maximum number of elements in the list</p>
+<p>Returns:
+:return chars_selfie: list of selfie characters present in molecule selfie</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.get_structure_ff">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">get_structure_ff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_confs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.get_structure_ff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a reasonable set of 3D structures
+using forcefields for a given rdkit.mol object.
+It will try several 3D generation approaches in rdkit.
+It will try to sample several conformations and get the minima.</p>
+<p>Parameters:
+:type mol: a rdkit.mol object
+:type n_confs: the number of conformations to sample</p>
+<p>Returns:
+:return mol_structure: the same rdkit mol with 3D coordinates</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.has_transition_metals">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">has_transition_metals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.has_transition_metals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the rdkit.mol object passed as argument has a (transition)-metal atom, False if else.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.is_transition_metal">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">is_transition_metal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">at</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.is_transition_metal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the rdkit.Atom object passed as argument is a transition metal, False if else.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.prune_mol_conformers">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">prune_mol_conformers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energies_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.prune_mol_conformers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.randomize_selfies">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">randomize_selfies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selfies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_random</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.randomize_selfies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.randomize_smiles">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">randomize_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.randomize_smiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.sanitize_multiple_smiles">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">sanitize_multiple_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.sanitize_multiple_smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls sanitize_smiles for every item in a list.</p>
+<p>Parameters:
+:param smiles_list list of smiles strings to be sanitized</p>
+<p>Returns:
+:return sanitized_smiles: list of sanitized smile strings with None in errors</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.sanitize_smiles">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">sanitize_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.sanitize_smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a canonical smile representation of smi.
+If there are metals, it will try to fix the bonds as dative.</p>
+<p>Parameters:
+:param smi: smiles string to be sanitized
+:type smi: smiles string</p>
+<p>Returns:
+:return mol: corresponding rdkit.mol object, None if exception caught
+:return smi_canon: canonicalized smile representation of smi, None if exception caught
+:return conversion_successful: True if no exception caught, False if exception caught</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.set_dative_bonds">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">set_dative_bonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromAtoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(7,</span> <span class="pre">8,</span> <span class="pre">15,</span> <span class="pre">16)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.set_dative_bonds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to replace bonds with metal atoms by dative bonds, while keeping valence rules enforced. Adapted from G. Landrum.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.timed_decoder">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">timed_decoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selfie</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.timed_decoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a selfies string to smiles using selfies.decoder, call exception and return None if decoder takes more than 10 seconds to run.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_selfies.timed_sanitizer">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_selfies.</span></span><span class="sig-name descname"><span class="pre">timed_sanitizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_selfies.timed_sanitizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert smiles string to rdkit.mol, call exception and return None if it takes more than 10 seconds to run.</p>
+</dd></dl>
+
+</section>
+<section id="module-navicatGA.chemistry_smiles">
+<span id="navicatga-chemistry-smiles-module"></span><h2>navicatGA.chemistry_smiles module<a class="headerlink" href="#module-navicatGA.chemistry_smiles" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.diagnose_mol">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">diagnose_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.diagnose_mol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to identify and print to logger whatever was or is wrong with the chemistry_selfies of an rdkit.mol object.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.draw_smiles">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">draw_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.draw_smiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.get_ECFP4">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">get_ECFP4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.get_ECFP4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.get_conformer_rmsd">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">get_conformer_rmsd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.get_conformer_rmsd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.get_confs_ff">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">get_confs_ff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">250</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.get_confs_ff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.get_interatomic_distances">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">get_interatomic_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.get_interatomic_distances" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.get_structure_ff">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">get_structure_ff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_confs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.get_structure_ff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a reasonable set of 3D structures
+using forcefields for a given rdkit.mol object.
+It will try several 3D generation approaches in rdkit.
+It will try to sample several conformations and get the minima.</p>
+<p>Parameters:
+:param mol: an rdkit mol object
+:type mol: rdkit.mol
+:param n_confs: number of conformations to sample
+:type n_confs: int</p>
+<p>Returns:
+:return mol_structure: mol with 3D coordinate information set</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.has_transition_metals">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">has_transition_metals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.has_transition_metals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the rdkit.mol object passed as argument has a (transition)-metal atom, False if else.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.is_transition_metal">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">is_transition_metal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">at</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.is_transition_metal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the rdkit.Atom object passed as argument is a transition metal, False if else.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.prune_mol_conformers">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">prune_mol_conformers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energies_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.prune_mol_conformers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.randomize_smiles">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">randomize_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.randomize_smiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.sanitize_multiple_smiles">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">sanitize_multiple_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.sanitize_multiple_smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls sanitize_smiles for every item in a list.</p>
+<p>Parameters:
+:param smiles_list: list of smile strings to be sanitized.</p>
+<p>Returns:
+:return sanitized_smiles: list of sanitized smile strings or None in case a smiles led to error</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.sanitize_smiles">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">sanitize_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.sanitize_smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a canonical smile representation of smi.
+If there are metals, it will try to fix the bonds as dative.</p>
+<p>Parameters:
+:param smi: smile string to be canonicalized
+:type smi: str</p>
+<p>Returns:
+:return mol: rdkit mol object, None if exception caught
+:return smi_canon: canonicalized smile representation of smi, None if exception caught.
+:return conversion_successful: True if no exception caught, False if exception caught.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.set_dative_bonds">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">set_dative_bonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromAtoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(7,</span> <span class="pre">8,</span> <span class="pre">15,</span> <span class="pre">16)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.set_dative_bonds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to replace bonds with metal atoms by dative bonds, while keeping valence rules enforced. Adapted from G. Landrum.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_smiles.timed_sanitizer">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_smiles.</span></span><span class="sig-name descname"><span class="pre">timed_sanitizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_smiles.timed_sanitizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert smiles string to rdkit.mol, call exception and return None if it takes more than 10 seconds to run.</p>
+</dd></dl>
+
+</section>
+<section id="module-navicatGA.chemistry_xyz">
+<span id="navicatga-chemistry-xyz-module"></span><h2>navicatGA.chemistry_xyz module<a class="headerlink" href="#module-navicatGA.chemistry_xyz" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="navicatGA.chemistry_xyz.Hashable_Geometry">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_xyz.</span></span><span class="sig-name descname"><span class="pre">Hashable_Geometry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_xyz.Hashable_Geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AaronTools.geometry.Geometry</span></code></p>
+<p>This is a modified version of the Geometry class in AaronTools.py, which is identical but hashable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_xyz.check_xyz">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_xyz.</span></span><span class="sig-name descname"><span class="pre">check_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_xyz.check_xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a list of Geometries can lead to a valid structure.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_xyz.draw_xyz">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_xyz.</span></span><span class="sig-name descname"><span class="pre">draw_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_xyz.draw_xyz" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_xyz.get_alphabet_from_path">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_xyz.</span></span><span class="sig-name descname"><span class="pre">get_alphabet_from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'alphabet/'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_xyz.get_alphabet_from_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_xyz.get_default_alphabet">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_xyz.</span></span><span class="sig-name descname"><span class="pre">get_default_alphabet</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_xyz.get_default_alphabet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_xyz.get_starting_xyz_from_file">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_xyz.</span></span><span class="sig-name descname"><span class="pre">get_starting_xyz_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_xyz.get_starting_xyz_from_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_xyz.get_starting_xyz_from_path">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_xyz.</span></span><span class="sig-name descname"><span class="pre">get_starting_xyz_from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scaffolds'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_xyz.get_starting_xyz_from_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_xyz.get_starting_xyz_from_smi">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_xyz.</span></span><span class="sig-name descname"><span class="pre">get_starting_xyz_from_smi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_xyz.get_starting_xyz_from_smi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_xyz.pad_xyz_list">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_xyz.</span></span><span class="sig-name descname"><span class="pre">pad_xyz_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxchars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_xyz.pad_xyz_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pads chromosome with empty elements.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.chemistry_xyz.random_merge_xyz">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.chemistry_xyz.</span></span><span class="sig-name descname"><span class="pre">random_merge_xyz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.chemistry_xyz.random_merge_xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default chromosome manipulator: randomly generates an XYZ structure from fragments.</p>
+</dd></dl>
+
+</section>
+<section id="module-navicatGA.exception_messages">
+<span id="navicatga-exception-messages-module"></span><h2>navicatGA.exception_messages module<a class="headerlink" href="#module-navicatGA.exception_messages" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-navicatGA.exceptions">
+<span id="navicatga-exceptions-module"></span><h2>navicatGA.exceptions module<a class="headerlink" href="#module-navicatGA.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="navicatGA.exceptions.InvalidInput">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">navicatGA.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.exceptions.InvalidInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="navicatGA.exceptions.NoAssembler">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">navicatGA.exceptions.</span></span><span class="sig-name descname"><span class="pre">NoAssembler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.exceptions.NoAssembler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="navicatGA.exceptions.NoFitnessFunction">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">navicatGA.exceptions.</span></span><span class="sig-name descname"><span class="pre">NoFitnessFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.exceptions.NoFitnessFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-navicatGA.fitness_functions_float">
+<span id="navicatga-fitness-functions-float-module"></span><h2>navicatGA.fitness_functions_float module<a class="headerlink" href="#module-navicatGA.fitness_functions_float" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.fitness_functions_float.fitness_function_float">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.fitness_functions_float.</span></span><span class="sig-name descname"><span class="pre">fitness_function_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function_number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.fitness_functions_float.fitness_function_float" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="navicatga-fitness-functions-selfies-module">
+<h2>navicatGA.fitness_functions_selfies module<a class="headerlink" href="#navicatga-fitness-functions-selfies-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="navicatga-fitness-functions-xyz-module">
+<h2>navicatGA.fitness_functions_xyz module<a class="headerlink" href="#navicatga-fitness-functions-xyz-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="navicatga-float-solver-module">
+<h2>navicatGA.float_solver module<a class="headerlink" href="#navicatga-float-solver-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-navicatGA.helpers">
+<span id="navicatga-helpers-module"></span><h2>navicatGA.helpers module<a class="headerlink" href="#module-navicatGA.helpers" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.helpers.check_error">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.helpers.</span></span><span class="sig-name descname"><span class="pre">check_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.helpers.check_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.helpers.concatenate_list">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.helpers.</span></span><span class="sig-name descname"><span class="pre">concatenate_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.helpers.concatenate_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default chromosome manipulator: concatenates all elements of a list.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.helpers.get_elapsed_time">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.helpers.</span></span><span class="sig-name descname"><span class="pre">get_elapsed_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.helpers.get_elapsed_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.helpers.get_input_dimensions">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.helpers.</span></span><span class="sig-name descname"><span class="pre">get_input_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.helpers.get_input_dimensions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.helpers.make_array">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.helpers.</span></span><span class="sig-name descname"><span class="pre">make_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.helpers.make_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default chromosome manipulator: turns list into array.</p>
+</dd></dl>
+
+</section>
+<section id="module-navicatGA.logger">
+<span id="navicatga-logger-module"></span><h2>navicatGA.logger module<a class="headerlink" href="#module-navicatGA.logger" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.logger.addLoggingLevel">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.logger.</span></span><span class="sig-name descname"><span class="pre">addLoggingLevel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">levelName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levelNum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.logger.addLoggingLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new logging level to the logging module and the
+currently configured logging class.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.logger.close_logger">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.logger.</span></span><span class="sig-name descname"><span class="pre">close_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.logger.close_logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.logger.configure_logger">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.logger.</span></span><span class="sig-name descname"><span class="pre">configure_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_stdout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">libraries_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.logger.configure_logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-navicatGA.progress_bars">
+<span id="navicatga-progress-bars-module"></span><h2>navicatGA.progress_bars module<a class="headerlink" href="#module-navicatGA.progress_bars" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.progress_bars.set_progress_bars">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.progress_bars.</span></span><span class="sig-name descname"><span class="pre">set_progress_bars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.progress_bars.set_progress_bars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.progress_bars.solve_progress">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.progress_bars.</span></span><span class="sig-name descname"><span class="pre">solve_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.progress_bars.solve_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the genetic algorithm optimization according to the parameters
+loaded in __init__. Will run for max_gen or until it
+converges for max_conv iterations, or for min(niter,max_gen) iterations if niter
+is an integer. Will start using previous state if available.</p>
+<p>Parameters:
+:param niter: the number of generations to run</p>
+</dd></dl>
+
+</section>
+<section id="navicatga-quantum-wrappers-selfies-module">
+<h2>navicatGA.quantum_wrappers_selfies module<a class="headerlink" href="#navicatga-quantum-wrappers-selfies-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="navicatga-quantum-wrappers-xyz-module">
+<h2>navicatGA.quantum_wrappers_xyz module<a class="headerlink" href="#navicatga-quantum-wrappers-xyz-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="navicatga-queue-wrappers-xyz-module">
+<h2>navicatGA.queue_wrappers_xyz module<a class="headerlink" href="#navicatga-queue-wrappers-xyz-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-navicatGA.score_modifiers">
+<span id="navicatga-score-modifiers-module"></span><h2>navicatGA.score_modifiers module<a class="headerlink" href="#module-navicatGA.score_modifiers" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.score_modifiers.AbsoluteModifier">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.score_modifiers.</span></span><span class="sig-name descname"><span class="pre">AbsoluteModifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#navicatGA.score_modifiers.AbsoluteModifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.score_modifiers.GaussianModifier">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.score_modifiers.</span></span><span class="sig-name descname"><span class="pre">GaussianModifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#navicatGA.score_modifiers.GaussianModifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.score_modifiers.SquaredModifier">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.score_modifiers.</span></span><span class="sig-name descname"><span class="pre">SquaredModifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#navicatGA.score_modifiers.SquaredModifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.score_modifiers.score_modifier">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.score_modifiers.</span></span><span class="sig-name descname"><span class="pre">score_modifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_modifier_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#navicatGA.score_modifiers.score_modifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-navicatGA.selfies_solver">
+<span id="navicatga-selfies-solver-module"></span><h2>navicatGA.selfies_solver module<a class="headerlink" href="#module-navicatGA.selfies_solver" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="navicatGA.selfies_solver.SelfiesGenAlgSolver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">navicatGA.selfies_solver.</span></span><span class="sig-name descname"><span class="pre">SelfiesGenAlgSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">starting_selfies:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">['[nop]'],</span> <span class="pre">starting_random:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">starting_stoned:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">alphabet_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">['[#C]',</span> <span class="pre">'[O]',</span> <span class="pre">'[Ring1]',</span> <span class="pre">'[O+1expl]',</span> <span class="pre">'[=P-1expl]',</span> <span class="pre">'[=C]',</span> <span class="pre">'[Ring3]',</span> <span class="pre">'[P-1expl]',</span> <span class="pre">'[#P-1expl]',</span> <span class="pre">'[O-1expl]',</span> <span class="pre">'[Ring2]',</span> <span class="pre">'[=N+1expl]',</span> <span class="pre">'[Branch2_1]',</span> <span class="pre">'[=N]',</span> <span class="pre">'[S-1expl]',</span> <span class="pre">'[P+1expl]',</span> <span class="pre">'[Expl=Ring3]',</span> <span class="pre">'[C+1expl]',</span> <span class="pre">'[#S+1expl]',</span> <span class="pre">'[Branch1_1]',</span> <span class="pre">'[=C+1expl]',</span> <span class="pre">'[#S]',</span> <span class="pre">'[=P+1expl]',</span> <span class="pre">'[#C-1expl]',</span> <span class="pre">'[=N-1expl]',</span> <span class="pre">'[I]',</span> <span class="pre">'[Branch1_2]',</span> <span class="pre">'[S+1expl]',</span> <span class="pre">'[#O+1expl]',</span> <span class="pre">'[C]',</span> <span class="pre">'[Branch2_3]',</span> <span class="pre">'[Branch2_2]',</span> <span class="pre">'[F]',</span> <span class="pre">'[S]',</span> <span class="pre">'[#N]',</span> <span class="pre">'[=C-1expl]',</span> <span class="pre">'[#P+1expl]',</span> <span class="pre">'[Cl]',</span> <span class="pre">'[#P]',</span> <span class="pre">'[=S]',</span> <span class="pre">'[N+1expl]',</span> <span class="pre">'[#S-1expl]',</span> <span class="pre">'[Expl=Ring2]',</span> <span class="pre">'[=S+1expl]',</span> <span class="pre">'[=O]',</span> <span class="pre">'[Branch3_2]',</span> <span class="pre">'[N-1expl]',</span> <span class="pre">'[Br]',</span> <span class="pre">'[C-1expl]',</span> <span class="pre">'[Hexpl]',</span> <span class="pre">'[#N+1expl]',</span> <span class="pre">'[#C+1expl]',</span> <span class="pre">'[=P]',</span> <span class="pre">'[Expl=Ring1]',</span> <span class="pre">'[N]',</span> <span class="pre">'[Branch1_3]',</span> <span class="pre">'[Branch3_3]',</span> <span class="pre">'[=O+1expl]',</span> <span class="pre">'[Branch3_1]',</span> <span class="pre">'[=S-1expl]',</span> <span class="pre">'[P]'],</span> <span class="pre">chromosome_to_selfies=&lt;function</span> <span class="pre">concatenate_list.&lt;locals&gt;.sc2str&gt;,</span> <span class="pre">multi_alphabet:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">equivalences:</span> <span class="pre">Optional[Sequence]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">branching:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">variables_limits:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">max_counter:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10,</span> <span class="pre">n_genes:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">fitness_function=None,</span> <span class="pre">max_gen:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">500,</span> <span class="pre">max_conv:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">100,</span> <span class="pre">pop_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">100,</span> <span class="pre">mutation_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.05,</span> <span class="pre">selection_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.25,</span> <span class="pre">selection_strategy:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'tournament',</span> <span class="pre">excluded_genes:</span> <span class="pre">Optional[Sequence]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">n_crossover_points:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">random_state:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">lru_cache:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">scalarizer=None,</span> <span class="pre">prune_duplicates=False,</span> <span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">show_stats:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">plot_results:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">to_stdout:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">to_file:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">logger_file:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'output.log',</span> <span class="pre">logger_level:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'INFO',</span> <span class="pre">progress_bars:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">problem_type='selfies'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.selfies_solver.SelfiesGenAlgSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#navicatGA.base_solver.GenAlgSolver" title="navicatGA.base_solver.GenAlgSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">navicatGA.base_solver.GenAlgSolver</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.selfies_solver.SelfiesGenAlgSolver.chromosomize">
+<span class="sig-name descname"><span class="pre">chromosomize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.selfies_solver.SelfiesGenAlgSolver.chromosomize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pad or truncate starting_population chromosome to build a population chromosome.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.selfies_solver.SelfiesGenAlgSolver.create_offspring">
+<span class="sig-name descname"><span class="pre">create_offspring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec_parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crossover_pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offspring_number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.selfies_solver.SelfiesGenAlgSolver.create_offspring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an offspring from 2 parents.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.selfies_solver.SelfiesGenAlgSolver.get_crossover_points">
+<span class="sig-name descname"><span class="pre">get_crossover_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.selfies_solver.SelfiesGenAlgSolver.get_crossover_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves random crossover points
+:return: a numpy array with the crossover points</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.selfies_solver.SelfiesGenAlgSolver.initialize_population">
+<span class="sig-name descname"><span class="pre">initialize_population</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.selfies_solver.SelfiesGenAlgSolver.initialize_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the population of the problem according to the
+population size and number of genes and according to the problem
+type (either integers or floats).</p>
+<p>Returns:
+:return: a numpy array with initialized population</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.selfies_solver.SelfiesGenAlgSolver.mutate_population">
+<span class="sig-name descname"><span class="pre">mutate_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_mutations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.selfies_solver.SelfiesGenAlgSolver.mutate_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutates the population by randomizing specific positions of the
+population individuals.
+:param population: the population at a given iteration
+:param n_mutations: number of mutations to be performed.
+:return: the mutated population</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.selfies_solver.SelfiesGenAlgSolver.refill_population">
+<span class="sig-name descname"><span class="pre">refill_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nrefill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.selfies_solver.SelfiesGenAlgSolver.refill_population" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.selfies_solver.SelfiesGenAlgSolver.write_population">
+<span class="sig-name descname"><span class="pre">write_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'chromosome'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.selfies_solver.SelfiesGenAlgSolver.write_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print xyz for all the population at the current state.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.selfies_solver.test_benzene_selfies">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.selfies_solver.</span></span><span class="sig-name descname"><span class="pre">test_benzene_selfies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.selfies_solver.test_benzene_selfies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-navicatGA.smiles_solver">
+<span id="navicatga-smiles-solver-module"></span><h2>navicatGA.smiles_solver module<a class="headerlink" href="#module-navicatGA.smiles_solver" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="navicatGA.smiles_solver.SmilesGenAlgSolver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">navicatGA.smiles_solver.</span></span><span class="sig-name descname"><span class="pre">SmilesGenAlgSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">starting_population:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">[['']],</span> <span class="pre">starting_random:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">alphabet_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">['C',</span> <span class="pre">'N',</span> <span class="pre">'P',</span> <span class="pre">'O',</span> <span class="pre">'[Si]',</span> <span class="pre">'F',</span> <span class="pre">'[H]'],</span> <span class="pre">chromosome_to_smiles=&lt;function</span> <span class="pre">concatenate_list.&lt;locals&gt;.sc2str&gt;,</span> <span class="pre">multi_alphabet:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">equivalences:</span> <span class="pre">Optional[Sequence]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">max_counter:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10,</span> <span class="pre">n_genes:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">fitness_function=None,</span> <span class="pre">max_gen:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">500,</span> <span class="pre">max_conv:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">100,</span> <span class="pre">pop_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">100,</span> <span class="pre">mutation_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.05,</span> <span class="pre">selection_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.25,</span> <span class="pre">selection_strategy:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'tournament',</span> <span class="pre">excluded_genes:</span> <span class="pre">Optional[Sequence]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">n_crossover_points:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">random_state:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">lru_cache:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">scalarizer=None,</span> <span class="pre">prune_duplicates=False,</span> <span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">show_stats:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">plot_results:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">to_stdout:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">to_file:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">logger_file:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'output.log',</span> <span class="pre">logger_level:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'INFO',</span> <span class="pre">progress_bars:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">problem_type='smiles'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.smiles_solver.SmilesGenAlgSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#navicatGA.base_solver.GenAlgSolver" title="navicatGA.base_solver.GenAlgSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">navicatGA.base_solver.GenAlgSolver</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.smiles_solver.SmilesGenAlgSolver.chromosomize">
+<span class="sig-name descname"><span class="pre">chromosomize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.smiles_solver.SmilesGenAlgSolver.chromosomize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pad or truncate starting_population chromosome to build a population chromosome.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.smiles_solver.SmilesGenAlgSolver.create_offspring">
+<span class="sig-name descname"><span class="pre">create_offspring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec_parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crossover_pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offspring_number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.smiles_solver.SmilesGenAlgSolver.create_offspring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an offspring from 2 parents.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.smiles_solver.SmilesGenAlgSolver.get_crossover_points">
+<span class="sig-name descname"><span class="pre">get_crossover_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.smiles_solver.SmilesGenAlgSolver.get_crossover_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves random crossover points
+:return: a numpy array with the crossover points</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.smiles_solver.SmilesGenAlgSolver.initialize_population">
+<span class="sig-name descname"><span class="pre">initialize_population</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.smiles_solver.SmilesGenAlgSolver.initialize_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the population of the problem according to the
+population size and number of genes and according to the problem
+type (either integers or floats).</p>
+<p>Returns:
+:return: a numpy array with initialized population</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.smiles_solver.SmilesGenAlgSolver.mutate_population">
+<span class="sig-name descname"><span class="pre">mutate_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_mutations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.smiles_solver.SmilesGenAlgSolver.mutate_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutates the population by randomizing specific positions of the
+population individuals.
+:param population: the population at a given iteration
+:param n_mutations: number of mutations to be performed.
+:return: the mutated population</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.smiles_solver.SmilesGenAlgSolver.refill_population">
+<span class="sig-name descname"><span class="pre">refill_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nrefill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.smiles_solver.SmilesGenAlgSolver.refill_population" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.smiles_solver.SmilesGenAlgSolver.write_population">
+<span class="sig-name descname"><span class="pre">write_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'chromosome'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.smiles_solver.SmilesGenAlgSolver.write_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print xyz for all the population at the current state.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-navicatGA.timeout">
+<span id="navicatga-timeout-module"></span><h2>navicatGA.timeout module<a class="headerlink" href="#module-navicatGA.timeout" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.timeout.handler">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.timeout.</span></span><span class="sig-name descname"><span class="pre">handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.timeout.handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="navicatGA.timeout.timeout">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">navicatGA.timeout.</span></span><span class="sig-name descname"><span class="pre">timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Function</span> <span class="pre">call</span> <span class="pre">exceeded</span> <span class="pre">the</span> <span class="pre">time</span> <span class="pre">limit.'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.timeout.timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.timeout.timeout.handle_timeout">
+<span class="sig-name descname"><span class="pre">handle_timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.timeout.timeout.handle_timeout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.timeout.timer_alarm">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.timeout.</span></span><span class="sig-name descname"><span class="pre">timer_alarm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.timeout.timer_alarm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-navicatGA.wrappers_selfies">
+<span id="navicatga-wrappers-selfies-module"></span><h2>navicatGA.wrappers_selfies module<a class="headerlink" href="#module-navicatGA.wrappers_selfies" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.mol_structure2cm">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">mol_structure2cm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.mol_structure2cm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.mol_structure2depictions">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">mol_structure2depictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.mol_structure2depictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate 2D and 3D depictions from an rdkit.mol object with 3D coordinates.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2cm">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2cm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2cm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2depictions">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2depictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2depictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate 2D and 3D depictions from a list of selfies characters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2ilogp">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2ilogp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2ilogp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2krr">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2krr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2krr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2levenshtein_to_target">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2levenshtein_to_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_selfie</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2levenshtein_to_target" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2logp">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2logp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2logp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2mol_structure">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2mol_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2mol_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a rdkit.mol object with 3D coordinates from a list of selfies characters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2mv">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2mv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2mv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2mw">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2mw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2mw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2mwilogp">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2mwilogp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2mwilogp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2nmw">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2nmw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2nmw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2selfies">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2selfies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2selfies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a selfies string from a list of selfies characters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2smiles">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a canonical smiles string from a list of selfies characters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_selfies.sc2tanimoto_to_target">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_selfies.</span></span><span class="sig-name descname"><span class="pre">sc2tanimoto_to_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_selfie</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_selfies.sc2tanimoto_to_target" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-navicatGA.wrappers_smiles">
+<span id="navicatga-wrappers-smiles-module"></span><h2>navicatGA.wrappers_smiles module<a class="headerlink" href="#module-navicatGA.wrappers_smiles" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.check_smiles_chars">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">check_smiles_chars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.check_smiles_chars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a chromosome corresponds to a proper SMILES.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.chromosome_to_smiles">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">chromosome_to_smiles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.chromosome_to_smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper function for simplicity.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.mol_structure2cm">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">mol_structure2cm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.mol_structure2cm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.mol_structure2depictions">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">mol_structure2depictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.mol_structure2depictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate 2D and 3D depictions from an rdkit.mol object with 3D coordinates.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.sc2cm">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">sc2cm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.sc2cm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.sc2depictions">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">sc2depictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.sc2depictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate 2D and 3D depictions from a chromosome.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.sc2ilogp">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">sc2ilogp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.sc2ilogp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.sc2logp">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">sc2logp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.sc2logp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.sc2mol_structure">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">sc2mol_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.sc2mol_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a rdkit.mol object with 3D coordinates from a list of selfies characters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.sc2mv">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">sc2mv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.sc2mv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.sc2mw">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">sc2mw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.sc2mw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.sc2mwilogp">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">sc2mwilogp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.sc2mwilogp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.sc2nmw">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">sc2nmw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.sc2nmw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.sc2smiles">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">sc2smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.sc2smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a SMILES string from a list of SMILES characters. To be customized.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_smiles.smiles2mol_structure">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_smiles.</span></span><span class="sig-name descname"><span class="pre">smiles2mol_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_smiles.smiles2mol_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a rdkit.mol object with 3D coordinates from a SMILES.</p>
+</dd></dl>
+
+</section>
+<section id="module-navicatGA.wrappers_xyz">
+<span id="navicatga-wrappers-xyz-module"></span><h2>navicatGA.wrappers_xyz module<a class="headerlink" href="#module-navicatGA.wrappers_xyz" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="navicatGA.wrappers_xyz.Hashable_Geometry">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_xyz.</span></span><span class="sig-name descname"><span class="pre">Hashable_Geometry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_xyz.Hashable_Geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AaronTools.geometry.Geometry</span></code></p>
+<p>This is a modified version of the Geometry class in AaronTools.py, which is identical but hashable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_xyz.chromosome_to_xyz">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_xyz.</span></span><span class="sig-name descname"><span class="pre">chromosome_to_xyz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_xyz.chromosome_to_xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper function for simplicity.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_xyz.geom2angle">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_xyz.</span></span><span class="sig-name descname"><span class="pre">geom2angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_xyz.geom2angle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_xyz.geom2bond">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_xyz.</span></span><span class="sig-name descname"><span class="pre">geom2bond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_xyz.geom2bond" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_xyz.geom2dihedral">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_xyz.</span></span><span class="sig-name descname"><span class="pre">geom2dihedral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_xyz.geom2dihedral" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_xyz.geom2sub_sterimol">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_xyz.</span></span><span class="sig-name descname"><span class="pre">geom2sub_sterimol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_xyz.geom2sub_sterimol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.wrappers_xyz.gl2geom">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.wrappers_xyz.</span></span><span class="sig-name descname"><span class="pre">gl2geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_positions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'19-20'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.wrappers_xyz.gl2geom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a chromosome (list of geometries) can lead to a valid structure.</p>
+</dd></dl>
+
+</section>
+<section id="module-navicatGA.xyz_solver">
+<span id="navicatga-xyz-solver-module"></span><h2>navicatGA.xyz_solver module<a class="headerlink" href="#module-navicatGA.xyz_solver" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="navicatGA.xyz_solver.XYZGenAlgSolver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">navicatGA.xyz_solver.</span></span><span class="sig-name descname"><span class="pre">XYZGenAlgSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">starting_population:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">[[None]],</span> <span class="pre">starting_random:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">alphabet_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">[],</span> <span class="pre">chromosome_to_xyz=&lt;function</span> <span class="pre">random_merge_xyz.&lt;locals&gt;.merge&gt;,</span> <span class="pre">multi_alphabet:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">equivalences:</span> <span class="pre">Optional[Sequence]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">max_counter:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10,</span> <span class="pre">n_genes:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">fitness_function=None,</span> <span class="pre">max_gen:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">15,</span> <span class="pre">max_conv:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">100,</span> <span class="pre">pop_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">5,</span> <span class="pre">mutation_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1,</span> <span class="pre">selection_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.25,</span> <span class="pre">selection_strategy:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'tournament',</span> <span class="pre">excluded_genes:</span> <span class="pre">Optional[Sequence]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">n_crossover_points:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">random_state:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">lru_cache:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">scalarizer=None,</span> <span class="pre">prune_duplicates=False,</span> <span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">show_stats:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">plot_results:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">to_stdout:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">to_file:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">logger_file:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'output.log',</span> <span class="pre">logger_level:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'INFO',</span> <span class="pre">progress_bars:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">problem_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'xyz'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.xyz_solver.XYZGenAlgSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#navicatGA.base_solver.GenAlgSolver" title="navicatGA.base_solver.GenAlgSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">navicatGA.base_solver.GenAlgSolver</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.xyz_solver.XYZGenAlgSolver.chromosomize">
+<span class="sig-name descname"><span class="pre">chromosomize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.xyz_solver.XYZGenAlgSolver.chromosomize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pad or truncate starting_population chromosome to build a population chromosome.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.xyz_solver.XYZGenAlgSolver.create_offspring">
+<span class="sig-name descname"><span class="pre">create_offspring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec_parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crossover_pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offspring_number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.xyz_solver.XYZGenAlgSolver.create_offspring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an offspring from 2 parents.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.xyz_solver.XYZGenAlgSolver.get_crossover_points">
+<span class="sig-name descname"><span class="pre">get_crossover_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.xyz_solver.XYZGenAlgSolver.get_crossover_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves random crossover points
+:return: a numpy array with the crossover points</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.xyz_solver.XYZGenAlgSolver.initialize_population">
+<span class="sig-name descname"><span class="pre">initialize_population</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.xyz_solver.XYZGenAlgSolver.initialize_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the population of the problem according to the
+population size and number of genes and according to the problem
+type (XYZ fragments here).
+:return: a numpy array with a sanitized initialized population</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.xyz_solver.XYZGenAlgSolver.mutate_population">
+<span class="sig-name descname"><span class="pre">mutate_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_mutations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.xyz_solver.XYZGenAlgSolver.mutate_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutates the population by randomizing specific positions of the
+population individuals.
+:param population: the population at a given iteration
+:param n_mutations: number of mutations to be performed.
+:return: the mutated population</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.xyz_solver.XYZGenAlgSolver.refill_population">
+<span class="sig-name descname"><span class="pre">refill_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nrefill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.xyz_solver.XYZGenAlgSolver.refill_population" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.xyz_solver.XYZGenAlgSolver.write_population">
+<span class="sig-name descname"><span class="pre">write_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'chromosome'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.xyz_solver.XYZGenAlgSolver.write_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print  xyz for all the population at the current state.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+<hr class="docutils" />
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NaviCatGA: A flexible Genetic Algorithm Optimizer for the NaviCat project</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#contents">Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#about">About</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#module-navicatGA">Module contents:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.base_solver">navicatGA.base_solver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.cache">navicatGA.cache module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.chemistry_selfies">navicatGA.chemistry_selfies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.chemistry_smiles">navicatGA.chemistry_smiles module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.chemistry_xyz">navicatGA.chemistry_xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.exception_messages">navicatGA.exception_messages module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.exceptions">navicatGA.exceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.fitness_functions_float">navicatGA.fitness_functions_float module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-fitness-functions-selfies-module">navicatGA.fitness_functions_selfies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-fitness-functions-xyz-module">navicatGA.fitness_functions_xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-float-solver-module">navicatGA.float_solver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.helpers">navicatGA.helpers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.logger">navicatGA.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.progress_bars">navicatGA.progress_bars module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-quantum-wrappers-selfies-module">navicatGA.quantum_wrappers_selfies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-quantum-wrappers-xyz-module">navicatGA.quantum_wrappers_xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-queue-wrappers-xyz-module">navicatGA.queue_wrappers_xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.score_modifiers">navicatGA.score_modifiers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.selfies_solver">navicatGA.selfies_solver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.smiles_solver">navicatGA.smiles_solver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.timeout">navicatGA.timeout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.wrappers_selfies">navicatGA.wrappers_selfies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.wrappers_smiles">navicatGA.wrappers_smiles module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.wrappers_xyz">navicatGA.wrappers_xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.xyz_solver">navicatGA.xyz_solver module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="#">
+    <img class="logo" src="_static/../../../images/navicatga_logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NaviCatGA: A flexible Genetic Algorithm Optimizer for the NaviCat project</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#contents">Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#about">About</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#module-navicatGA">Module contents:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.base_solver">navicatGA.base_solver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.cache">navicatGA.cache module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.chemistry_selfies">navicatGA.chemistry_selfies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.chemistry_smiles">navicatGA.chemistry_smiles module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.chemistry_xyz">navicatGA.chemistry_xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.exception_messages">navicatGA.exception_messages module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.exceptions">navicatGA.exceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.fitness_functions_float">navicatGA.fitness_functions_float module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-fitness-functions-selfies-module">navicatGA.fitness_functions_selfies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-fitness-functions-xyz-module">navicatGA.fitness_functions_xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-float-solver-module">navicatGA.float_solver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.helpers">navicatGA.helpers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.logger">navicatGA.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.progress_bars">navicatGA.progress_bars module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-quantum-wrappers-selfies-module">navicatGA.quantum_wrappers_selfies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-quantum-wrappers-xyz-module">navicatGA.quantum_wrappers_xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#navicatga-queue-wrappers-xyz-module">navicatGA.queue_wrappers_xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.score_modifiers">navicatGA.score_modifiers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.selfies_solver">navicatGA.selfies_solver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.smiles_solver">navicatGA.smiles_solver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.timeout">navicatGA.timeout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.wrappers_selfies">navicatGA.wrappers_selfies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.wrappers_smiles">navicatGA.wrappers_smiles module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.wrappers_xyz">navicatGA.wrappers_xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-navicatGA.xyz_solver">navicatGA.xyz_solver module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, rlaplaza.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

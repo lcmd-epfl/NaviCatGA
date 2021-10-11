@@ -5,11 +5,16 @@
 
 Welcome to navicatGA's documentation!
 =====================================
-
 .. toctree::
+   :glob:
    :maxdepth: 2
    :caption: Contents:
 
+
+Solver classes
+==============
+.. automodule:: navicatGA
+   :members:
 
 
 Indices and tables
