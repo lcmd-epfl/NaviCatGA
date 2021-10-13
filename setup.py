@@ -8,7 +8,7 @@ setup(
     version="0.1",
     author="R.LAPLAZA",
     author_email="laplazasolanas@gmail.com",
-    description="A simple Genetic Algorithm solver",
+    description="A flexible Genetic Algorithm solver",
     long_description=long_description,
     url="https://github.com/rlaplaza/navicatGA",
     classifiers=["Programming Language :: Python :: 3"],
