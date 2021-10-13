@@ -157,6 +157,7 @@ def draw_smiles(smiles, root_name):
 
 
 def get_confs_ff(mol, maxiters=250):
+    mol_copy = Chem.Mol(mol)
     mol_structure = Chem.Mol(mol)
     mol_structure.RemoveAllConformers()
     try:
@@ -169,7 +170,17 @@ def get_confs_ff(mol, maxiters=250):
             min_e_index = energies_list.index(min(energies_list))
             mol_structure.AddConformer(mol.GetConformer(min_e_index))
             return mol_structure
-        elif Chem.rdForceFieldHelpers.UFFHasAllMoleculeParams(mol):
+        else:
+            logger.debug(
+                "Could not do complete MMFF typing. SMILES {0}".format(mol2smi(mol))
+            )
+    except ValueError:
+        logger.debug(
+            "Conformational sampling led to crash. SMILES {0}".format(mol2smi(mol))
+        )
+        mol = mol_copy
+    try:
+        if Chem.rdForceFieldHelpers.UFFHasAllMoleculeParams(mol):
             energies = AllChem.UFFOptimizeMoleculeConfs(
                 mol, maxIters=maxiters, vdwThresh=15.0
             )
@@ -179,14 +190,17 @@ def get_confs_ff(mol, maxiters=250):
             return mol_structure
         else:
             logger.debug(
-                "Could not do complete FF typing. SMILES {0}".format(mol2smi(mol))
+                "Could not do complete UFF typing. SMILES {0}".format(mol2smi(mol))
             )
-            return mol
-    except:
+    except ValueError:
         logger.debug(
             "Conformational sampling led to crash. SMILES {0}".format(mol2smi(mol))
         )
-        return mol
+        mol = mol_copy
+    logger.debug(
+        "Conformational sampling not performed. SMILES {0}".format(mol2smi(mol))
+    )
+    return mol_copy
 
 
 def prune_mol_conformers(mol, energies_list):

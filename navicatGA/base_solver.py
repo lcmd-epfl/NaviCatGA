@@ -357,7 +357,9 @@ class GenAlgSolver:
             for i in range(population.shape[0]):
                 fitness[i, :] = self.fitness_function(self.assembler(population[i]))
             pfitness = fitness
-            fitness = self.scalarizer.scalarize(fitness)
+            fitness = np.ones((population.shape[0])) - self.scalarizer.scalarize(
+                fitness
+            )
         return fitness, pfitness
 
     def select_parents(self, fitness):

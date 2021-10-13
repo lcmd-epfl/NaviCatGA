@@ -6,6 +6,8 @@ from navicatGA.base_solver import GenAlgSolver
 from navicatGA.helpers import get_input_dimensions, make_array
 from navicatGA.fitness_functions_float import fitness_function_float
 
+logger = logging.getLogger(__name__)
+
 
 class FloatGenAlgSolver(GenAlgSolver):
     def __init__(

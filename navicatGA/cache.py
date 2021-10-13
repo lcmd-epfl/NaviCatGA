@@ -35,7 +35,9 @@ def calculate_fitness_cache(self, population):
     if self.scalarizer is None:
         return np.squeeze(fitness), np.squeeze(fitness)
     else:
-        return self.scalarizer.scalarize(fitness), (fitness)
+        return np.ones((population.shape[0])) - self.scalarizer.scalarize(fitness), (
+            fitness
+        )
 
 
 @lru_cache(maxsize=64)
