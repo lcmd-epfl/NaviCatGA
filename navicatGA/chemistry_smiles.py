@@ -159,25 +159,33 @@ def draw_smiles(smiles, root_name):
 def get_confs_ff(mol, maxiters=250):
     mol_structure = Chem.Mol(mol)
     mol_structure.RemoveAllConformers()
-    if Chem.rdForceFieldHelpers.MMFFHasAllMoleculeParams(mol):
-        AllChem.MMFFSanitizeMolecule(mol)
-        energies = AllChem.MMFFOptimizeMoleculeConfs(
-            mol, maxIters=maxiters, nonBondedThresh=15.0
+    try:
+        if Chem.rdForceFieldHelpers.MMFFHasAllMoleculeParams(mol):
+            AllChem.MMFFSanitizeMolecule(mol)
+            energies = AllChem.MMFFOptimizeMoleculeConfs(
+                mol, maxIters=maxiters, nonBondedThresh=15.0
+            )
+            energies_list = [e[1] for e in energies]
+            min_e_index = energies_list.index(min(energies_list))
+            mol_structure.AddConformer(mol.GetConformer(min_e_index))
+            return mol_structure
+        elif Chem.rdForceFieldHelpers.UFFHasAllMoleculeParams(mol):
+            energies = AllChem.UFFOptimizeMoleculeConfs(
+                mol, maxIters=maxiters, vdwThresh=15.0
+            )
+            energies_list = [e[1] for e in energies]
+            min_e_index = energies_list.index(min(energies_list))
+            mol_structure.AddConformer(mol.GetConformer(min_e_index))
+            return mol_structure
+        else:
+            logger.debug(
+                "Could not do complete FF typing. SMILES {0}".format(mol2smi(mol))
+            )
+            return mol
+    except:
+        logger.debug(
+            "Conformational sampling led to crash. SMILES {0}".format(mol2smi(mol))
         )
-        energies_list = [e[1] for e in energies]
-        min_e_index = energies_list.index(min(energies_list))
-        mol_structure.AddConformer(mol.GetConformer(min_e_index))
-        return mol_structure
-    elif Chem.rdForceFieldHelpers.UFFHasAllMoleculeParams(mol):
-        energies = AllChem.UFFOptimizeMoleculeConfs(
-            mol, maxIters=maxiters, vdwThresh=15.0
-        )
-        energies_list = [e[1] for e in energies]
-        min_e_index = energies_list.index(min(energies_list))
-        mol_structure.AddConformer(mol.GetConformer(min_e_index))
-        return mol_structure
-    else:
-        logger.debug("Could not do complete FF typing. SMILES {0}".format(mol2smi(mol)))
         return mol
 
 
