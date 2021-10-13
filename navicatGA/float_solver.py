@@ -1,5 +1,5 @@
 from typing import Sequence
-
+import logging
 import numpy as np
 
 from navicatGA.base_solver import GenAlgSolver
