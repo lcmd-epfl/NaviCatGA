@@ -13,7 +13,11 @@ NaviCatGA: A flexible Genetic Algorithm Optimizer for the NaviCat project
 
 ## About [↑](#about)
 
-The code runs on pure python and is thus not extremely optimized. However, it is easy to adapt for particular applications.
+NaviCatGA is part of the [NaviCat project](https://github.com/lcmd-epfl/NaviCat) from [LCMD](https://www.epfl.ch/labs/lcmd/) at EPFL.
+
+The NaviCat project is funded within the [NCCR Catalysis](https://www.nccr-catalysis.ch/)  of the [Swiss National Science Foundation](https://www.snf.ch/en).
+
+The NaviCatGA code runs on pure python and is thus it is easy to adapt for particular applications.
 Dependencies are minimal for the base class: 
 - `numpy`
 - `matplotlib`

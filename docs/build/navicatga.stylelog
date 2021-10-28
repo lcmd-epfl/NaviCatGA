@@ -13,10 +13,10 @@
          > (0,0,1,0,2) title page author [Sphinx] > DEFAULT
            (0,0,0,0,2) body [Sphinx] > default
         SingleStyledText('rlaplaza')
-    Paragraph('Oct 11, 2021', style='title page date')
+    Paragraph('Oct 28, 2021', style='title page date')
          > (0,0,1,0,2) title page date [Sphinx] > DEFAULT
            (0,0,0,0,2) body [Sphinx] > default
-        SingleStyledText('Oct 11, 2021')
+        SingleStyledText('Oct 28, 2021')
 ---------------------------------- page i ----------------------------------
 #### FootnoteContainer('footnotes')
   StaticGroupedFlowables()
