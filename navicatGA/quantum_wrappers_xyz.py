@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 h_positions = "19-20"
 
 
-def gl2gap(chromosome, lot=0):
+def gl2gap(chromosome, lot=0, charge=0, mult=0):
     logger.debug(f"Level of Theory passed at {lot}")
     ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
@@ -18,10 +18,10 @@ def gl2gap(chromosome, lot=0):
     return geom2gap(geom, lot)
 
 
-def geom2gap(geom, lot=0):
+def geom2gap(geom, lot=0, charge=0, mult=0):
     logger.debug(f"Level of Theory passed at {lot}")
     try:
-        pyscfmol, mf = geom2pyscf(geom, lot=lot)
+        pyscfmol, mf = geom2pyscf(geom, lot=lot, charge=charge, mult=mult)
         idx = np.argsort(mf.mo_energy)
         e_sort = mf.mo_energy[idx]
         occ_sort = mf.mo_occ[idx].astype(int)
@@ -43,7 +43,7 @@ def geom2gap(geom, lot=0):
     return e_lumo - e_homo
 
 
-def gl2ehl(chromosome, lot=0):
+def gl2ehl(chromosome, lot=0, charge=0, mult=0):
     logger.debug(f"Level of Theory passed at {lot}")
     ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
@@ -51,10 +51,10 @@ def gl2ehl(chromosome, lot=0):
     return geom2ehl(geom, lot)
 
 
-def geom2ehl(geom, lot=0):
+def geom2ehl(geom, lot=0, charge=0, mult=0):
     logger.debug(f"Level of Theory passed at {lot}")
     try:
-        pyscfmol, mf = geom2pyscf(geom, lot=lot)
+        pyscfmol, mf = geom2pyscf(geom, lot=lot, charge=charge, mult=mult)
         idx = np.argsort(mf.mo_energy)
         e_sort = mf.mo_energy[idx]
         occ_sort = mf.mo_occ[idx].astype(int)
@@ -76,10 +76,10 @@ def geom2ehl(geom, lot=0):
     return [e_homo, e_lumo]
 
 
-def geom2ehomo(geom, lot=0):
+def geom2ehomo(geom, lot=0, charge=0, mult=0):
     logger.debug(f"Level of Theory passed at {lot}")
     try:
-        pyscfmol, mf = geom2pyscf(geom, lot=lot)
+        pyscfmol, mf = geom2pyscf(geom, lot=lot, charge=charge, mult=mult)
         idx = np.argsort(mf.mo_energy)
         e_sort = mf.mo_energy[idx]
         occ_sort = mf.mo_occ[idx].astype(int)
@@ -99,10 +99,10 @@ def geom2ehomo(geom, lot=0):
     return e_homo
 
 
-def geom2elumo(geom, lot=0):
+def geom2elumo(geom, lot=0, charge=0, mult=0):
     logger.debug(f"Level of Theory passed at {lot}")
     try:
-        pyscfmol, mf = geom2pyscf(geom, lot=lot)
+        pyscfmol, mf = geom2pyscf(geom, lot=lot, charge=charge, mult=mult)
         idx = np.argsort(mf.mo_energy)
         e_sort = mf.mo_energy[idx]
         occ_sort = mf.mo_occ[idx].astype(int)
@@ -121,7 +121,7 @@ def geom2elumo(geom, lot=0):
     return e_lumo
 
 
-def gl2elumo(chromosome, lot=0):
+def gl2elumo(chromosome, lot=0, charge=0, mult=0):
     logger.debug(f"Level of Theory passed at {lot}")
     ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
@@ -129,7 +129,7 @@ def gl2elumo(chromosome, lot=0):
     return geom2elumo(geom, lot)
 
 
-def gl2opt(chromosome, lot=0):
+def gl2opt(chromosome, lot=0, charge=0, mult=0):
     logger.debug(f"Level of Theory passed at {lot}")
     ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
@@ -137,7 +137,7 @@ def gl2opt(chromosome, lot=0):
     return geom2opt(geom, lot)
 
 
-def gl2ehomo(chromosome, lot=0):
+def gl2ehomo(chromosome, lot=0, charge=0, mult=0):
     logger.debug(f"Level of Theory passed at {lot}")
     ok, geom = gl2geom(chromosome, h_positions)
     if not ok:
@@ -145,10 +145,10 @@ def gl2ehomo(chromosome, lot=0):
     return geom2ehomo(geom, lot)
 
 
-def geom2opt(geom, lot=0):
+def geom2opt(geom, lot=0, charge=0, mult=0):
     logger.debug(f"Level of Theory passed at {lot}")
     try:
-        pyscfmol, mf = geom2pyscf(geom, lot=lot)
+        pyscfmol, mf = geom2pyscf(geom, lot=lot, charge=charge, mult=mult)
         pyscfmol, mf = opt(pyscfmol, mf)
         geom = pyscf2geom(pyscfmol, geom)
     except Exception as m:
@@ -183,19 +183,15 @@ def pyscf2geom(pyscfmol, geom):
     return geom
 
 
-def geom2pyscf(geom, lot=0):
+def geom2pyscf(geom, lot=0, charge=0, mult=0):
     logger.debug(
-        f"Level of Theory passed to pySCF at {lot}:\n 0 is RMINDO3 \n 1 is PBE/pcseg0 \n 2 is b97d/def2svp"
+        f"Level of Theory passed to pySCF at {lot}:\n 0 is RMINDO3 \n 1 is PBE/pcseg0 \n 2 is b97d/def2svp \n with charge {charge} and spin {mult}"
     )
     pyscfmol = gto.Mole()
     pyscfmol.atom = ""
     nelectron = pyscfmol.atom_charges().sum()
-    if nelectron % 2 == 0:
-        pyscfmol.charge = 0
-        pyscfmol.spin = 0
-    else:
-        pyscfmol.charge = -1
-        pyscfmol.spin = 1
+    pyscfmol.charge = charge
+    pyscfmol.spin = mult
     for atom in geom:
         symbol = atom.element
         p = atom.coords
@@ -220,6 +216,6 @@ def geom2pyscf(geom, lot=0):
         mf = dft.ROKS(pyscfmol)
         mf.verbose = 1
         mf.xc = "b97d"
-        mf.conv_tol = 1e-7
+        mf.conv_tol = 1e-6
         mf = mf.density_fit().run()
     return pyscfmol, mf
