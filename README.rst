@@ -1,4 +1,6 @@
 
+.. image:: https://zenodo.org/badge/322634265.svg
+   :target: https://zenodo.org/badge/latestdoi/322634265
 
 Contents
 --------

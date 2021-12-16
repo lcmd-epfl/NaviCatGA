@@ -12,14 +12,15 @@
 #
 import os
 import sys
+import rinoh
 sys.path.insert(0, os.path.abspath('../'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'navicatGA'
+project = 'NaviCatGA'
 copyright = '2021, rlaplaza'
-author = 'rlaplaza'
+author = 'rlaplaza, lcmd-epfl'
 
 # The full version, including alpha/beta/rc tags
 release = '0.0.0'
