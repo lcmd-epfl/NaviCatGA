@@ -232,8 +232,12 @@ class GenAlgSolver:
         else:
             self.logger.info("Continuing run with previous population in memory.")
             population = self.population_
+        if self.fitness_ is None:
+            fitness, printable_fitness = self.calculate_fitness(population)
+        else:
+            fitness = self.fitness_
+            printable_fitness = self.printable_fitness
 
-        fitness, printable_fitness = self.calculate_fitness(population)
         fitness, population, printable_fitness = self.sort_by_fitness(
             fitness, population, printable_fitness
         )
