@@ -12,6 +12,7 @@ jobs:
       max-parallel: 5
 
     steps:
+    - name: checkout repository
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
@@ -21,10 +22,10 @@ jobs:
       uses: conda-incubator/setup-miniconda@v2
       with:
         mamba-version: "*"
-        channels: conda-forge,bioconda,defaults
+        channels: conda-forge,defaults
         auto-activate-base: false
         activate-environment: ga
-        environment-file: ../environment.yml
+        environment-file: environment.yml
     - name: check solution
       run: |
         mamba env export
