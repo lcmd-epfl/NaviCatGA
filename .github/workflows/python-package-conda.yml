@@ -24,7 +24,7 @@ jobs:
         channels: conda-forge,bioconda,defaults
         auto-activate-base: false
         activate-environment: ga
-        environment-file: NaviCatGA/environment.yml
+        environment-file: ../environment.yml
     - name: check solution
       run: |
         mamba env export
