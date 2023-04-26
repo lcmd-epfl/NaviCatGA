@@ -20,6 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         conda create --name ga python=3.6
+        conda init bash
         conda activate ga
     - name: Lint with flake8
       run: |
