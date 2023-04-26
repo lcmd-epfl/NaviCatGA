@@ -18,16 +18,16 @@ jobs:
       with:
         python-version: 3.8
     - name: create environment with mamba
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          mamba-version: "*"
-          channels: conda-forge,bioconda,defaults
-          auto-activate-base: false
-          activate-environment: ga
-          environment-file: environment.yaml
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        mamba-version: "*"
+        channels: conda-forge,bioconda,defaults
+        auto-activate-base: false
+        activate-environment: ga
+        environment-file: environment.yaml
     - name: check solution
-        run: |
-          mamba env export
+      run: |
+        mamba env export
     - name: Lint with flake8
       run: |
         conda install flake8
