@@ -29,15 +29,11 @@ def SquaredModifier(score, target, parameter=1) -> float:
 
 
 def score_modifier(score, target, score_modifier_number=1, parameter=1) -> float:
-
     if score_modifier_number == 1:
-
         return GaussianModifier(score, target, parameter)
 
     if score_modifier_number == 2:
-
         return AbsoluteModifier(score, target, parameter)
 
     if score_modifier_number == 3:
-
         return SquaredModifier(score, target, parameter)

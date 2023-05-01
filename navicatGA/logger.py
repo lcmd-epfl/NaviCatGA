@@ -9,7 +9,6 @@ def configure_logger(
     to_file=True,
     libraries_level=None,
 ):
-
     logger = logging.getLogger()
     addLoggingLevel("TRACE", logging.DEBUG - 5)
     numeric_level = getattr(logging, logger_level.upper(), None)

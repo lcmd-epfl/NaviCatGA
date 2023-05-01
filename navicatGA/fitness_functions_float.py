@@ -2,13 +2,12 @@ import numpy as np
 
 
 def fitness_function_float(function_number):
-
     if function_number == 1:
         return lambda chromosome: -(np.abs(chromosome[0]) + np.cos(chromosome[0]))
     elif function_number == 2:
         return lambda chromosome: -(np.abs(chromosome[0]) + np.sin(chromosome[0]))
     elif function_number == 3:
-        return lambda chromosome: -(chromosome ** 2).sum()
+        return lambda chromosome: -(chromosome**2).sum()
     elif function_number == 4:
         return lambda chromosome: -np.sum(
             np.abs(chromosome) - 10 * np.cos(np.sqrt(np.abs(10 * chromosome)))

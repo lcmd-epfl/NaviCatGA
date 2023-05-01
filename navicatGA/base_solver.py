@@ -235,6 +235,7 @@ class GenAlgSolver:
         if self.fitness_ is None:
             fitness, printable_fitness = self.calculate_fitness(population)
         else:
+            self.logger.info("Continuing run with previous population in memory.")
             fitness = self.fitness_
             printable_fitness = self.printable_fitness
 
@@ -292,12 +293,7 @@ class GenAlgSolver:
                     population = np.vstack(
                         (pruned_pop, self.refill_population(nrefill))
                     )
-            rest_fitness, rest_printable_fitness = self.calculate_fitness(
-                population[1:, :]
-            )
-            fitness = np.hstack((fitness[0], rest_fitness))
-            for i in range(1, len(rest_fitness)):
-                printable_fitness[i] = rest_printable_fitness[i]
+            fitness, printable_fitness = self.calculate_fitness(population)
             fitness, population, printable_fitness = self.sort_by_fitness(
                 fitness, population, printable_fitness
             )
@@ -389,7 +385,6 @@ class GenAlgSolver:
         if (self.selection_strategy == "roulette_wheel") or (
             self.selection_strategy == "random"
         ):
-
             self.logger.trace(
                 f"Selection probabilities for kept population are {self.prob_intervals}."
             )
@@ -402,7 +397,6 @@ class GenAlgSolver:
             )
 
         elif self.selection_strategy == "boltzmann":
-
             self.prob_intervals = self.get_boltzmann_probabilities(fitness)
             self.logger.trace(
                 f"Selection probabilities for kept population are {self.prob_intervals}."
@@ -416,7 +410,6 @@ class GenAlgSolver:
             )
 
         elif self.selection_strategy == "two_by_two":
-
             range_max = self.n_matings * 2
 
             ma = np.arange(range_max)[::2]
@@ -426,7 +419,6 @@ class GenAlgSolver:
                 ma = ma[:-1]
 
         elif self.selection_strategy == "tournament":
-
             range_max = self.n_matings * 2
 
             ma = self.tournament_selection(fitness, range_max)

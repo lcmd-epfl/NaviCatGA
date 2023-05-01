@@ -13,7 +13,6 @@ def check_error(func, *args, **kw):
         func(*args, **kw)
         return True
     except Exception as m:
-
         return False
 
 
@@ -39,7 +38,6 @@ def make_array():
 
 
 def get_elapsed_time(start_time, end_time):
-
     runtime = (end_time - start_time).seconds
 
     hours, remainder = np.divmod(runtime, 3600)

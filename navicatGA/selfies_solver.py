@@ -212,7 +212,6 @@ class SelfiesGenAlgSolver(GenAlgSolver):
         return population
 
     def refill_population(self, nrefill=0):
-
         assert nrefill > 0
         ref_pop = np.zeros(shape=(nrefill, self.n_genes), dtype=object)
 

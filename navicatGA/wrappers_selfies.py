@@ -146,7 +146,6 @@ def sc2levenshtein_to_target(chromosome, target_selfie):
     iterations = max(l1, l2)
 
     for i in range(iterations):
-
         if i + 1 > len(sc1) or i + 1 > len(sc2):
             return reward
 

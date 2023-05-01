@@ -178,7 +178,6 @@ class SmilesGenAlgSolver(GenAlgSolver):
         return population
 
     def refill_population(self, nrefill=0):
-
         assert nrefill > 0
         ref_pop = np.zeros(shape=(nrefill, self.n_genes), dtype=object)
 
@@ -214,7 +213,6 @@ class SmilesGenAlgSolver(GenAlgSolver):
         beta = np.random.rand(1)[0]
         gamma = np.random.rand(1)[0]
         if not self.multi_alphabet:
-
             backup_sec_parent = sec_parent
             backup_first_parent = first_parent
             if self.allowed_mutation_genes is not None:

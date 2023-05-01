@@ -21,7 +21,6 @@ class FixedSubmitProcess(SubmitProcess):
     """This is a lightly modified version of the SubmitProcess class in AaronTools.py."""
 
     def submit(self, wait=False, quiet=True):
-
         job_file = os.path.join(self.directory, self.name + ".job")
 
         opts = {
