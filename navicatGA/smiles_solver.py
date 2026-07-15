@@ -2,7 +2,7 @@ from typing import Sequence
 import logging
 import numpy as np
 
-from navicatGA.base_solver import GenAlgSolver
+from navicatGA.alphabet_solver import AlphabetGenAlgSolver
 from navicatGA.helpers import check_error, concatenate_list
 from navicatGA.chemistry_smiles import draw_smiles
 from navicatGA.exceptions import InvalidInput
@@ -11,7 +11,33 @@ from navicatGA.exception_messages import exception_messages
 logger = logging.getLogger(__name__)
 
 
-class SmilesGenAlgSolver(GenAlgSolver):
+class SmilesGenAlgSolver(AlphabetGenAlgSolver):
+    # Defaults for the GenAlgSolver (base-class) parameters not otherwise
+    # named below; override any of them via **base_kwargs, e.g.
+    # SmilesGenAlgSolver(..., pop_size=50, lru_cache=True).
+    _BASE_DEFAULTS = dict(
+        max_gen=500,
+        max_conv=100,
+        pop_size=100,
+        mutation_rate=0.05,
+        selection_rate=0.25,
+        selection_strategy="tournament",
+        n_crossover_points=1,
+        random_state=None,
+        lru_cache=False,
+        scalarizer=None,
+        prune_duplicates=False,
+        verbose=True,
+        show_stats=False,
+        plot_results=False,
+        to_stdout=True,
+        to_file=True,
+        logger_file="output.log",
+        logger_level="INFO",
+        progress_bars=False,
+        problem_type="smiles",
+    )
+
     def __init__(
         self,
         starting_population: list = [[""]],
@@ -21,31 +47,10 @@ class SmilesGenAlgSolver(GenAlgSolver):
         multi_alphabet: bool = False,
         equivalences: Sequence = None,
         max_counter: int = 10,
-        # Parameters for base class
         n_genes: int = 1,
         fitness_function=None,
-        max_gen: int = 500,
-        max_conv: int = 100,
-        pop_size: int = 100,
-        mutation_rate: float = 0.05,
-        selection_rate: float = 0.25,
-        selection_strategy: str = "tournament",
         excluded_genes: Sequence = None,
-        n_crossover_points: int = 1,
-        random_state: int = None,
-        lru_cache: bool = False,
-        scalarizer=None,
-        prune_duplicates=False,
-        # Verbosity and printing options
-        verbose: bool = True,
-        show_stats: bool = False,
-        plot_results: bool = False,
-        to_stdout: bool = True,
-        to_file: bool = True,
-        logger_file: str = "output.log",
-        logger_level: str = "INFO",
-        progress_bars: bool = False,
-        problem_type="smiles",
+        **base_kwargs,
     ):
         """Example child solver class for the GA.
         This child solver class is an example meant for a particular purpose,
@@ -68,64 +73,19 @@ class SmilesGenAlgSolver(GenAlgSolver):
         :type equivalences: list
         :param max_counter: maximum number of times a wrong structure will try to be corrected before skipping
         :type max_counter: int
+        :param base_kwargs: any GenAlgSolver parameter (max_gen, pop_size, mutation_rate, ...); see GenAlgSolver for the full list and defaults
         """
 
         if chromosome_to_smiles is None:
             raise (InvalidInput("No smiles builder provided."))
-        GenAlgSolver.__init__(
-            self,
+        super().__init__(
             fitness_function=fitness_function,
             assembler=chromosome_to_smiles,
-            scalarizer=scalarizer,
             n_genes=n_genes,
-            max_gen=max_gen,
-            max_conv=max_conv,
-            pop_size=pop_size,
-            mutation_rate=mutation_rate,
-            selection_rate=selection_rate,
-            selection_strategy=selection_strategy,
-            verbose=verbose,
-            show_stats=show_stats,
-            plot_results=plot_results,
             excluded_genes=excluded_genes,
-            prune_duplicates=prune_duplicates,
-            n_crossover_points=n_crossover_points,
-            random_state=random_state,
-            logger_file=logger_file,
-            logger_level=logger_level,
-            to_stdout=to_stdout,
-            to_file=to_file,
-            progress_bars=progress_bars,
-            lru_cache=lru_cache,
-            problem_type=problem_type,
+            **{**self._BASE_DEFAULTS, **base_kwargs},
         )
-        if all(isinstance(i, list) for i in alphabet_list):
-            if not (len(alphabet_list) == n_genes):
-                raise (InvalidInput(exception_messages["AlphabetDimensions"]))
-            self.alphabet = alphabet_list
-            self.multi_alphabet = True
-            if excluded_genes is not None:
-                raise (InvalidInput(exception_messages["MultiDictExcluded"]))
-            if equivalences is None:
-                equivalences = []
-                for j in range(n_genes):
-                    equivalences.append([j])
-                    for k in range(n_genes):
-                        if list(self.alphabet[j]) == list(self.alphabet[k]):
-                            equivalences[j].append(k)
-                tpls = [tuple(x) for x in equivalences]
-                dct = list(dict.fromkeys(tpls))
-                equivalences = [list(x) for x in dct]
-                self.equivalences = equivalences
-                logger.debug(f"Equivalence classes are {equivalences}")
-            else:
-                if len(equivalences) > n_genes:
-                    raise (InvalidInput(exception_messages["EquivalenceDimensions"]))
-        else:
-            self.multi_alphabet = False
-            sorted_list = list(sorted(alphabet_list))
-            self.alphabet = [sorted_list] * n_genes
-            assert len(self.alphabet) == n_genes
+        self._setup_alphabet(alphabet_list, n_genes, excluded_genes, equivalences)
 
         if not isinstance(starting_population, list):
             raise (InvalidInput(exception_messages["StartingPopulationNotAList"]))
@@ -136,73 +96,11 @@ class SmilesGenAlgSolver(GenAlgSolver):
         if self.n_crossover_points < 1:
             raise (InvalidInput(exception_messages["TooFewCrossoverPoints"]))
 
-        if len(starting_population) < self.pop_size:
-            n_patch = self.pop_size - len(starting_population)
-            for i in range(n_patch):
-                j = np.random.choice(range(len(starting_population)), size=1)[0]
-                starting_population.append(starting_population[j])
-        elif len(starting_population) > self.pop_size:
-            n_remove = len(starting_population) - self.pop_size
-            for i in range(n_remove):
-                j = np.random.choice(range(len(starting_population)), size=1)[0]
-                starting_population.remove(starting_population[j])
-        assert len(starting_population) == self.pop_size
-        self.starting_population = starting_population
+        self.starting_population = self._pad_or_trim_to_pop_size(
+            starting_population, self.pop_size
+        )
         self.max_counter = int(max_counter)
         self.starting_random = starting_random
-
-    def initialize_population(self):
-        """
-        Initializes the population of the problem according to the
-        population size and number of genes and according to the problem
-        type (either integers or floats).
-
-        Returns:
-        :return: a numpy array with initialized population
-        """
-
-        population = np.zeros(shape=(self.pop_size, self.n_genes), dtype=object)
-
-        for i in range(self.pop_size):
-            chromosome = self.chromosomize(self.starting_population[i])
-            if self.starting_random:
-                logger.warning("Randomizing starting chromosome.")
-                for n, j in enumerate(range(self.n_genes)):
-                    if n in self.allowed_mutation_genes:
-                        chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.assembler, chromosome)
-            population[i][:] = chromosome[0 : self.n_genes]
-
-        self.logger.debug("Initial population: {0}".format(population))
-        self.starting_population = population
-        return population
-
-    def refill_population(self, nrefill=0):
-        assert nrefill > 0
-        ref_pop = np.zeros(shape=(nrefill, self.n_genes), dtype=object)
-
-        for i in range(nrefill):
-            chromosome = self.chromosomize(self.starting_population[i])
-            for n, j in enumerate(range(self.n_genes)):
-                if n in self.allowed_mutation_genes:
-                    chromosome[j] = np.random.choice(self.alphabet[j], size=1)[0]
-            assert check_error(self.assembler, chromosome)
-            ref_pop[i][:] = chromosome[0 : self.n_genes]
-
-        self.logger.debug("Refill subset for population:\n{0}".format(ref_pop))
-        return ref_pop
-
-    def get_crossover_points(self):
-        """
-        Retrieves random crossover points
-        :return: a numpy array with the crossover points
-        """
-
-        return np.sort(
-            np.random.choice(
-                np.arange(self.n_genes), self.n_crossover_points, replace=False
-            )
-        )
 
     def create_offspring(
         self, first_parent, sec_parent, crossover_pt, offspring_number
@@ -318,44 +216,6 @@ class SmilesGenAlgSolver(GenAlgSolver):
             logger.trace("Final offspring chromosome: {0}".format(offspring))
             return offspring
 
-    def mutate_population(self, population, n_mutations):
-        """
-        Mutates the population by randomizing specific positions of the
-        population individuals.
-        :param population: the population at a given iteration
-        :param n_mutations: number of mutations to be performed.
-        :return: the mutated population
-        """
-
-        valid_smiles = False
-        alpha = np.random.rand(1)[0]
-        mutation_rows, mutation_cols = super(
-            SmilesGenAlgSolver, self
-        ).mutate_population(population, n_mutations)
-        for i, j in zip(mutation_rows, mutation_cols):
-            backup_gene = population[i, j]
-            counter = 0
-            while not valid_smiles:
-                population[i, j] = np.random.choice(self.alphabet[j], size=1)[0]
-                logger.trace(
-                    "Mutated chromosome attempt {0}: {1}".format(
-                        counter, population[i, :]
-                    )
-                )
-                valid_smiles = check_error(self.assembler, population[i, :])
-                counter += 1
-                if counter > self.max_counter:
-                    logger.debug(
-                        "Counter in mutate exceeded {0}, using default.".format(
-                            self.max_counter
-                        )
-                    )
-                    population[i, j] = backup_gene
-                    valid_smiles = True
-            valid_smiles = False
-
-        return population
-
     def write_population(self, basename="chromosome"):
         """
         Print xyz for all the population at the current state.
@@ -363,26 +223,3 @@ class SmilesGenAlgSolver(GenAlgSolver):
         for i, j in zip(range(self.pop_size), self.fitness_):
             smiles = self.assembler(self.population_[i][:])
             draw_smiles(smiles, f"{basename}_{i}_{np.round(j,4)}")
-
-    def chromosomize(self, str_list):
-        """Pad or truncate starting_population chromosome to build a population chromosome."""
-        logger.debug(f"Chromosomizing {str_list} to conform to n_genes {self.n_genes}")
-        chromosome = np.empty(self.n_genes, dtype=object)
-        if isinstance(str_list, (list, np.ndarray)):
-            for i in range(min(self.n_genes, len(str_list))):
-                chromosome[i] = str_list[i]
-            if len(str_list) > self.n_genes:
-                logger.debug("Exceedingly long SMILES produced. Will be truncated.")
-            if len(str_list) < self.n_genes:
-                logger.debug(
-                    "Exceedingly short SMILES produced. Will be randomly completed."
-                )
-                for i in range(1, self.n_genes - len(str_list) + 1):
-                    chromosome[-i] = np.random.choice(self.alphabet[-i], size=1)[0]
-            return chromosome
-        else:
-            raise (
-                InvalidInput(
-                    "Starting SMILES is not a list of lists. Partitioning a SMILES string into genes is arbitrary, user has to define the genes."
-                )
-            )

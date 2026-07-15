@@ -12,7 +12,6 @@ from navicatGA.wrappers_selfies import (
     sc2tanimoto_to_target,
     sc2krr,
 )
-from navicatGA.quantum_wrappers_selfies import sc2gap, sc2ehomo, sc2elumo
 
 
 logger = logging.getLogger(__name__)
@@ -37,6 +36,8 @@ def fitness_function_target_property(
         )
 
     if function_number == 9:  # sc2gap homo-lumo gap
+        from navicatGA.quantum_wrappers_selfies import sc2gap
+
         return lambda chromosome: score_modifier(
             sc2gap(chromosome), target, score_modifier_number, parameter
         )
@@ -70,10 +71,16 @@ def fitness_function_selfies(function_number=1):
         return lambda chromosome: sc2mv(chromosome)
 
     if function_number == 7:  # sc2ehomo homo energy
+        from navicatGA.quantum_wrappers_selfies import sc2ehomo
+
         return lambda chromosome: sc2ehomo(chromosome)
 
     if function_number == 8:  # sc2elumo lumo energy
+        from navicatGA.quantum_wrappers_selfies import sc2elumo
+
         return lambda chromosome: sc2elumo(chromosome)
 
     if function_number == 9:  # sc2gap gap
+        from navicatGA.quantum_wrappers_selfies import sc2gap
+
         return lambda chromosome: sc2gap(chromosome)

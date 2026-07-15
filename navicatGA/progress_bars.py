@@ -2,21 +2,10 @@ import datetime
 import logging
 import types
 import numpy as np
-import alive_progress
-from alive_progress import alive_bar
 
-from navicatGA.helpers import get_elapsed_time
+from navicatGA.helpers import get_elapsed_time, GAResult
 
 logger = logging.getLogger(__name__)
-
-if __name__ == "__main__":
-    try:
-        import alive_progress
-        from alive_progress import alive_bar
-
-        print("Monkeypatching the solve method to add progress bars.")
-    except ImportError as m:
-        print(m)
 
 
 def solve_progress(self, niter=None):
@@ -29,6 +18,7 @@ def solve_progress(self, niter=None):
     Parameters:
     :param niter: the number of generations to run
     """
+    from alive_progress import alive_bar
     start_time = datetime.datetime.now()
     if self.mean_fitness_ is None:
         mean_fitness = np.ndarray(shape=(1, 0))
@@ -147,6 +137,16 @@ def solve_progress(self, niter=None):
 
         if self.show_stats:
             self.print_stats(time_str)
+
+        return GAResult(
+            best_individual=self.best_individual_,
+            best_fitness=self.best_fitness_,
+            best_pfitness=self.best_pfitness_,
+            population=self.population_,
+            fitness=self.fitness_,
+            generations=self.generations_,
+            runtime=self.runtime_,
+        )
 
 
 def set_progress_bars(self):

@@ -1,4 +1,24 @@
+from collections import namedtuple
+
 import numpy as np
+
+
+# Convenience return value for GenAlgSolver.solve(): everything solve()
+# already stores as solver.best_individual_/solver.best_fitness_/etc,
+# bundled into one object so callers don't have to pull attributes off the
+# solver by hand.
+GAResult = namedtuple(
+    "GAResult",
+    [
+        "best_individual",
+        "best_fitness",
+        "best_pfitness",
+        "population",
+        "fitness",
+        "generations",
+        "runtime",
+    ],
+)
 
 
 def get_input_dimensions(lst, n_dim=0):

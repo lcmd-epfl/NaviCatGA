@@ -10,35 +10,40 @@ logger = logging.getLogger(__name__)
 
 
 class FloatGenAlgSolver(GenAlgSolver):
+    # Defaults for the GenAlgSolver (base-class) parameters not otherwise
+    # named below; override any of them via **base_kwargs, e.g.
+    # FloatGenAlgSolver(..., pop_size=50, lru_cache=True).
+    _BASE_DEFAULTS = dict(
+        max_gen=500,
+        max_conv=100,
+        pop_size=100,
+        mutation_rate=0.05,
+        selection_rate=0.25,
+        selection_strategy="roulette_wheel",
+        n_crossover_points=1,
+        random_state=None,
+        lru_cache=False,
+        scalarizer=None,
+        prune_duplicates=False,
+        verbose=True,
+        show_stats=False,
+        plot_results=False,
+        to_stdout=True,
+        to_file=True,
+        logger_file="output.log",
+        logger_level="INFO",
+        progress_bars=False,
+        problem_type="float",
+    )
+
     def __init__(
         self,
         chromosome_to_array=make_array(),
         variables_limits=None,
-        # Parameters for base class
         n_genes: int = 1,
         fitness_function=None,
-        max_gen: int = 500,
-        max_conv: int = 100,
-        pop_size: int = 100,
-        mutation_rate: float = 0.05,
-        selection_rate: float = 0.25,
-        selection_strategy: str = "roulette-wheel",
         excluded_genes: Sequence = None,
-        n_crossover_points: int = 1,
-        random_state: int = None,
-        lru_cache: bool = False,
-        scalarizer=None,
-        prune_duplicates=False,
-        # Verbosity and printing options
-        verbose: bool = True,
-        show_stats: bool = False,
-        plot_results: bool = False,
-        to_stdout: bool = True,
-        to_file: bool = True,
-        logger_file: str = "output.log",
-        logger_level: str = "INFO",
-        progress_bars: bool = False,
-        problem_type="float",
+        **base_kwargs,
     ):
         """Example child solver class for the GA.
         This child solver class is an example meant for a particular purpose,
@@ -51,6 +56,7 @@ class FloatGenAlgSolver(GenAlgSolver):
         :type chromosome_to_array: object
         :param variables_limits: limits for each variable [(x1_min, x1_max), (x2_min, x2_max), ...]
         :type variables_limits: tuple, list of tuples
+        :param base_kwargs: any GenAlgSolver parameter (max_gen, pop_size, mutation_rate, ...); see GenAlgSolver for the full list and defaults
         """
 
         GenAlgSolver.__init__(
@@ -58,22 +64,8 @@ class FloatGenAlgSolver(GenAlgSolver):
             fitness_function=fitness_function,
             assembler=chromosome_to_array,
             n_genes=n_genes,
-            max_gen=max_gen,
-            pop_size=pop_size,
-            mutation_rate=mutation_rate,
-            selection_rate=selection_rate,
-            selection_strategy=selection_strategy,
-            verbose=verbose,
-            show_stats=show_stats,
-            plot_results=plot_results,
             excluded_genes=excluded_genes,
-            n_crossover_points=n_crossover_points,
-            random_state=random_state,
-            logger_file=logger_file,
-            logger_level=logger_level,
-            to_stdout=to_stdout,
-            to_file=to_file,
-            progress_bars=progress_bars,
+            **{**self._BASE_DEFAULTS, **base_kwargs},
         )
 
         if not variables_limits:
@@ -84,7 +76,6 @@ class FloatGenAlgSolver(GenAlgSolver):
             variables_limits = [variables_limits for _ in range(n_genes)]
 
         self.variables_limits = variables_limits
-        self.problem_type = problem_type
 
     def initialize_population(self):
         """

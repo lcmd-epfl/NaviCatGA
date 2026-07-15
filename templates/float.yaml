@@ -1,0 +1,50 @@
+# Template for a FloatGenAlgSolver run (continuous-vector optimization).
+# Build with: navicatGA.config.build_solver_from_yaml("templates/float.yaml")
+#
+# References below use 'module.path:attr' (resolved via importlib), or
+# 'module.path:attr()' to call a zero-arg factory and use its return value.
+
+solver:
+  type: float
+
+  # Required. fn(assembled_array) -> float (or a tuple if using a scalarizer).
+  fitness_function: your_project.fitness:your_fitness_function
+
+  # Optional. Defaults to make_array() (chromosome passed through as-is).
+  # chromosome_to_array: your_project.assemblers:your_array_builder
+
+  # Optional multi-objective scalarizer (needs fitness_function to return a
+  # tuple). Any class with a .scalarize() method works, not just chimera.
+  # scalarizer:
+  #   class: chimera:Chimera
+  #   kwargs:
+  #     tolerances: [0.25, 0.1, 0.25]
+  #     goals: [max, max, min]     # one per fitness_function output
+
+  params:
+    n_genes: 6                     # required: number of float variables
+    # variables_limits: [0, 1]     # (min, max) shared by all genes, or a
+                                    # list of (min, max) pairs, one per gene
+
+    # --- GA mechanics (defaults shown) ---
+    pop_size: 100
+    mutation_rate: 0.05
+    selection_rate: 0.25
+    selection_strategy: roulette_wheel   # roulette_wheel | tournament | two_by_two | random | boltzmann
+    n_crossover_points: 1
+    max_gen: 500
+    max_conv: 100                  # generations with unchanged best fitness before stopping early
+    random_state: null
+    # excluded_genes: [0]          # gene indices to hold fixed
+    lru_cache: false               # requires assembled_array output to be hashable
+    prune_duplicates: false
+
+    # --- logging / output ---
+    verbose: true
+    show_stats: false
+    plot_results: false
+    to_stdout: true
+    to_file: true
+    logger_file: output.log
+    logger_level: INFO
+    progress_bars: false           # needs alive-progress installed

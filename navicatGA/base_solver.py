@@ -10,7 +10,7 @@ from navicatGA.exceptions import NoFitnessFunction, InvalidInput
 from navicatGA.exception_messages import exception_messages
 from navicatGA.progress_bars import set_progress_bars
 from navicatGA.cache import set_lru_cache
-from navicatGA.helpers import get_elapsed_time
+from navicatGA.helpers import get_elapsed_time, GAResult
 from navicatGA.logger import configure_logger, close_logger
 
 
@@ -333,6 +333,16 @@ class GenAlgSolver:
         if self.show_stats:
             self.print_stats(time_str)
 
+        return GAResult(
+            best_individual=self.best_individual_,
+            best_fitness=self.best_fitness_,
+            best_pfitness=self.best_pfitness_,
+            population=self.population_,
+            fitness=self.fitness_,
+            generations=self.generations_,
+            runtime=self.runtime_,
+        )
+
     def calculate_fitness(self, population):
         """
         Calculates the fitness of the population using the defined fitness function.
@@ -529,7 +539,7 @@ class GenAlgSolver:
             self.n_crossover_points,
             replace=False,
         )
-        return np.asarray(crossover_points).sort()
+        return np.sort(crossover_points)
 
     @staticmethod
     def plot_fitness_results(mean_fitness, max_fitness, iterations: int):

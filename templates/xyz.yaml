@@ -1,0 +1,54 @@
+# Template for an XYZGenAlgSolver run (3D structures via AaronTools.py
+# substituent/ligand swaps). Requires AaronTools installed - navicatGA.config
+# only registers this solver type if AaronTools imports successfully.
+# Build with: navicatGA.config.build_solver_from_yaml("templates/xyz.yaml", alphabet_list=...)
+#
+# References below use 'module.path:attr' (resolved via importlib), or
+# 'module.path:attr()' to call a zero-arg factory and use its return value.
+
+solver:
+  type: xyz
+
+  # Required. fn(AaronTools_geometry) -> float (or a tuple if using a scalarizer).
+  fitness_function: your_project.fitness:your_fitness_function
+
+  # Optional. Defaults to random_merge_xyz().
+  # chromosome_to_xyz: your_project.assemblers:your_xyz_builder
+
+  # Optional multi-objective scalarizer (needs fitness_function to return a
+  # tuple). Any class with a .scalarize() method works, not just chimera.
+  # scalarizer:
+  #   class: chimera:Chimera
+  #   kwargs:
+  #     tolerances: [0.25, 0.1, 0.25]
+  #     goals: [max, max, min]     # one per fitness_function output
+
+  params:
+    n_genes: 3                     # required: number of chromosome positions
+    # starting_population: [[None]] # list of starting chromosomes (list of lists)
+    starting_random: true          # randomize starting_population from alphabet_list
+    # excluded_genes: [0]          # gene indices to hold fixed
+    max_counter: 10                # retries before falling back to a parent on invalid geometry
+
+    # --- GA mechanics (defaults shown - note the smaller pop_size/max_gen,
+    # since XYZ fitness evaluations are typically much more expensive) ---
+    pop_size: 5
+    mutation_rate: 0.10
+    selection_rate: 0.25
+    selection_strategy: tournament  # roulette_wheel | tournament | two_by_two | random | boltzmann
+    n_crossover_points: 1
+    max_gen: 15
+    max_conv: 100                  # generations with unchanged best fitness before stopping early
+    random_state: null
+    lru_cache: false               # requires fitness_function+assembler output to be hashable
+    prune_duplicates: false
+
+    # --- logging / output ---
+    verbose: true
+    show_stats: false
+    plot_results: false
+    to_stdout: true
+    to_file: true
+    logger_file: output.log
+    logger_level: INFO
+    progress_bars: false           # needs alive-progress installed
