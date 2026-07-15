@@ -2,9 +2,10 @@
 # Build with: navicatGA.config.build_solver_from_yaml("templates/smiles.yaml", alphabet_list=...)
 #
 # alphabet_list is intentionally NOT set here: it usually comes from a
-# database/file read at runtime (see ga_flp/launcher.py for a worked
-# example), so pass it as an extra kwarg to build_solver_from_yaml/build_solver
-# rather than trying to express it statically in YAML.
+# database/file read at runtime (see docs/tutorials/07_custom_solver.md for
+# a worked example), so pass it as an extra kwarg to
+# build_solver_from_yaml/build_solver rather than trying to express it
+# statically in YAML.
 #
 # References below use 'module.path:attr' (resolved via importlib), or
 # 'module.path:attr()' to call a zero-arg factory and use its return value.

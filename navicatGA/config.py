@@ -8,6 +8,7 @@ built from a project-specific database) stays the caller's job and is
 passed in as an extra kwarg to build_solver().
 """
 
+import ast
 import importlib
 
 import yaml
@@ -48,22 +49,29 @@ def load_yaml(path):
 def resolve(dotted_path: str):
     """Import 'package.module:attr' and return the attribute.
 
-    Several of navicatGA's own example assemblers are factories rather than
-    plain callables (e.g. concatenate_list(), chromosome_to_smiles()) - append
-    '()' to the reference to call the resolved attribute with no arguments
-    and use its return value instead, e.g.
-    'navicatGA.wrappers_smiles:chromosome_to_smiles()'.
+    Several of navicatGA's own example assemblers/fitness functions are
+    factories rather than plain callables (e.g. concatenate_list(),
+    fitness_function_selfies(1)) - append a literal '(...)' call to the
+    reference to call the resolved attribute and use its return value
+    instead, e.g. 'navicatGA.fitness_functions_selfies:fitness_function_selfies(1)'
+    or 'navicatGA.wrappers_smiles:chromosome_to_smiles()'. Only literal
+    positional/keyword arguments are supported (numbers, strings, lists,
+    dicts, ... - anything ast.literal_eval accepts), not arbitrary
+    expressions.
     """
-    call = dotted_path.endswith("()")
-    if call:
-        dotted_path = dotted_path[:-2]
-    module_path, _, attr = dotted_path.partition(":")
+    ref = dotted_path
+    call_args, call_kwargs = None, None
+    if ref.endswith(")") and "(" in ref:
+        ref, _, call_str = ref.partition("(")
+        call_node = ast.parse(f"_({call_str}", mode="eval").body
+        call_args = [ast.literal_eval(a) for a in call_node.args]
+        call_kwargs = {kw.arg: ast.literal_eval(kw.value) for kw in call_node.keywords}
+
+    module_path, _, attr = ref.partition(":")
     if not attr:
-        raise ValueError(
-            f"'{dotted_path}' is not a 'module.path:attr' reference."
-        )
+        raise ValueError(f"'{dotted_path}' is not a 'module.path:attr' reference.")
     obj = getattr(importlib.import_module(module_path), attr)
-    return obj() if call else obj
+    return obj(*call_args, **call_kwargs) if call_args is not None else obj
 
 
 def _build_scalarizer(spec):

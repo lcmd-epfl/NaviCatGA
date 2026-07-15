@@ -56,6 +56,15 @@ rm $(cat files.txt)
 
 The documentation is available [here](https://navicatga.readthedocs.io/).
 
+Built with Sphinx + [Furo](https://github.com/pradyunsg/furo) + [MyST](https://myst-parser.readthedocs.io/) + [sphinx-autoapi](https://github.com/readthedocs/sphinx-autoapi) (auto-generated API reference, no hand-maintained `.rst` module list). To build locally:
+
+```bash
+pip install -r docs/requirements.txt
+sphinx-build -b html docs/ docs/_build/html
+```
+
+Then open `docs/_build/html/index.html`.
+
 ## Config-driven usage [↑](#config-driven-usage)
 
 Every GA run needs three ingredients: a **solver** (which representation), an **assembler** (chromosome → the object being scored, e.g. `chromosome_to_smiles`) and a **fitness function** (that object → a score). Wiring these up by hand means a Python launcher script that hardcodes the solver constructor call, which is what most downstream projects end up doing.
@@ -88,14 +97,14 @@ solver:
     # ...any other GenAlgSolver/solver-specific parameter
 ```
 
-Values that are computed at runtime rather than static (e.g. an alphabet read from a database) aren't expressible in YAML — build them in the launcher script and pass them as extra kwargs, which override/extend the YAML's `params` block:
+Values that are computed at runtime rather than static (e.g. an alphabet read from a database) aren't expressible in YAML. Build them in the launcher script and pass them as extra kwargs, which override/extend the YAML's `params` block:
 
 ```python
 alphabet_list = my_alphabet_builder(...)
 solver, config = build_solver_from_yaml("my_project/config.yaml", alphabet_list=alphabet_list)
 ```
 
-`templates/{float,smiles,selfies,xyz}.yaml` are starting-point configs listing every parameter each solver accepts, with the library defaults filled in; `templates/launcher.py` is a generic runner and `templates/assembler_and_fitness.py` is a stub `assemble()`/`score()` pair to fill in — copy all three into a new project and fill in the blanks. See `templates/README.md`. `ga_flp/` (a downstream consumer under this repo) is a full worked example of the launcher → YAML → assembler/fitness pattern, filled in: `ga_flp/config/config.yaml` + `ga_flp/launcher.py`.
+`templates/{float,smiles,selfies,xyz}.yaml` are starting-point configs listing every parameter each solver accepts, with the library defaults filled in; `templates/launcher.py` is a generic runner and `templates/assembler_and_fitness.py` is a stub `assemble()`/`score()` pair to fill in. Copy all three into a new project and fill in the blanks. See `templates/README.md`, or `docs/tutorials/07_custom_solver.md` for a full worked example of writing an assembler/fitness function/launcher from scratch.
 
 ## Examples [↑](#examples)
 

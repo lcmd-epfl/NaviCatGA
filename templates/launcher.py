@@ -3,10 +3,10 @@
 
 Copy this into your project alongside your own config.yaml (start from
 templates/{float,smiles,selfies,xyz}.yaml) and assembler/fitness module
-(start from templates/assembler_and_fitness.py), then adjust to taste - the
-things ga_flp/launcher.py adds on top (per-cycle logging, output files,
-loading an external model) are project-specific and belong in your copy,
-not here.
+(start from templates/assembler_and_fitness.py), then adjust to taste -
+anything project-specific (per-cycle logging, output files, loading an
+external model) belongs in your copy, not here. See
+docs/tutorials/07_custom_solver.md for a full worked example.
 """
 import argparse
 
@@ -23,7 +23,7 @@ def main():
         type=int,
         default=1,
         help="Number of solve() calls; >1 runs one generation at a time so "
-        "you can inspect/log progress between cycles (see ga_flp/launcher.py).",
+        "you can inspect/log progress between cycles.",
     )
     args = parser.parse_args()
 
