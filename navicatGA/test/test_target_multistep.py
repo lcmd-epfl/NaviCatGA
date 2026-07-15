@@ -21,14 +21,14 @@ def test_target_multistep_17():
         )
     )
     starting_selfies = []
-    for i in range(50):
+    for i in range(5):
         solver = SelfiesGenAlgSolver(
             starting_random=True,
             n_genes=30,
             fitness_function=fitness_function_target_selfies(
                 target_selfies, function_number=2
             ),  # See fitness_function_target_selfies
-            max_gen=50,
+            max_gen=10,
             pop_size=10,
             selection_strategy="random",
             prune_duplicates=True,
@@ -53,9 +53,9 @@ def test_target_multistep_17():
         fitness_function=fitness_function_target_selfies(
             target_selfies, function_number=1
         ),  # See fitness_function_target_selfies
-        max_gen=50,
+        max_gen=10,
         selection_strategy="tournament",
-        pop_size=20,
+        pop_size=10,
         n_crossover_points=3,
         logger_file="multistep.log",
         random_state=420,

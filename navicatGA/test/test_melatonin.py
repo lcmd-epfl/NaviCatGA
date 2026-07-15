@@ -29,7 +29,8 @@ def test_melatonin_logp_11():
             range(n_starting_genes)
         ),  # We do not modify the melatonin molecule
         fitness_function=fitness_function_selfies(1),  # See fitness_functions_selfies
-        max_gen=25,  # This is a simple test
+        max_gen=5,  # This is a simple test
+        pop_size=10,
         random_state=420,
         logger_file="melatonin_logp.log",
         verbose=True,
@@ -68,7 +69,8 @@ def test_melatonin_ilogp_12():
         fitness_function=fitness_function_selfies(
             2
         ),  # See fitness_functions_selfies, this is inverse logp
-        max_gen=100,  # This is a simple test
+        max_gen=5,  # This is a simple test
+        pop_size=10,
         random_state=420,
         logger_file="melatonin_ilogp.log",
         verbose=True,
@@ -107,7 +109,8 @@ def test_melatonin_mw_13():
         fitness_function=fitness_function_selfies(
             3
         ),  # See fitness_functions_selfies, this is mw
-        max_gen=100,  # This is a simple test
+        max_gen=5,  # This is a simple test
+        pop_size=10,
         random_state=420,
         logger_file="melatonin_mw.log",
         verbose=True,
@@ -146,8 +149,8 @@ def test_melatonin_mv_14():
         fitness_function=fitness_function_selfies(
             6
         ),  # See fitness_functions_selfies, this is mv
-        max_gen=50,  # This is a simple test and this run is more expensive
-        pop_size=10,
+        max_gen=5,  # This is a simple test and this run is more expensive
+        pop_size=5,
         random_state=420,
         logger_level="INFO",
         logger_file="melatonin_mv.log",

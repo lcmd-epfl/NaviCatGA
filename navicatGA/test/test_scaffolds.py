@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 import os
+import pytest
+
+pytest.importorskip("pyscf")
+
 from navicatGA.xyz_solver import XYZGenAlgSolver
 from navicatGA.chemistry_xyz import get_alphabet_from_path, get_default_alphabet
 from navicatGA.wrappers_xyz import geom2dihedral, geom2sub_sterimol, chromosome_to_xyz

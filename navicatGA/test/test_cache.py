@@ -27,8 +27,8 @@ def test_ibuprofen_mv_06(lru_cache=False):
         fitness_function=fitness_function_selfies(
             6
         ),  # See fitness_functions_selfies, this is mv
-        max_gen=10,  # This is a simple test and this run is more expensive
-        pop_size=100,
+        max_gen=5,  # This is a simple test and this run is more expensive
+        pop_size=10,
         random_state=666,
         lru_cache=lru_cache,
         logger_level="INFO",

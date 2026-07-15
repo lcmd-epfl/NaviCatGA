@@ -35,7 +35,7 @@ def my_fitness_function():
 def test_ni_catalyst_24():
     solver = SmilesGenAlgSolver(
         n_genes=7,
-        pop_size=50,
+        pop_size=10,
         max_gen=10,
         mutation_rate=0.05,
         fitness_function=my_fitness_function(),

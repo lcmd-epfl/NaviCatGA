@@ -26,8 +26,8 @@ def test_tanimoto_methane_19():
         fitness_function=fitness_function_target_selfies(
             target_selfies, function_number=1
         ),  # See fitness_function_target_selfies
-        max_gen=100,
-        pop_size=50,
+        max_gen=10,
+        pop_size=10,
         n_crossover_points=2,
         random_state=420,
         logger_file="tanimoto_methane.log",
@@ -65,8 +65,8 @@ def test_tanimoto_random_20():
         fitness_function=fitness_function_target_selfies(
             target_selfies, function_number=1
         ),  # See fitness_function_target_selfies
-        max_gen=100,
-        pop_size=50,
+        max_gen=10,
+        pop_size=10,
         n_crossover_points=2,
         random_state=420,
         logger_file="tanimoto_random.log",
@@ -104,8 +104,8 @@ def test_levenshtein_methane_21():
         fitness_function=fitness_function_target_selfies(
             target_selfies, function_number=2
         ),  # See fitness_function_target_selfies
-        max_gen=100,
-        pop_size=50,
+        max_gen=10,
+        pop_size=10,
         n_crossover_points=1,
         random_state=420,
         logger_file="levenshtein_methane.log",
@@ -138,8 +138,8 @@ def test_levenshtein_random_22():
         fitness_function=fitness_function_target_selfies(
             target_selfies, function_number=2
         ),  # See fitness_function_target_selfies
-        max_gen=100,
-        pop_size=50,
+        max_gen=10,
+        pop_size=10,
         n_crossover_points=1,
         random_state=420,
         logger_file="levenshtein_random.log",

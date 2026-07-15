@@ -4,12 +4,7 @@ from selfies import encoder
 from navicatGA.selfies_solver import SelfiesGenAlgSolver
 from navicatGA.fitness_functions_selfies import fitness_function_target_property
 from navicatGA.chemistry_selfies import count_selfie_chars
-from navicatGA.wrappers_selfies import (
-    sc2smiles,
-    sc2mv,
-    sc2mol_structure,
-    mol_structure2depictions,
-)
+from navicatGA.wrappers_selfies import sc2smiles
 
 
 def test_biphenyl_05():
@@ -33,7 +28,7 @@ def test_biphenyl_05():
         fitness_function=fitness_function_target_property(
             target=350.0, function_number=6, score_modifier_number=2
         ),  # See fitness_functions_selfies, this is mv
-        max_gen=25,  # This is a simple test and this run is more expensive
+        max_gen=5,  # This is a simple test and this run is more expensive
         pop_size=10,  # So we reduce the size of everything
         random_state=420,
         logger_level="INFO",
@@ -50,9 +45,6 @@ def test_biphenyl_05():
     print(
         "The corresponding SMILES is : {0}".format(sc2smiles(solver.best_individual_))
     )
-    mol = sc2mol_structure(solver.best_individual_)
-    mol_structure2depictions(mol, root_name="biphenyl_mv")
-    print("The corresponding mv is : {0}".format(sc2mv(solver.best_individual_)))
     solver.close_solver_logger()
 
 

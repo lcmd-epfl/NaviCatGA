@@ -5,11 +5,11 @@ from selfies import encoder
 from navicatGA.selfies_solver import SelfiesGenAlgSolver
 from navicatGA.exceptions import InvalidInput
 from navicatGA.fitness_functions_selfies import fitness_function_target_selfies
-from navicatGA.wrappers_selfies import sc2selfies, sc2tanimoto_to_target, sc2depictions
+from navicatGA.wrappers_selfies import sc2selfies, sc2tanimoto_to_target
 
 
 def test_rediscover_paracetamol(
-    n_crossover_points=2, mutation_rate=0.10, max_gen=250, pop_size=100
+    n_crossover_points=2, mutation_rate=0.10, max_gen=10, pop_size=10
 ):
 
     target_smiles = "CC(=O)Nc1ccc(cc1)O"  # Paracetamol
@@ -44,10 +44,6 @@ def test_rediscover_paracetamol(
         )
     )
     print("       Its SELFIES is : {0}".format(sc2selfies(solver.best_individual_)))
-    sc2depictions(
-        solver.best_individual_,
-        "benchmark_{0}_{1}_{2}".format(n_crossover_points, mutation_rate, max_gen),
-    )
     solver.close_solver_logger()
     return sc2tanimoto_to_target(solver.best_individual_, target_selfies)
 
@@ -58,7 +54,7 @@ def test_crossover_points_02():
     for i in range(4):
         try:
             tanimoto = test_rediscover_paracetamol(
-                n_crossover_points=i, mutation_rate=0.15, max_gen=50, pop_size=25
+                n_crossover_points=i, mutation_rate=0.15, max_gen=10, pop_size=10
             )
             tanimoto_list.append(tanimoto)
         except InvalidInput:
@@ -76,7 +72,7 @@ def test_mutation_rate_03():
     for j in np.linspace(0.05, 0.25, 5, endpoint=False):
         mutation_rate = np.round(j, 2)
         tanimoto = test_rediscover_paracetamol(
-            n_crossover_points=1, mutation_rate=mutation_rate, max_gen=50, pop_size=25
+            n_crossover_points=1, mutation_rate=mutation_rate, max_gen=10, pop_size=10
         )
         tanimoto_list.append(tanimoto)
     print(

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import pytest
+
+pytest.importorskip("pyscf")
+
 from selfies import encoder
 from navicatGA.selfies_solver import SelfiesGenAlgSolver
 from navicatGA.chemistry_selfies import count_selfie_chars, get_selfie_chars

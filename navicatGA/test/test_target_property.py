@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import pytest
+
+pytest.importorskip("pyscf")  # function_number=9 below needs the pyscf-based homo-lumo gap
+
 from navicatGA.selfies_solver import SelfiesGenAlgSolver
 from navicatGA.fitness_functions_selfies import fitness_function_target_property
 
@@ -9,7 +13,7 @@ def test_target_property_18():
     solver = SelfiesGenAlgSolver(
         n_genes=4,
         pop_size=10,
-        max_gen=25,
+        max_gen=10,
         fitness_function=fitness_function_target_property(
             function_number=9, target=0.1
         ),  # homo-lumo gap

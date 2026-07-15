@@ -177,7 +177,9 @@ def get_structure_ff(mol, n_confs=5):
         except:
             logger.warning("Method 1 failed to generate conformations.")
         else:
-            if all([conformer_id >= 0 for conformer_id in conformer_ids]):
+            if conformer_ids and all(
+                conformer_id >= 0 for conformer_id in conformer_ids
+            ):
                 coordinates_added = True
 
     if not coordinates_added:
@@ -190,7 +192,9 @@ def get_structure_ff(mol, n_confs=5):
         except:
             logger.warning("Method 2 failed to generate conformations.")
         else:
-            if all([conformer_id >= 0 for conformer_id in conformer_ids]):
+            if conformer_ids and all(
+                conformer_id >= 0 for conformer_id in conformer_ids
+            ):
                 coordinates_added = True
 
     if not coordinates_added:
@@ -207,7 +211,9 @@ def get_structure_ff(mol, n_confs=5):
         except:
             logger.warning("Method 3 failed to generate conformations.")
         else:
-            if all([conformer_id >= 0 for conformer_id in conformer_ids]):
+            if conformer_ids and all(
+                conformer_id >= 0 for conformer_id in conformer_ids
+            ):
                 coordinates_added = True
         finally:
             if not coordinates_added:

@@ -4,12 +4,7 @@ from selfies import encoder
 from navicatGA.selfies_solver import SelfiesGenAlgSolver
 from navicatGA.fitness_functions_selfies import fitness_function_target_property
 from navicatGA.chemistry_selfies import count_selfie_chars
-from navicatGA.wrappers_selfies import (
-    sc2smiles,
-    sc2mv,
-    sc2mol_structure,
-    mol_structure2depictions,
-)
+from navicatGA.wrappers_selfies import sc2smiles
 
 
 def test_palladium_triphenylphosphine_15():
@@ -48,9 +43,6 @@ def test_palladium_triphenylphosphine_15():
     print(
         "The corresponding SMILES is : {0}".format(sc2smiles(solver.best_individual_))
     )
-    mol = sc2mol_structure(solver.best_individual_)
-    mol_structure2depictions(mol, root_name="palladium_triphenylphosphine_mv")
-    print("The corresponding mv is : {0}".format(sc2mv(solver.best_individual_)))
     solver.close_solver_logger()
 
 

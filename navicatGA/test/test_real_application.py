@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import pytest
+
+pytest.importorskip("pyscf")
+
 from navicatGA.selfies_solver import SelfiesGenAlgSolver
 from navicatGA.score_modifiers import score_modifier
 from navicatGA.wrappers_selfies import (
