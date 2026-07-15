@@ -100,3 +100,4 @@ dependencies:
     - h5py==3.2.1
     - jinja2==3.0.1
     - matter-chimera==1.0
+    - numpy<2
