@@ -1,0 +1,101 @@
+navicatGA.wrappers_smiles
+=========================
+
+.. py:module:: navicatGA.wrappers_smiles
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.wrappers_smiles.lg
+   navicatGA.wrappers_smiles.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.wrappers_smiles.check_smiles_chars
+   navicatGA.wrappers_smiles.chromosome_to_smiles
+   navicatGA.wrappers_smiles.mol_structure2cm
+   navicatGA.wrappers_smiles.mol_structure2depictions
+   navicatGA.wrappers_smiles.sc2cm
+   navicatGA.wrappers_smiles.sc2depictions
+   navicatGA.wrappers_smiles.sc2ilogp
+   navicatGA.wrappers_smiles.sc2logp
+   navicatGA.wrappers_smiles.sc2mol_structure
+   navicatGA.wrappers_smiles.sc2mv
+   navicatGA.wrappers_smiles.sc2mw
+   navicatGA.wrappers_smiles.sc2mwilogp
+   navicatGA.wrappers_smiles.sc2nmw
+   navicatGA.wrappers_smiles.sc2smiles
+   navicatGA.wrappers_smiles.smiles2logp
+   navicatGA.wrappers_smiles.smiles2mol_structure
+   navicatGA.wrappers_smiles.smiles2xyz
+
+
+Module Contents
+---------------
+
+.. py:function:: check_smiles_chars(chromosome)
+
+   Checks if a chromosome corresponds to a proper SMILES.
+
+
+.. py:function:: chromosome_to_smiles()
+
+   Wrapper function for simplicity.
+
+
+.. py:function:: mol_structure2cm(mol)
+
+.. py:function:: mol_structure2depictions(mol_structure, root_name='output')
+
+   Generate 2D and 3D depictions from an rdkit.mol object with 3D coordinates.
+
+
+.. py:function:: sc2cm(chromosome, order='C')
+
+.. py:function:: sc2depictions(chromosome, root_name='output', lot=0)
+
+   Generate 2D and 3D depictions from a chromosome.
+
+
+.. py:function:: sc2ilogp(chromosome)
+
+.. py:function:: sc2logp(chromosome)
+
+.. py:function:: sc2mol_structure(chromosome, lot=0)
+
+   Generates a rdkit.mol object with 3D coordinates from a list of selfies characters.
+
+
+.. py:function:: sc2mv(chromosome)
+
+.. py:function:: sc2mw(chromosome)
+
+.. py:function:: sc2mwilogp(chromosome)
+
+.. py:function:: sc2nmw(chromosome)
+
+.. py:function:: sc2smiles(chromosome)
+
+   Generate a SMILES string from a list of SMILES characters. To be customized.
+
+
+.. py:function:: smiles2logp(smiles)
+
+.. py:function:: smiles2mol_structure(smiles, lot=0)
+
+   Generates a rdkit.mol object with 3D coordinates from a SMILES.
+
+
+.. py:function:: smiles2xyz(smiles, outname='output', lot=0)
+
+.. py:data:: lg
+
+.. py:data:: logger
+

@@ -1,0 +1,49 @@
+navicatGA.cache
+===============
+
+.. py:module:: navicatGA.cache
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.cache.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.cache.calculate_fitness_cache
+   navicatGA.cache.calculate_one_fitness_cache
+   navicatGA.cache.set_lru_cache
+
+
+Module Contents
+---------------
+
+.. py:function:: calculate_fitness_cache(self, population)
+
+   Calculates the fitness of the population using a hashable fitness function.
+
+   Parameters:
+   :param population: population state at a given iteration
+   :return: the fitness of the current population
+
+
+.. py:function:: calculate_one_fitness_cache(hashable, fitness_function)
+
+.. py:function:: set_lru_cache(self)
+
+   Monkeypatches the calculate_fitness method of the base solver class in order to use a lru cache.
+   If a specific wrapper exists for a given solver, it will try to use the unique expression of genes
+   given by that wrapper to generate a hashable fitness function. If not, it will require
+   a hashable fitness function given by the user AND expect the given fitness_function to generate
+   a unique hash from a gene.
+
+
+.. py:data:: logger
+

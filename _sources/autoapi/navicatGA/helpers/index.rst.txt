@@ -1,0 +1,71 @@
+navicatGA.helpers
+=================
+
+.. py:module:: navicatGA.helpers
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   navicatGA.helpers.GAResult
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.helpers.check_error
+   navicatGA.helpers.concatenate_list
+   navicatGA.helpers.get_elapsed_time
+   navicatGA.helpers.get_input_dimensions
+   navicatGA.helpers.make_array
+
+
+Module Contents
+---------------
+
+.. py:class:: GAResult
+
+   Bases: :py:obj:`tuple`
+
+
+   .. py:attribute:: best_fitness
+
+
+   .. py:attribute:: best_individual
+
+
+   .. py:attribute:: best_pfitness
+
+
+   .. py:attribute:: fitness
+
+
+   .. py:attribute:: generations
+
+
+   .. py:attribute:: population
+
+
+   .. py:attribute:: runtime
+
+
+.. py:function:: check_error(func, *args, **kw)
+
+.. py:function:: concatenate_list()
+
+   Default chromosome manipulator: concatenates all elements of a list.
+
+
+.. py:function:: get_elapsed_time(start_time, end_time)
+
+.. py:function:: get_input_dimensions(lst, n_dim=0)
+
+.. py:function:: make_array()
+
+   Default chromosome manipulator: turns list into array.
+
+

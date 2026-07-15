@@ -1,0 +1,32 @@
+navicatGA.fitness_functions_xyz
+===============================
+
+.. py:module:: navicatGA.fitness_functions_xyz
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.fitness_functions_xyz.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.fitness_functions_xyz.fitness_function_target_property
+   navicatGA.fitness_functions_xyz.fitness_function_xyz
+
+
+Module Contents
+---------------
+
+.. py:function:: fitness_function_target_property(target, function_number=1, score_modifier_number=1, parameter=1)
+
+.. py:function:: fitness_function_xyz(function_number=1)
+
+.. py:data:: logger
+

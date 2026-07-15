@@ -1,0 +1,70 @@
+navicatGA.config
+================
+
+.. py:module:: navicatGA.config
+
+.. autoapi-nested-parse::
+
+   Build a GenAlgSolver from a YAML/dict config instead of hand-wiring
+   constructor calls in every downstream script.
+
+   Only handles what's genuinely declarative: picking the solver class and
+   resolving importable references (assembler, fitness_function, scalarizer)
+   by dotted path. Anything that needs runtime computation (e.g. an alphabet
+   built from a project-specific database) stays the caller's job and is
+   passed in as an extra kwarg to build_solver().
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.config.SOLVERS
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.config.build_solver
+   navicatGA.config.build_solver_from_yaml
+   navicatGA.config.load_yaml
+   navicatGA.config.resolve
+
+
+Module Contents
+---------------
+
+.. py:function:: build_solver(solver_config: dict, **extra_params)
+
+   :param solver_config: the 'solver' block of a config (type, fitness_function,
+       chromosome_to_*, scalarizer, params)
+   :param extra_params: additional/overriding solver kwargs computed at runtime
+       (e.g. alphabet_list), merged on top of solver_config['params']
+   :return: an instantiated, unsolved GenAlgSolver subclass
+
+
+.. py:function:: build_solver_from_yaml(path, **extra_params)
+
+.. py:function:: load_yaml(path)
+
+.. py:function:: resolve(dotted_path: str)
+
+   Import 'package.module:attr' and return the attribute.
+
+   Several of navicatGA's own example assemblers/fitness functions are
+   factories rather than plain callables (e.g. concatenate_list(),
+   fitness_function_selfies(1)) - append a literal '(...)' call to the
+   reference to call the resolved attribute and use its return value
+   instead, e.g. 'navicatGA.fitness_functions_selfies:fitness_function_selfies(1)'
+   or 'navicatGA.wrappers_smiles:chromosome_to_smiles()'. Only literal
+   positional/keyword arguments are supported (numbers, strings, lists,
+   dicts, ... - anything ast.literal_eval accepts), not arbitrary
+   expressions.
+
+
+.. py:data:: SOLVERS
+

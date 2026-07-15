@@ -1,0 +1,136 @@
+navicatGA.alphabet_solver
+=========================
+
+.. py:module:: navicatGA.alphabet_solver
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.alphabet_solver.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   navicatGA.alphabet_solver.AlphabetGenAlgSolver
+
+
+Module Contents
+---------------
+
+.. py:class:: AlphabetGenAlgSolver(n_genes: int, fitness_function=None, assembler=None, max_gen: int = 1000, max_conv: int = 100, pop_size: int = 100, mutation_rate: float = 0.15, selection_rate: float = 0.5, selection_strategy: str = 'roulette_wheel', excluded_genes: Sequence = None, n_crossover_points: int = 1, random_state: int = None, lru_cache: bool = False, scalarizer=None, prune_duplicates=False, verbose: bool = True, show_stats: bool = False, plot_results: bool = False, to_stdout: bool = True, to_file: bool = True, logger_file: str = 'output.log', logger_level: str = 'INFO', progress_bars: bool = False, problem_type: str = 'base')
+
+   Bases: :py:obj:`navicatGA.base_solver.GenAlgSolver`
+
+
+   Shared base for solvers whose chromosome genes are drawn from a
+   per-gene alphabet (SMILES fragments, SELFIES tokens, XYZ fragments).
+
+   Factors out the alphabet/equivalences setup, population init/refill,
+   crossover-point sampling, and mutation logic that
+   SmilesGenAlgSolver/SelfiesGenAlgSolver/XYZGenAlgSolver used to each
+   reimplement independently. Subclasses still own `create_offspring`
+   (crossover behaviour genuinely differs between them) and
+   `write_population` (different depiction backend per representation).
+
+   Base solver class for the GA.
+   Has the core methods and attributes that any GA run will require.
+   However, it lacks a way to create new offspring
+   evaluate fitness, and generate mutations.
+   Those must be defined in a child class.
+
+   Parameters:
+   :param n_genes: number of genes (variables) to have in each chromosome
+   :type n_genes: int
+   :param fitness_function: a fitness function that takes assembler(chromosome) and returns one (or more) fitness scores
+   :type fitness_function: object
+   :param assembler: a function that takes a chromosome and returns an (ideally hashable) object to be evaluated
+   :type assembler: object
+   :param max_gen: maximum number of generations to perform the optimization
+   :type max_gen: int
+   :param max_conv: maximum number of generations with same max fitness until convergence is assumed
+   :type max_conv : int
+   :param pop_size: number of chromosomes in population
+   :type pop_size: int
+   :param mutation_rate: rate at which random mutations occur
+   :type mutation_rate: float
+   :param selection_rate: top percentage of the population to be selected for crossover
+   :type selection_rate: float
+   :param selection_strategy: strategy to use for selection, several available
+   :type selection_strategy: string
+   :param excluded_genes: indices of chromosomes that should not be changed during run
+   :type excluded_genes: optional, array-like
+   :param n_crossover_points: number of slices to make for the crossover
+   :type n_crossover_points: int
+   :param random_state: fixed the random seed for the run
+   :type random_state: int, optional
+   :param lru_cache: whether to use lru_cacheing, which is monkeypatched into the class. Requires that the fitness function is hashable.
+   :type lru_cache: bool
+   :param scalarizer: chimera scalarizer object initialized to work on the results of fitness function
+   :type scalarizer: optional, object with a scalarize method that takes in a population fitness and rescales it
+   :param prune_duplicates: whether to prune duplicates in each generation
+   :type prune_duplicates: bool
+   :param verbose: whether to print iterations status
+   :type verbose: int
+   :param show_stats: whether to print stats at the end
+   :type show_stats: bool
+   :param plot_results: whether to plot results of the run at the end
+   :type plot_results: bool
+   :param to_stdout: whether to write output to stdout
+   :type to_stdout: bool
+   :param to_file: whether to write output to file
+   :type to_file: bool
+   :param logger_file: name of the file where output will be written if to_file is True
+   :type logger_file: string
+   :param progess_bars: whether to monkeypatch progress bars for monitoring run
+   :type progress_bars: bool
+   :param problem_type: passing a simple flag from child class for some in built hashable fitness functions.
+   :type problem_type: string
+
+
+   .. py:method:: chromosomize(str_list)
+
+      Pad or truncate a starting-population entry to conform to n_genes.
+
+
+
+   .. py:method:: get_crossover_points()
+
+      Retrieves random crossover points.
+      :return: a numpy array with the crossover points
+
+
+
+   .. py:method:: initialize_population()
+
+      Initializes the population according to the population size and
+      number of genes, seeding from self.starting_population and
+      optionally randomizing per self.starting_random.
+
+      Returns:
+      :return: a numpy array with initialized population
+
+
+
+   .. py:method:: mutate_population(population, n_mutations)
+
+      Mutates the population by randomizing specific positions of the
+      population individuals, retrying until self.assembler accepts the
+      result or self.max_counter attempts are exhausted.
+
+      :param population: the population at a given iteration
+      :param n_mutations: number of mutations to be performed.
+      :return: the mutated population
+
+
+
+   .. py:method:: refill_population(nrefill=0)
+
+
+.. py:data:: logger
+

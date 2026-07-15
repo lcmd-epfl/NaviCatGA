@@ -1,0 +1,62 @@
+navicatGA.queue_wrappers_xyz
+============================
+
+.. py:module:: navicatGA.queue_wrappers_xyz
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.queue_wrappers_xyz.COORD_THRESHOLD
+   navicatGA.queue_wrappers_xyz.QUEUE_TYPE
+   navicatGA.queue_wrappers_xyz.USER
+   navicatGA.queue_wrappers_xyz.logger
+   navicatGA.queue_wrappers_xyz.queue_env_var
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   navicatGA.queue_wrappers_xyz.FixedSubmitProcess
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.queue_wrappers_xyz.geom2opt
+
+
+Module Contents
+---------------
+
+.. py:class:: FixedSubmitProcess
+
+   Bases: :py:obj:`AaronTools.job_control.SubmitProcess`
+
+
+   This is a lightly modified version of the SubmitProcess class in AaronTools.py.
+
+
+   .. py:method:: submit(wait=False, quiet=True)
+
+
+.. py:function:: geom2opt(geom, lot=2, idtag=0)
+
+.. py:data:: COORD_THRESHOLD
+   :value: 0.2
+
+
+.. py:data:: QUEUE_TYPE
+
+.. py:data:: USER
+
+.. py:data:: logger
+
+.. py:data:: queue_env_var
+

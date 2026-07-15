@@ -1,0 +1,1431 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#"><link rel="search" title="Search" href="search.html">
+        <link rel="prefetch" href="_static/navicatga_logo.png" as="image">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 --><title>Index - NaviCatGA</title>
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">NaviCatGA</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/navicatga_logo.png" alt="Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials/index.html">Tutorials</a><input aria-label="Toggle navigation of Tutorials" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/01_float.html">1. Continuous optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/02_smiles.html">2. SMILES fragment optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/03_selfies.html">3. Editing a real molecule (SELFIES)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/04_config_driven.html">4. Config-driven runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/05_multi_objective.html">5. Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/06_xyz.html">6. 3D structures (XYZ/AaronTools)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/07_custom_solver.html">7. Writing your own assembler, fitness function, and launcher</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="config_templates.html">Configuration Templates</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="autoapi/navicatGA/index.html">navicatGA</a><input aria-label="Toggle navigation of navicatGA" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/alphabet_solver/index.html">navicatGA.alphabet_solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/base_solver/index.html">navicatGA.base_solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/cache/index.html">navicatGA.cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/chemistry_selfies/index.html">navicatGA.chemistry_selfies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/chemistry_smiles/index.html">navicatGA.chemistry_smiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/chemistry_xyz/index.html">navicatGA.chemistry_xyz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/config/index.html">navicatGA.config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/exception_messages/index.html">navicatGA.exception_messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/exceptions/index.html">navicatGA.exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/fitness_functions_float/index.html">navicatGA.fitness_functions_float</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/fitness_functions_selfies/index.html">navicatGA.fitness_functions_selfies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/fitness_functions_xyz/index.html">navicatGA.fitness_functions_xyz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/float_solver/index.html">navicatGA.float_solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/helpers/index.html">navicatGA.helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/logger/index.html">navicatGA.logger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/progress_bars/index.html">navicatGA.progress_bars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/quantum_wrappers_selfies/index.html">navicatGA.quantum_wrappers_selfies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/quantum_wrappers_xyz/index.html">navicatGA.quantum_wrappers_xyz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/queue_wrappers_xyz/index.html">navicatGA.queue_wrappers_xyz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/score_modifiers/index.html">navicatGA.score_modifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/selfies_solver/index.html">navicatGA.selfies_solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/smiles_solver/index.html">navicatGA.smiles_solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/timeout/index.html">navicatGA.timeout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/wrappers_selfies/index.html">navicatGA.wrappers_selfies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/wrappers_smiles/index.html">navicatGA.wrappers_smiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/wrappers_xyz/index.html">navicatGA.wrappers_xyz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoapi/navicatGA/xyz_solver/index.html">navicatGA.xyz_solver</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          
+<section class="genindex-section">
+  <h1 id="index">Index</h1>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#O"><strong>O</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#Q"><strong>Q</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#V"><strong>V</strong></a> | <a href="#W"><strong>W</strong></a> | <a href="#X"><strong>X</strong></a></div>
+</section>
+<section id="A" class="genindex-section">
+  <h2>A</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/score_modifiers/index.html#navicatGA.score_modifiers.AbsoluteModifier">AbsoluteModifier() (in module navicatGA.score_modifiers)</a>
+</li>
+        <li><a href="autoapi/navicatGA/logger/index.html#navicatGA.logger.addLoggingLevel">addLoggingLevel() (in module navicatGA.logger)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.allowed_mutation_genes">allowed_mutation_genes (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.allowed_selection_strategies">allowed_selection_strategies (in module navicatGA.base_solver)</a>
+</li>
+        <li><a href="autoapi/navicatGA/alphabet_solver/index.html#navicatGA.alphabet_solver.AlphabetGenAlgSolver">AlphabetGenAlgSolver (class in navicatGA.alphabet_solver)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.assembler">assembler (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="B" class="genindex-section">
+  <h2>B</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.GAResult.best_fitness">best_fitness (navicatGA.helpers.GAResult attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.best_fitness_">best_fitness_ (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.GAResult.best_individual">best_individual (navicatGA.helpers.GAResult attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.best_individual_">best_individual_ (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.GAResult.best_pfitness">best_pfitness (navicatGA.helpers.GAResult attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.best_pfitness_">best_pfitness_ (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/config/index.html#navicatGA.config.build_solver">build_solver() (in module navicatGA.config)</a>
+</li>
+        <li><a href="autoapi/navicatGA/config/index.html#navicatGA.config.build_solver_from_yaml">build_solver_from_yaml() (in module navicatGA.config)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="C" class="genindex-section">
+  <h2>C</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.calculate_fitness">calculate_fitness() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/cache/index.html#navicatGA.cache.calculate_fitness_cache">calculate_fitness_cache() (in module navicatGA.cache)</a>
+</li>
+        <li><a href="autoapi/navicatGA/cache/index.html#navicatGA.cache.calculate_one_fitness_cache">calculate_one_fitness_cache() (in module navicatGA.cache)</a>
+</li>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.check_error">check_error() (in module navicatGA.helpers)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.check_input_base">check_input_base() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.check_selfie_chars">check_selfie_chars() (in module navicatGA.chemistry_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.check_smiles_chars">check_smiles_chars() (in module navicatGA.wrappers_smiles)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.check_xyz">check_xyz() (in module navicatGA.chemistry_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.chromosome_to_smiles">chromosome_to_smiles() (in module navicatGA.wrappers_smiles)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.chromosome_to_xyz">chromosome_to_xyz() (in module navicatGA.wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/alphabet_solver/index.html#navicatGA.alphabet_solver.AlphabetGenAlgSolver.chromosomize">chromosomize() (navicatGA.alphabet_solver.AlphabetGenAlgSolver method)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/selfies_solver/index.html#navicatGA.selfies_solver.SelfiesGenAlgSolver.chromosomize">(navicatGA.selfies_solver.SelfiesGenAlgSolver method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/logger/index.html#navicatGA.logger.close_logger">close_logger() (in module navicatGA.logger)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.close_solver_logger">close_solver_logger() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.concatenate_list">concatenate_list() (in module navicatGA.helpers)</a>
+</li>
+        <li><a href="autoapi/navicatGA/logger/index.html#navicatGA.logger.configure_logger">configure_logger() (in module navicatGA.logger)</a>
+</li>
+        <li><a href="autoapi/navicatGA/queue_wrappers_xyz/index.html#navicatGA.queue_wrappers_xyz.COORD_THRESHOLD">COORD_THRESHOLD (in module navicatGA.queue_wrappers_xyz)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.COORD_THRESHOLD">(in module navicatGA.wrappers_xyz)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.count_selfie_chars">count_selfie_chars() (in module navicatGA.chemistry_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.create_offspring">create_offspring() (navicatGA.base_solver.GenAlgSolver static method)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/float_solver/index.html#navicatGA.float_solver.FloatGenAlgSolver.create_offspring">(navicatGA.float_solver.FloatGenAlgSolver method)</a>
+</li>
+          <li><a href="autoapi/navicatGA/selfies_solver/index.html#navicatGA.selfies_solver.SelfiesGenAlgSolver.create_offspring">(navicatGA.selfies_solver.SelfiesGenAlgSolver method)</a>
+</li>
+          <li><a href="autoapi/navicatGA/smiles_solver/index.html#navicatGA.smiles_solver.SmilesGenAlgSolver.create_offspring">(navicatGA.smiles_solver.SmilesGenAlgSolver method)</a>
+</li>
+          <li><a href="autoapi/navicatGA/xyz_solver/index.html#navicatGA.xyz_solver.XYZGenAlgSolver.create_offspring">(navicatGA.xyz_solver.XYZGenAlgSolver method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="D" class="genindex-section">
+  <h2>D</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.decode_selfies_list">decode_selfies_list() (in module navicatGA.chemistry_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.diagnose_mol">diagnose_mol() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.diagnose_mol">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.draw_selfies">draw_selfies() (in module navicatGA.chemistry_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.draw_smiles">draw_smiles() (in module navicatGA.chemistry_smiles)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.draw_xyz">draw_xyz() (in module navicatGA.chemistry_xyz)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="E" class="genindex-section">
+  <h2>E</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.encode_smiles_list">encode_smiles_list() (in module navicatGA.chemistry_selfies)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/timeout/index.html#navicatGA.timeout.timeout.error_message">error_message (navicatGA.timeout.timeout attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/exception_messages/index.html#navicatGA.exception_messages.exception_messages">exception_messages (in module navicatGA.exception_messages)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="F" class="genindex-section">
+  <h2>F</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.GAResult.fitness">fitness (navicatGA.helpers.GAResult attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.fitness_">fitness_ (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/fitness_functions_float/index.html#navicatGA.fitness_functions_float.fitness_function_float">fitness_function_float() (in module navicatGA.fitness_functions_float)</a>
+</li>
+        <li><a href="autoapi/navicatGA/fitness_functions_selfies/index.html#navicatGA.fitness_functions_selfies.fitness_function_selfies">fitness_function_selfies() (in module navicatGA.fitness_functions_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/fitness_functions_selfies/index.html#navicatGA.fitness_functions_selfies.fitness_function_target_property">fitness_function_target_property() (in module navicatGA.fitness_functions_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/fitness_functions_xyz/index.html#navicatGA.fitness_functions_xyz.fitness_function_target_property">(in module navicatGA.fitness_functions_xyz)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/fitness_functions_selfies/index.html#navicatGA.fitness_functions_selfies.fitness_function_target_selfies">fitness_function_target_selfies() (in module navicatGA.fitness_functions_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/fitness_functions_xyz/index.html#navicatGA.fitness_functions_xyz.fitness_function_xyz">fitness_function_xyz() (in module navicatGA.fitness_functions_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/queue_wrappers_xyz/index.html#navicatGA.queue_wrappers_xyz.FixedSubmitProcess">FixedSubmitProcess (class in navicatGA.queue_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/float_solver/index.html#navicatGA.float_solver.FloatGenAlgSolver">FloatGenAlgSolver (class in navicatGA.float_solver)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="G" class="genindex-section">
+  <h2>G</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.GAResult">GAResult (class in navicatGA.helpers)</a>
+</li>
+        <li><a href="autoapi/navicatGA/score_modifiers/index.html#navicatGA.score_modifiers.GaussianModifier">GaussianModifier() (in module navicatGA.score_modifiers)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver">GenAlgSolver (class in navicatGA.base_solver)</a>
+</li>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.GAResult.generations">generations (navicatGA.helpers.GAResult attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.generations_">generations_ (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.geom2angle">geom2angle() (in module navicatGA.wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.geom2bond">geom2bond() (in module navicatGA.wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.geom2dihedral">geom2dihedral() (in module navicatGA.wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.geom2ehl">geom2ehl() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.geom2ehomo">geom2ehomo() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.geom2elumo">geom2elumo() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.geom2gap">geom2gap() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.geom2opt">geom2opt() (in module navicatGA.quantum_wrappers_xyz)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/queue_wrappers_xyz/index.html#navicatGA.queue_wrappers_xyz.geom2opt">(in module navicatGA.queue_wrappers_xyz)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.geom2pyscf">geom2pyscf() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.geom2sub_sterimol">geom2sub_sterimol() (in module navicatGA.wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.get_alphabet_from_path">get_alphabet_from_path() (in module navicatGA.chemistry_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.get_boltzmann_probabilities">get_boltzmann_probabilities() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.get_conformer_rmsd">get_conformer_rmsd() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.get_conformer_rmsd">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.get_confs_ff">get_confs_ff() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.get_confs_ff">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/alphabet_solver/index.html#navicatGA.alphabet_solver.AlphabetGenAlgSolver.get_crossover_points">get_crossover_points() (navicatGA.alphabet_solver.AlphabetGenAlgSolver method)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.get_crossover_points">(navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+          <li><a href="autoapi/navicatGA/float_solver/index.html#navicatGA.float_solver.FloatGenAlgSolver.get_crossover_points">(navicatGA.float_solver.FloatGenAlgSolver method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.get_default_alphabet">get_default_alphabet() (in module navicatGA.chemistry_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.get_ECFP4">get_ECFP4() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.get_ECFP4">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.get_elapsed_time">get_elapsed_time() (in module navicatGA.helpers)</a>
+</li>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.get_input_dimensions">get_input_dimensions() (in module navicatGA.helpers)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.get_interatomic_distances">get_interatomic_distances() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.get_interatomic_distances">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.get_number_mutations">get_number_mutations() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.get_selection_probabilities">get_selection_probabilities() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.get_selfie_chars">get_selfie_chars() (in module navicatGA.chemistry_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.get_starting_xyz_from_file">get_starting_xyz_from_file() (in module navicatGA.chemistry_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.get_starting_xyz_from_path">get_starting_xyz_from_path() (in module navicatGA.chemistry_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.get_starting_xyz_from_smi">get_starting_xyz_from_smi() (in module navicatGA.chemistry_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.get_structure_ff">get_structure_ff() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.get_structure_ff">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.gl2ehl">gl2ehl() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.gl2ehomo">gl2ehomo() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.gl2elumo">gl2elumo() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.gl2gap">gl2gap() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.gl2geom">gl2geom() (in module navicatGA.wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.gl2opt">gl2opt() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="H" class="genindex-section">
+  <h2>H</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.h_positions">h_positions (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/timeout/index.html#navicatGA.timeout.timeout.handle_timeout">handle_timeout() (navicatGA.timeout.timeout method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/timeout/index.html#navicatGA.timeout.handler">handler() (in module navicatGA.timeout)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.has_transition_metals">has_transition_metals() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.has_transition_metals">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.Hashable_Geometry">Hashable_Geometry (class in navicatGA.chemistry_xyz)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.Hashable_Geometry">(class in navicatGA.wrappers_xyz)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/alphabet_solver/index.html#navicatGA.alphabet_solver.AlphabetGenAlgSolver.initialize_population">initialize_population() (navicatGA.alphabet_solver.AlphabetGenAlgSolver method)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.initialize_population">(navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+          <li><a href="autoapi/navicatGA/float_solver/index.html#navicatGA.float_solver.FloatGenAlgSolver.initialize_population">(navicatGA.float_solver.FloatGenAlgSolver method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.interval_selection">interval_selection() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/exceptions/index.html#navicatGA.exceptions.InvalidInput">InvalidInput</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.is_transition_metal">is_transition_metal() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.is_transition_metal">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="L" class="genindex-section">
+  <h2>L</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.lg">lg (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.lg">(in module navicatGA.chemistry_smiles)</a>
+</li>
+          <li><a href="autoapi/navicatGA/quantum_wrappers_selfies/index.html#navicatGA.quantum_wrappers_selfies.lg">(in module navicatGA.quantum_wrappers_selfies)</a>
+</li>
+          <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.lg">(in module navicatGA.wrappers_selfies)</a>
+</li>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.lg">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/config/index.html#navicatGA.config.load_yaml">load_yaml() (in module navicatGA.config)</a>
+</li>
+        <li><a href="autoapi/navicatGA/alphabet_solver/index.html#navicatGA.alphabet_solver.logger">logger (in module navicatGA.alphabet_solver)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/cache/index.html#navicatGA.cache.logger">(in module navicatGA.cache)</a>
+</li>
+          <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.logger">(in module navicatGA.chemistry_selfies)</a>
+</li>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.logger">(in module navicatGA.chemistry_smiles)</a>
+</li>
+          <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.logger">(in module navicatGA.chemistry_xyz)</a>
+</li>
+          <li><a href="autoapi/navicatGA/fitness_functions_selfies/index.html#navicatGA.fitness_functions_selfies.logger">(in module navicatGA.fitness_functions_selfies)</a>
+</li>
+          <li><a href="autoapi/navicatGA/fitness_functions_xyz/index.html#navicatGA.fitness_functions_xyz.logger">(in module navicatGA.fitness_functions_xyz)</a>
+</li>
+          <li><a href="autoapi/navicatGA/float_solver/index.html#navicatGA.float_solver.logger">(in module navicatGA.float_solver)</a>
+</li>
+          <li><a href="autoapi/navicatGA/progress_bars/index.html#navicatGA.progress_bars.logger">(in module navicatGA.progress_bars)</a>
+</li>
+          <li><a href="autoapi/navicatGA/quantum_wrappers_selfies/index.html#navicatGA.quantum_wrappers_selfies.logger">(in module navicatGA.quantum_wrappers_selfies)</a>
+</li>
+          <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.logger">(in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+          <li><a href="autoapi/navicatGA/queue_wrappers_xyz/index.html#navicatGA.queue_wrappers_xyz.logger">(in module navicatGA.queue_wrappers_xyz)</a>
+</li>
+          <li><a href="autoapi/navicatGA/score_modifiers/index.html#navicatGA.score_modifiers.logger">(in module navicatGA.score_modifiers)</a>
+</li>
+          <li><a href="autoapi/navicatGA/selfies_solver/index.html#navicatGA.selfies_solver.logger">(in module navicatGA.selfies_solver)</a>
+</li>
+          <li><a href="autoapi/navicatGA/smiles_solver/index.html#navicatGA.smiles_solver.logger">(in module navicatGA.smiles_solver)</a>
+</li>
+          <li><a href="autoapi/navicatGA/timeout/index.html#navicatGA.timeout.logger">(in module navicatGA.timeout)</a>
+</li>
+          <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.logger">(in module navicatGA.wrappers_selfies)</a>
+</li>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.logger">(in module navicatGA.wrappers_smiles)</a>
+</li>
+          <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.logger">(in module navicatGA.wrappers_xyz)</a>
+</li>
+          <li><a href="autoapi/navicatGA/xyz_solver/index.html#navicatGA.xyz_solver.logger">(in module navicatGA.xyz_solver)</a>
+</li>
+          <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.logger">(navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="M" class="genindex-section">
+  <h2>M</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.make_array">make_array() (in module navicatGA.helpers)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.max_conv">max_conv (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/selfies_solver/index.html#navicatGA.selfies_solver.SelfiesGenAlgSolver.max_counter">max_counter (navicatGA.selfies_solver.SelfiesGenAlgSolver attribute)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/smiles_solver/index.html#navicatGA.smiles_solver.SmilesGenAlgSolver.max_counter">(navicatGA.smiles_solver.SmilesGenAlgSolver attribute)</a>
+</li>
+          <li><a href="autoapi/navicatGA/xyz_solver/index.html#navicatGA.xyz_solver.XYZGenAlgSolver.max_counter">(navicatGA.xyz_solver.XYZGenAlgSolver attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.max_fitness_">max_fitness_ (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.max_gen">max_gen (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.mean_fitness_">mean_fitness_ (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/exceptions/index.html#navicatGA.exceptions.InvalidInput.message">message (navicatGA.exceptions.InvalidInput attribute)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/exceptions/index.html#navicatGA.exceptions.NoAssembler.message">(navicatGA.exceptions.NoAssembler attribute)</a>
+</li>
+          <li><a href="autoapi/navicatGA/exceptions/index.html#navicatGA.exceptions.NoFitnessFunction.message">(navicatGA.exceptions.NoFitnessFunction attribute)</a>
+</li>
+        </ul></li>
+        <li>
+    module
+
+        <ul>
+          <li><a href="autoapi/navicatGA/index.html#module-navicatGA">navicatGA</a>
+</li>
+          <li><a href="autoapi/navicatGA/alphabet_solver/index.html#module-navicatGA.alphabet_solver">navicatGA.alphabet_solver</a>
+</li>
+          <li><a href="autoapi/navicatGA/base_solver/index.html#module-navicatGA.base_solver">navicatGA.base_solver</a>
+</li>
+          <li><a href="autoapi/navicatGA/cache/index.html#module-navicatGA.cache">navicatGA.cache</a>
+</li>
+          <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#module-navicatGA.chemistry_selfies">navicatGA.chemistry_selfies</a>
+</li>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#module-navicatGA.chemistry_smiles">navicatGA.chemistry_smiles</a>
+</li>
+          <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#module-navicatGA.chemistry_xyz">navicatGA.chemistry_xyz</a>
+</li>
+          <li><a href="autoapi/navicatGA/config/index.html#module-navicatGA.config">navicatGA.config</a>
+</li>
+          <li><a href="autoapi/navicatGA/exception_messages/index.html#module-navicatGA.exception_messages">navicatGA.exception_messages</a>
+</li>
+          <li><a href="autoapi/navicatGA/exceptions/index.html#module-navicatGA.exceptions">navicatGA.exceptions</a>
+</li>
+          <li><a href="autoapi/navicatGA/fitness_functions_float/index.html#module-navicatGA.fitness_functions_float">navicatGA.fitness_functions_float</a>
+</li>
+          <li><a href="autoapi/navicatGA/fitness_functions_selfies/index.html#module-navicatGA.fitness_functions_selfies">navicatGA.fitness_functions_selfies</a>
+</li>
+          <li><a href="autoapi/navicatGA/fitness_functions_xyz/index.html#module-navicatGA.fitness_functions_xyz">navicatGA.fitness_functions_xyz</a>
+</li>
+          <li><a href="autoapi/navicatGA/float_solver/index.html#module-navicatGA.float_solver">navicatGA.float_solver</a>
+</li>
+          <li><a href="autoapi/navicatGA/helpers/index.html#module-navicatGA.helpers">navicatGA.helpers</a>
+</li>
+          <li><a href="autoapi/navicatGA/logger/index.html#module-navicatGA.logger">navicatGA.logger</a>
+</li>
+          <li><a href="autoapi/navicatGA/progress_bars/index.html#module-navicatGA.progress_bars">navicatGA.progress_bars</a>
+</li>
+          <li><a href="autoapi/navicatGA/quantum_wrappers_selfies/index.html#module-navicatGA.quantum_wrappers_selfies">navicatGA.quantum_wrappers_selfies</a>
+</li>
+          <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#module-navicatGA.quantum_wrappers_xyz">navicatGA.quantum_wrappers_xyz</a>
+</li>
+          <li><a href="autoapi/navicatGA/queue_wrappers_xyz/index.html#module-navicatGA.queue_wrappers_xyz">navicatGA.queue_wrappers_xyz</a>
+</li>
+          <li><a href="autoapi/navicatGA/score_modifiers/index.html#module-navicatGA.score_modifiers">navicatGA.score_modifiers</a>
+</li>
+          <li><a href="autoapi/navicatGA/selfies_solver/index.html#module-navicatGA.selfies_solver">navicatGA.selfies_solver</a>
+</li>
+          <li><a href="autoapi/navicatGA/smiles_solver/index.html#module-navicatGA.smiles_solver">navicatGA.smiles_solver</a>
+</li>
+          <li><a href="autoapi/navicatGA/timeout/index.html#module-navicatGA.timeout">navicatGA.timeout</a>
+</li>
+          <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#module-navicatGA.wrappers_selfies">navicatGA.wrappers_selfies</a>
+</li>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#module-navicatGA.wrappers_smiles">navicatGA.wrappers_smiles</a>
+</li>
+          <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#module-navicatGA.wrappers_xyz">navicatGA.wrappers_xyz</a>
+</li>
+          <li><a href="autoapi/navicatGA/xyz_solver/index.html#module-navicatGA.xyz_solver">navicatGA.xyz_solver</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.mol_structure2cm">mol_structure2cm() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.mol_structure2cm">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.mol_structure2depictions">mol_structure2depictions() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.mol_structure2depictions">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_selfies/index.html#navicatGA.quantum_wrappers_selfies.mol_structure2pyscf">mol_structure2pyscf() (in module navicatGA.quantum_wrappers_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/alphabet_solver/index.html#navicatGA.alphabet_solver.AlphabetGenAlgSolver.mutate_population">mutate_population() (navicatGA.alphabet_solver.AlphabetGenAlgSolver method)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.mutate_population">(navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+          <li><a href="autoapi/navicatGA/float_solver/index.html#navicatGA.float_solver.FloatGenAlgSolver.mutate_population">(navicatGA.float_solver.FloatGenAlgSolver method)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.mutation_rate">mutation_rate (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="N" class="genindex-section">
+  <h2>N</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.n_crossover_points">n_crossover_points (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.n_genes">n_genes (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.n_matings">n_matings (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.n_mutations">n_mutations (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li>
+    navicatGA
+
+        <ul>
+          <li><a href="autoapi/navicatGA/index.html#module-navicatGA">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.alphabet_solver
+
+        <ul>
+          <li><a href="autoapi/navicatGA/alphabet_solver/index.html#module-navicatGA.alphabet_solver">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.base_solver
+
+        <ul>
+          <li><a href="autoapi/navicatGA/base_solver/index.html#module-navicatGA.base_solver">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.cache
+
+        <ul>
+          <li><a href="autoapi/navicatGA/cache/index.html#module-navicatGA.cache">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.chemistry_selfies
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#module-navicatGA.chemistry_selfies">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.chemistry_smiles
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#module-navicatGA.chemistry_smiles">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.chemistry_xyz
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#module-navicatGA.chemistry_xyz">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.config
+
+        <ul>
+          <li><a href="autoapi/navicatGA/config/index.html#module-navicatGA.config">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.exception_messages
+
+        <ul>
+          <li><a href="autoapi/navicatGA/exception_messages/index.html#module-navicatGA.exception_messages">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.exceptions
+
+        <ul>
+          <li><a href="autoapi/navicatGA/exceptions/index.html#module-navicatGA.exceptions">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.fitness_functions_float
+
+        <ul>
+          <li><a href="autoapi/navicatGA/fitness_functions_float/index.html#module-navicatGA.fitness_functions_float">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.fitness_functions_selfies
+
+        <ul>
+          <li><a href="autoapi/navicatGA/fitness_functions_selfies/index.html#module-navicatGA.fitness_functions_selfies">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.fitness_functions_xyz
+
+        <ul>
+          <li><a href="autoapi/navicatGA/fitness_functions_xyz/index.html#module-navicatGA.fitness_functions_xyz">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.float_solver
+
+        <ul>
+          <li><a href="autoapi/navicatGA/float_solver/index.html#module-navicatGA.float_solver">module</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    navicatGA.helpers
+
+        <ul>
+          <li><a href="autoapi/navicatGA/helpers/index.html#module-navicatGA.helpers">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.logger
+
+        <ul>
+          <li><a href="autoapi/navicatGA/logger/index.html#module-navicatGA.logger">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.progress_bars
+
+        <ul>
+          <li><a href="autoapi/navicatGA/progress_bars/index.html#module-navicatGA.progress_bars">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.quantum_wrappers_selfies
+
+        <ul>
+          <li><a href="autoapi/navicatGA/quantum_wrappers_selfies/index.html#module-navicatGA.quantum_wrappers_selfies">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.quantum_wrappers_xyz
+
+        <ul>
+          <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#module-navicatGA.quantum_wrappers_xyz">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.queue_wrappers_xyz
+
+        <ul>
+          <li><a href="autoapi/navicatGA/queue_wrappers_xyz/index.html#module-navicatGA.queue_wrappers_xyz">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.score_modifiers
+
+        <ul>
+          <li><a href="autoapi/navicatGA/score_modifiers/index.html#module-navicatGA.score_modifiers">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.selfies_solver
+
+        <ul>
+          <li><a href="autoapi/navicatGA/selfies_solver/index.html#module-navicatGA.selfies_solver">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.smiles_solver
+
+        <ul>
+          <li><a href="autoapi/navicatGA/smiles_solver/index.html#module-navicatGA.smiles_solver">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.timeout
+
+        <ul>
+          <li><a href="autoapi/navicatGA/timeout/index.html#module-navicatGA.timeout">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.wrappers_selfies
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#module-navicatGA.wrappers_selfies">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.wrappers_smiles
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#module-navicatGA.wrappers_smiles">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.wrappers_xyz
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#module-navicatGA.wrappers_xyz">module</a>
+</li>
+        </ul></li>
+        <li>
+    navicatGA.xyz_solver
+
+        <ul>
+          <li><a href="autoapi/navicatGA/xyz_solver/index.html#module-navicatGA.xyz_solver">module</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/exceptions/index.html#navicatGA.exceptions.NoAssembler">NoAssembler</a>
+</li>
+        <li><a href="autoapi/navicatGA/exceptions/index.html#navicatGA.exceptions.NoFitnessFunction">NoFitnessFunction</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="O" class="genindex-section">
+  <h2>O</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.opt">opt() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.pad_xyz_list">pad_xyz_list() (in module navicatGA.chemistry_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.plot_fitness_results">plot_fitness_results() (navicatGA.base_solver.GenAlgSolver static method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.plot_results">plot_results (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.pop_keep">pop_keep (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.pop_size">pop_size (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.GAResult.population">population (navicatGA.helpers.GAResult attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.population_">population_ (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.print_stats">print_stats() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.printable_fitness">printable_fitness (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.prob_intervals">prob_intervals (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.problem_type">problem_type (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.prune_duplicates">prune_duplicates (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.prune_mol_conformers">prune_mol_conformers() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.prune_mol_conformers">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_xyz/index.html#navicatGA.quantum_wrappers_xyz.pyscf2geom">pyscf2geom() (in module navicatGA.quantum_wrappers_xyz)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="Q" class="genindex-section">
+  <h2>Q</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/queue_wrappers_xyz/index.html#navicatGA.queue_wrappers_xyz.queue_env_var">queue_env_var (in module navicatGA.queue_wrappers_xyz)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.queue_env_var">(in module navicatGA.wrappers_xyz)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/queue_wrappers_xyz/index.html#navicatGA.queue_wrappers_xyz.QUEUE_TYPE">QUEUE_TYPE (in module navicatGA.queue_wrappers_xyz)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.QUEUE_TYPE">(in module navicatGA.wrappers_xyz)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="R" class="genindex-section">
+  <h2>R</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/chemistry_xyz/index.html#navicatGA.chemistry_xyz.random_merge_xyz">random_merge_xyz() (in module navicatGA.chemistry_xyz)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.randomize_selfies">randomize_selfies() (in module navicatGA.chemistry_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.randomize_smiles">randomize_smiles() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.randomize_smiles">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/alphabet_solver/index.html#navicatGA.alphabet_solver.AlphabetGenAlgSolver.refill_population">refill_population() (navicatGA.alphabet_solver.AlphabetGenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/config/index.html#navicatGA.config.resolve">resolve() (in module navicatGA.config)</a>
+</li>
+        <li><a href="autoapi/navicatGA/helpers/index.html#navicatGA.helpers.GAResult.runtime">runtime (navicatGA.helpers.GAResult attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.runtime_">runtime_ (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="S" class="genindex-section">
+  <h2>S</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.sanitize_multiple_smiles">sanitize_multiple_smiles() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.sanitize_multiple_smiles">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.sanitize_smiles">sanitize_smiles() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.sanitize_smiles">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2cm">sc2cm() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.sc2cm">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2depictions">sc2depictions() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.sc2depictions">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_selfies/index.html#navicatGA.quantum_wrappers_selfies.sc2ehomo">sc2ehomo() (in module navicatGA.quantum_wrappers_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_selfies/index.html#navicatGA.quantum_wrappers_selfies.sc2elumo">sc2elumo() (in module navicatGA.quantum_wrappers_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/quantum_wrappers_selfies/index.html#navicatGA.quantum_wrappers_selfies.sc2gap">sc2gap() (in module navicatGA.quantum_wrappers_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2ilogp">sc2ilogp() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.sc2ilogp">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2krr">sc2krr() (in module navicatGA.wrappers_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2levenshtein_to_target">sc2levenshtein_to_target() (in module navicatGA.wrappers_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2logp">sc2logp() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.sc2logp">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2mol_structure">sc2mol_structure() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.sc2mol_structure">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2mv">sc2mv() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.sc2mv">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2mw">sc2mw() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.sc2mw">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2mwilogp">sc2mwilogp() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.sc2mwilogp">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2nmw">sc2nmw() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.sc2nmw">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2selfies">sc2selfies() (in module navicatGA.wrappers_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2smiles">sc2smiles() (in module navicatGA.wrappers_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.sc2smiles">(in module navicatGA.wrappers_smiles)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/wrappers_selfies/index.html#navicatGA.wrappers_selfies.sc2tanimoto_to_target">sc2tanimoto_to_target() (in module navicatGA.wrappers_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.scalarizer">scalarizer (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/score_modifiers/index.html#navicatGA.score_modifiers.score_modifier">score_modifier() (in module navicatGA.score_modifiers)</a>
+</li>
+        <li><a href="autoapi/navicatGA/timeout/index.html#navicatGA.timeout.timeout.seconds">seconds (navicatGA.timeout.timeout attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.select_parents">select_parents() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.selection_rate">selection_rate (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.selection_strategy">selection_strategy (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/selfies_solver/index.html#navicatGA.selfies_solver.SelfiesGenAlgSolver">SelfiesGenAlgSolver (class in navicatGA.selfies_solver)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.set_dative_bonds">set_dative_bonds() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.set_dative_bonds">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/cache/index.html#navicatGA.cache.set_lru_cache">set_lru_cache() (in module navicatGA.cache)</a>
+</li>
+        <li><a href="autoapi/navicatGA/progress_bars/index.html#navicatGA.progress_bars.set_progress_bars">set_progress_bars() (in module navicatGA.progress_bars)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.show_stats">show_stats (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.smiles2logp">smiles2logp() (in module navicatGA.wrappers_smiles)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.smiles2mol_structure">smiles2mol_structure() (in module navicatGA.wrappers_smiles)</a>
+</li>
+        <li><a href="autoapi/navicatGA/wrappers_smiles/index.html#navicatGA.wrappers_smiles.smiles2xyz">smiles2xyz() (in module navicatGA.wrappers_smiles)</a>
+</li>
+        <li><a href="autoapi/navicatGA/smiles_solver/index.html#navicatGA.smiles_solver.SmilesGenAlgSolver">SmilesGenAlgSolver (class in navicatGA.smiles_solver)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.solve">solve() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/progress_bars/index.html#navicatGA.progress_bars.solve_progress">solve_progress() (in module navicatGA.progress_bars)</a>
+</li>
+        <li><a href="autoapi/navicatGA/config/index.html#navicatGA.config.SOLVERS">SOLVERS (in module navicatGA.config)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.sort_by_fitness">sort_by_fitness() (navicatGA.base_solver.GenAlgSolver static method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/score_modifiers/index.html#navicatGA.score_modifiers.SquaredModifier">SquaredModifier() (in module navicatGA.score_modifiers)</a>
+</li>
+        <li><a href="autoapi/navicatGA/smiles_solver/index.html#navicatGA.smiles_solver.SmilesGenAlgSolver.starting_population">starting_population (navicatGA.smiles_solver.SmilesGenAlgSolver attribute)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/xyz_solver/index.html#navicatGA.xyz_solver.XYZGenAlgSolver.starting_population">(navicatGA.xyz_solver.XYZGenAlgSolver attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/selfies_solver/index.html#navicatGA.selfies_solver.SelfiesGenAlgSolver.starting_random">starting_random (navicatGA.selfies_solver.SelfiesGenAlgSolver attribute)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/smiles_solver/index.html#navicatGA.smiles_solver.SmilesGenAlgSolver.starting_random">(navicatGA.smiles_solver.SmilesGenAlgSolver attribute)</a>
+</li>
+          <li><a href="autoapi/navicatGA/xyz_solver/index.html#navicatGA.xyz_solver.XYZGenAlgSolver.starting_random">(navicatGA.xyz_solver.XYZGenAlgSolver attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="autoapi/navicatGA/queue_wrappers_xyz/index.html#navicatGA.queue_wrappers_xyz.FixedSubmitProcess.submit">submit() (navicatGA.queue_wrappers_xyz.FixedSubmitProcess method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="T" class="genindex-section">
+  <h2>T</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.temperature">temperature (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+        <li><a href="autoapi/navicatGA/float_solver/index.html#navicatGA.float_solver.test_bohachevsky">test_bohachevsky() (in module navicatGA.float_solver)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.timed_decoder">timed_decoder() (in module navicatGA.chemistry_selfies)</a>
+</li>
+        <li><a href="autoapi/navicatGA/chemistry_selfies/index.html#navicatGA.chemistry_selfies.timed_sanitizer">timed_sanitizer() (in module navicatGA.chemistry_selfies)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/chemistry_smiles/index.html#navicatGA.chemistry_smiles.timed_sanitizer">(in module navicatGA.chemistry_smiles)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/timeout/index.html#navicatGA.timeout.timeout">timeout (class in navicatGA.timeout)</a>
+</li>
+        <li><a href="autoapi/navicatGA/timeout/index.html#navicatGA.timeout.timer_alarm">timer_alarm() (in module navicatGA.timeout)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.tournament_selection">tournament_selection() (navicatGA.base_solver.GenAlgSolver method)</a>
+</li>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.tournament_selection_helper">tournament_selection_helper() (navicatGA.base_solver.GenAlgSolver static method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="U" class="genindex-section">
+  <h2>U</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/queue_wrappers_xyz/index.html#navicatGA.queue_wrappers_xyz.USER">USER (in module navicatGA.queue_wrappers_xyz)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/wrappers_xyz/index.html#navicatGA.wrappers_xyz.USER">(in module navicatGA.wrappers_xyz)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="V" class="genindex-section">
+  <h2>V</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/float_solver/index.html#navicatGA.float_solver.FloatGenAlgSolver.variables_limits">variables_limits (navicatGA.float_solver.FloatGenAlgSolver attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/base_solver/index.html#navicatGA.base_solver.GenAlgSolver.verbose">verbose (navicatGA.base_solver.GenAlgSolver attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="W" class="genindex-section">
+  <h2>W</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/selfies_solver/index.html#navicatGA.selfies_solver.SelfiesGenAlgSolver.write_population">write_population() (navicatGA.selfies_solver.SelfiesGenAlgSolver method)</a>
+
+        <ul>
+          <li><a href="autoapi/navicatGA/smiles_solver/index.html#navicatGA.smiles_solver.SmilesGenAlgSolver.write_population">(navicatGA.smiles_solver.SmilesGenAlgSolver method)</a>
+</li>
+          <li><a href="autoapi/navicatGA/xyz_solver/index.html#navicatGA.xyz_solver.XYZGenAlgSolver.write_population">(navicatGA.xyz_solver.XYZGenAlgSolver method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="X" class="genindex-section">
+  <h2>X</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="autoapi/navicatGA/xyz_solver/index.html#navicatGA.xyz_solver.XYZGenAlgSolver">XYZGenAlgSolver (class in navicatGA.xyz_solver)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2021, rlaplaza, lcmd-epfl
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=2709fde1"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>

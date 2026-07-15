@@ -1,0 +1,38 @@
+navicatGA.score_modifiers
+=========================
+
+.. py:module:: navicatGA.score_modifiers
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.score_modifiers.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.score_modifiers.AbsoluteModifier
+   navicatGA.score_modifiers.GaussianModifier
+   navicatGA.score_modifiers.SquaredModifier
+   navicatGA.score_modifiers.score_modifier
+
+
+Module Contents
+---------------
+
+.. py:function:: AbsoluteModifier(score, target, parameter=1) -> float
+
+.. py:function:: GaussianModifier(score, target, parameter=1) -> float
+
+.. py:function:: SquaredModifier(score, target, parameter=1) -> float
+
+.. py:function:: score_modifier(score, target, score_modifier_number=1, parameter=1) -> float
+
+.. py:data:: logger
+

@@ -1,0 +1,55 @@
+navicatGA.timeout
+=================
+
+.. py:module:: navicatGA.timeout
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.timeout.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   navicatGA.timeout.timeout
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.timeout.handler
+   navicatGA.timeout.timer_alarm
+
+
+Module Contents
+---------------
+
+.. py:class:: timeout(seconds=10, error_message='Function call exceeded the time limit.')
+
+   .. py:method:: handle_timeout(signum, frame)
+
+
+   .. py:attribute:: error_message
+      :value: 'Function call exceeded the time limit.'
+
+
+
+   .. py:attribute:: seconds
+      :value: 10
+
+
+
+.. py:function:: handler(signum, frame)
+
+.. py:function:: timer_alarm(n_sec, handler)
+
+.. py:data:: logger
+

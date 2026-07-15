@@ -1,0 +1,78 @@
+navicatGA.chemistry_xyz
+=======================
+
+.. py:module:: navicatGA.chemistry_xyz
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.chemistry_xyz.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   navicatGA.chemistry_xyz.Hashable_Geometry
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.chemistry_xyz.check_xyz
+   navicatGA.chemistry_xyz.draw_xyz
+   navicatGA.chemistry_xyz.get_alphabet_from_path
+   navicatGA.chemistry_xyz.get_default_alphabet
+   navicatGA.chemistry_xyz.get_starting_xyz_from_file
+   navicatGA.chemistry_xyz.get_starting_xyz_from_path
+   navicatGA.chemistry_xyz.get_starting_xyz_from_smi
+   navicatGA.chemistry_xyz.pad_xyz_list
+   navicatGA.chemistry_xyz.random_merge_xyz
+
+
+Module Contents
+---------------
+
+.. py:class:: Hashable_Geometry(*args, **kw)
+
+   Bases: :py:obj:`AaronTools.geometry.Geometry`
+
+
+   This is a modified version of the Geometry class in AaronTools.py, which is identical but hashable.
+
+
+.. py:function:: check_xyz(chromosome)
+
+   Check if a list of Geometries can lead to a valid structure.
+
+
+.. py:function:: draw_xyz(geom, outname)
+
+.. py:function:: get_alphabet_from_path(path='alphabet/')
+
+.. py:function:: get_default_alphabet()
+
+.. py:function:: get_starting_xyz_from_file(file_list)
+
+.. py:function:: get_starting_xyz_from_path(path='scaffolds')
+
+.. py:function:: get_starting_xyz_from_smi(smiles_list)
+
+.. py:function:: pad_xyz_list(xyz, maxchars)
+
+   Pads chromosome with empty elements.
+
+
+.. py:function:: random_merge_xyz()
+
+   Default chromosome manipulator: randomly generates an XYZ structure from fragments.
+
+
+.. py:data:: logger
+

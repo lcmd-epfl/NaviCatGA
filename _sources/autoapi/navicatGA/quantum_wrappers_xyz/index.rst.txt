@@ -1,0 +1,70 @@
+navicatGA.quantum_wrappers_xyz
+==============================
+
+.. py:module:: navicatGA.quantum_wrappers_xyz
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.quantum_wrappers_xyz.h_positions
+   navicatGA.quantum_wrappers_xyz.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.quantum_wrappers_xyz.geom2ehl
+   navicatGA.quantum_wrappers_xyz.geom2ehomo
+   navicatGA.quantum_wrappers_xyz.geom2elumo
+   navicatGA.quantum_wrappers_xyz.geom2gap
+   navicatGA.quantum_wrappers_xyz.geom2opt
+   navicatGA.quantum_wrappers_xyz.geom2pyscf
+   navicatGA.quantum_wrappers_xyz.gl2ehl
+   navicatGA.quantum_wrappers_xyz.gl2ehomo
+   navicatGA.quantum_wrappers_xyz.gl2elumo
+   navicatGA.quantum_wrappers_xyz.gl2gap
+   navicatGA.quantum_wrappers_xyz.gl2opt
+   navicatGA.quantum_wrappers_xyz.opt
+   navicatGA.quantum_wrappers_xyz.pyscf2geom
+
+
+Module Contents
+---------------
+
+.. py:function:: geom2ehl(geom, lot=0, charge=0, mult=0)
+
+.. py:function:: geom2ehomo(geom, lot=0, charge=0, mult=0)
+
+.. py:function:: geom2elumo(geom, lot=0, charge=0, mult=0)
+
+.. py:function:: geom2gap(geom, lot=0, charge=0, mult=0)
+
+.. py:function:: geom2opt(geom, lot=0, charge=0, mult=0)
+
+.. py:function:: geom2pyscf(geom, lot=0, charge=0, mult=0)
+
+.. py:function:: gl2ehl(chromosome, lot=0, charge=0, mult=0)
+
+.. py:function:: gl2ehomo(chromosome, lot=0, charge=0, mult=0)
+
+.. py:function:: gl2elumo(chromosome, lot=0, charge=0, mult=0)
+
+.. py:function:: gl2gap(chromosome, lot=0, charge=0, mult=0)
+
+.. py:function:: gl2opt(chromosome, lot=0, charge=0, mult=0)
+
+.. py:function:: opt(pyscfmol, mf)
+
+.. py:function:: pyscf2geom(pyscfmol, geom)
+
+.. py:data:: h_positions
+   :value: '19-20'
+
+
+.. py:data:: logger
+

@@ -1,0 +1,41 @@
+navicatGA.quantum_wrappers_selfies
+==================================
+
+.. py:module:: navicatGA.quantum_wrappers_selfies
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.quantum_wrappers_selfies.lg
+   navicatGA.quantum_wrappers_selfies.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.quantum_wrappers_selfies.mol_structure2pyscf
+   navicatGA.quantum_wrappers_selfies.sc2ehomo
+   navicatGA.quantum_wrappers_selfies.sc2elumo
+   navicatGA.quantum_wrappers_selfies.sc2gap
+
+
+Module Contents
+---------------
+
+.. py:function:: mol_structure2pyscf(mol, lot=0)
+
+.. py:function:: sc2ehomo(chromosome, lot=0)
+
+.. py:function:: sc2elumo(chromosome, lot=0)
+
+.. py:function:: sc2gap(chromosome, lot=0)
+
+.. py:data:: lg
+
+.. py:data:: logger
+

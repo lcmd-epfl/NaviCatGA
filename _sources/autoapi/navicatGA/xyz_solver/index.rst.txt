@@ -1,0 +1,93 @@
+navicatGA.xyz_solver
+====================
+
+.. py:module:: navicatGA.xyz_solver
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.xyz_solver.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   navicatGA.xyz_solver.XYZGenAlgSolver
+
+
+Module Contents
+---------------
+
+.. py:class:: XYZGenAlgSolver(starting_population: list = [[None]], starting_random: bool = False, alphabet_list: list = get_default_alphabet(), chromosome_to_xyz=random_merge_xyz(), multi_alphabet: bool = False, equivalences: Sequence = None, max_counter: int = 10, n_genes: int = 1, fitness_function=None, excluded_genes: Sequence = None, **base_kwargs)
+
+   Bases: :py:obj:`navicatGA.alphabet_solver.AlphabetGenAlgSolver`
+
+
+   Shared base for solvers whose chromosome genes are drawn from a
+   per-gene alphabet (SMILES fragments, SELFIES tokens, XYZ fragments).
+
+   Factors out the alphabet/equivalences setup, population init/refill,
+   crossover-point sampling, and mutation logic that
+   SmilesGenAlgSolver/SelfiesGenAlgSolver/XYZGenAlgSolver used to each
+   reimplement independently. Subclasses still own `create_offspring`
+   (crossover behaviour genuinely differs between them) and
+   `write_population` (different depiction backend per representation).
+
+   Example child solver class for the GA.
+   This child solver class is an example meant for a particular purpose,
+   which also shows how to use the GA with xyz coordinate fragments using AaronTools.py.
+   It might require heavy modification for other particular usages.
+   Only the parameters specific for this child class are covered here.
+
+   Parameters:
+   :param starting_population: list containing the starting AaronTools.py interpretable elements for all chromosomes; overridden by starting_random=True
+   :type starting_population: list
+   :param starting_random: whether to initialize all chromosomes with random elements from alphabet; overrides starting_selfies
+   :type starting_random: bool
+   :param alphabet_list: list containing the alphabets for the individual genes; or a single alphabet for all; can be a path directing to a directory containing xyz files
+   :type alphabet_list: list
+   :param chromosome_to_xyz: object that can take a chromosome and generate an AaronTools.py geometry object
+   :type chromosome_to_xyz: object
+   :param multi_alphabet: whether alphabet_list contains a single alphabet or a list of n_genes alphabet
+   :type multi_alphabet: bool
+   :param equivalences: list of integers that set the equivalent genes of a chromosome; see examples for clarification
+   :type equivalences: list
+   :param max_counter: maximum number of times a wrong structure will try to be corrected before skipping
+   :type max_counter: int
+   :param base_kwargs: any GenAlgSolver parameter (max_gen, pop_size, mutation_rate, ...); see GenAlgSolver for the full list and defaults
+
+
+   .. py:method:: create_offspring(first_parent, sec_parent, crossover_pt, offspring_number)
+
+      Creates an offspring from 2 parents.
+
+
+
+   .. py:method:: write_population(basename='chromosome')
+
+      Print  xyz for all the population at the current state.
+
+
+
+   .. py:attribute:: max_counter
+      :value: 10
+
+
+
+   .. py:attribute:: starting_population
+      :value: [[None]]
+
+
+
+   .. py:attribute:: starting_random
+      :value: False
+
+
+
+.. py:data:: logger
+

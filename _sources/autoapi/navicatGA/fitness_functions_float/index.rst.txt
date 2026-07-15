@@ -1,0 +1,19 @@
+navicatGA.fitness_functions_float
+=================================
+
+.. py:module:: navicatGA.fitness_functions_float
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.fitness_functions_float.fitness_function_float
+
+
+Module Contents
+---------------
+
+.. py:function:: fitness_function_float(function_number)
+

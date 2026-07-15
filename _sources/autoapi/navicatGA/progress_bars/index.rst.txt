@@ -1,0 +1,41 @@
+navicatGA.progress_bars
+=======================
+
+.. py:module:: navicatGA.progress_bars
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.progress_bars.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.progress_bars.set_progress_bars
+   navicatGA.progress_bars.solve_progress
+
+
+Module Contents
+---------------
+
+.. py:function:: set_progress_bars(self)
+
+.. py:function:: solve_progress(self, niter=None)
+
+   Performs the genetic algorithm optimization according to the parameters
+   loaded in __init__. Will run for max_gen or until it
+   converges for max_conv iterations, or for min(niter,max_gen) iterations if niter
+   is an integer. Will start using previous state if available.
+
+   Parameters:
+   :param niter: the number of generations to run
+
+
+.. py:data:: logger
+

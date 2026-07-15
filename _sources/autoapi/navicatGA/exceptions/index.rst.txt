@@ -1,0 +1,64 @@
+navicatGA.exceptions
+====================
+
+.. py:module:: navicatGA.exceptions
+
+
+Exceptions
+----------
+
+.. autoapisummary::
+
+   navicatGA.exceptions.InvalidInput
+   navicatGA.exceptions.NoAssembler
+   navicatGA.exceptions.NoFitnessFunction
+
+
+Module Contents
+---------------
+
+.. py:exception:: InvalidInput(*args, **kwargs)
+
+   Bases: :py:obj:`Exception`
+
+
+   Common base class for all non-exit exceptions.
+
+   Initialize self.  See help(type(self)) for accurate signature.
+
+
+   .. py:attribute:: message
+      :value: 'InvalidInput'
+
+
+
+.. py:exception:: NoAssembler(*args, **kwargs)
+
+   Bases: :py:obj:`Exception`
+
+
+   Common base class for all non-exit exceptions.
+
+   Initialize self.  See help(type(self)) for accurate signature.
+
+
+   .. py:attribute:: message
+      :value: 'NoAssembler'
+
+
+
+.. py:exception:: NoFitnessFunction(*args, **kwargs)
+
+   Bases: :py:obj:`Exception`
+
+
+   Common base class for all non-exit exceptions.
+
+   Initialize self.  See help(type(self)) for accurate signature.
+
+
+   .. py:attribute:: message
+      :value: 'NoFitnessFunction'
+
+
+

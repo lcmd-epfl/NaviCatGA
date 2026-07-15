@@ -1,0 +1,126 @@
+navicatGA.chemistry_smiles
+==========================
+
+.. py:module:: navicatGA.chemistry_smiles
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.chemistry_smiles.lg
+   navicatGA.chemistry_smiles.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.chemistry_smiles.diagnose_mol
+   navicatGA.chemistry_smiles.draw_smiles
+   navicatGA.chemistry_smiles.get_ECFP4
+   navicatGA.chemistry_smiles.get_conformer_rmsd
+   navicatGA.chemistry_smiles.get_confs_ff
+   navicatGA.chemistry_smiles.get_interatomic_distances
+   navicatGA.chemistry_smiles.get_structure_ff
+   navicatGA.chemistry_smiles.has_transition_metals
+   navicatGA.chemistry_smiles.is_transition_metal
+   navicatGA.chemistry_smiles.prune_mol_conformers
+   navicatGA.chemistry_smiles.randomize_smiles
+   navicatGA.chemistry_smiles.sanitize_multiple_smiles
+   navicatGA.chemistry_smiles.sanitize_smiles
+   navicatGA.chemistry_smiles.set_dative_bonds
+   navicatGA.chemistry_smiles.timed_sanitizer
+
+
+Module Contents
+---------------
+
+.. py:function:: diagnose_mol(mol)
+
+   Tries to identify and print to logger whatever was or is wrong with the chemistry_selfies of an rdkit.mol object.
+
+
+.. py:function:: draw_smiles(smiles, root_name)
+
+.. py:function:: get_ECFP4(mol)
+
+.. py:function:: get_conformer_rmsd(mol)
+
+.. py:function:: get_confs_ff(mol, maxiters=250)
+
+.. py:function:: get_interatomic_distances(conf)
+
+.. py:function:: get_structure_ff(mol, n_confs=5)
+
+   Generates a reasonable set of 3D structures
+   using forcefields for a given rdkit.mol object.
+   It will try several 3D generation approaches in rdkit.
+   It will try to sample several conformations and get the minima.
+
+   Parameters:
+   :param mol: an rdkit mol object
+   :type mol: rdkit.mol
+   :param n_confs: number of conformations to sample
+   :type n_confs: int
+
+   Returns:
+   :return mol_structure: mol with 3D coordinate information set
+
+
+.. py:function:: has_transition_metals(mol)
+
+   Returns True if the rdkit.mol object passed as argument has a (transition)-metal atom, False if else.
+
+
+.. py:function:: is_transition_metal(at)
+
+   Returns True if the rdkit.Atom object passed as argument is a transition metal, False if else.
+
+
+.. py:function:: prune_mol_conformers(mol, energies_list)
+
+.. py:function:: randomize_smiles(mol)
+
+.. py:function:: sanitize_multiple_smiles(smiles_list)
+
+   Calls sanitize_smiles for every item in a list.
+
+   Parameters:
+   :param smiles_list: list of smile strings to be sanitized.
+
+   Returns:
+   :return sanitized_smiles: list of sanitized smile strings or None in case a smiles led to error
+
+
+.. py:function:: sanitize_smiles(smiles)
+
+   Return a canonical smile representation of smi.
+   If there are metals, it will try to fix the bonds as dative.
+
+   Parameters:
+   :param smi: smile string to be canonicalized
+   :type smi: str
+
+   Returns:
+   :return mol: rdkit mol object, None if exception caught
+   :return smi_canon: canonicalized smile representation of smi, None if exception caught.
+   :return conversion_successful: True if no exception caught, False if exception caught.
+
+
+.. py:function:: set_dative_bonds(mol, fromAtoms=(7, 8, 15, 16))
+
+   Tries to replace bonds with metal atoms by dative bonds, while keeping valence rules enforced. Adapted from G. Landrum.
+
+
+.. py:function:: timed_sanitizer(smiles)
+
+   Convert smiles string to rdkit.mol, call exception and return None if it takes more than 10 seconds to run.
+
+
+.. py:data:: lg
+
+.. py:data:: logger
+

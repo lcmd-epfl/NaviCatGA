@@ -1,0 +1,533 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="navicatGA.base_solver" href="../base_solver/index.html"><link rel="prev" title="navicatGA" href="../index.html">
+        <link rel="prefetch" href="../../../_static/navicatga_logo.png" as="image">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>navicatGA.alphabet_solver - NaviCatGA</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">NaviCatGA</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../../_static/navicatga_logo.png" alt="Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><input aria-label="Toggle navigation of Tutorials" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/01_float.html">1. Continuous optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/02_smiles.html">2. SMILES fragment optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/03_selfies.html">3. Editing a real molecule (SELFIES)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/04_config_driven.html">4. Config-driven runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/05_multi_objective.html">5. Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/06_xyz.html">6. 3D structures (XYZ/AaronTools)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/07_custom_solver.html">7. Writing your own assembler, fitness function, and launcher</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_templates.html">Configuration Templates</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../../api.html">API Reference</a><input aria-label="Toggle navigation of API Reference" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../index.html">navicatGA</a><input aria-label="Toggle navigation of navicatGA" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">navicatGA.alphabet_solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../base_solver/index.html">navicatGA.base_solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cache/index.html">navicatGA.cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../chemistry_selfies/index.html">navicatGA.chemistry_selfies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../chemistry_smiles/index.html">navicatGA.chemistry_smiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../chemistry_xyz/index.html">navicatGA.chemistry_xyz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/index.html">navicatGA.config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../exception_messages/index.html">navicatGA.exception_messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../exceptions/index.html">navicatGA.exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../fitness_functions_float/index.html">navicatGA.fitness_functions_float</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../fitness_functions_selfies/index.html">navicatGA.fitness_functions_selfies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../fitness_functions_xyz/index.html">navicatGA.fitness_functions_xyz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../float_solver/index.html">navicatGA.float_solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../helpers/index.html">navicatGA.helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../logger/index.html">navicatGA.logger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../progress_bars/index.html">navicatGA.progress_bars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quantum_wrappers_selfies/index.html">navicatGA.quantum_wrappers_selfies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quantum_wrappers_xyz/index.html">navicatGA.quantum_wrappers_xyz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../queue_wrappers_xyz/index.html">navicatGA.queue_wrappers_xyz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../score_modifiers/index.html">navicatGA.score_modifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../selfies_solver/index.html">navicatGA.selfies_solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../smiles_solver/index.html">navicatGA.smiles_solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../timeout/index.html">navicatGA.timeout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../wrappers_selfies/index.html">navicatGA.wrappers_selfies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../wrappers_smiles/index.html">navicatGA.wrappers_smiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../wrappers_xyz/index.html">navicatGA.wrappers_xyz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../xyz_solver/index.html">navicatGA.xyz_solver</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/lcmd-epfl/NaviCatGA/blob/master/docs/autoapi/navicatGA/alphabet_solver/index.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/lcmd-epfl/NaviCatGA/edit/master/docs/autoapi/navicatGA/alphabet_solver/index.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="module-navicatGA.alphabet_solver">
+<span id="navicatga-alphabet-solver"></span><h1>navicatGA.alphabet_solver<a class="headerlink" href="#module-navicatGA.alphabet_solver" title="Link to this heading">¶</a></h1>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#navicatGA.alphabet_solver.logger" title="navicatGA.alphabet_solver.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver" title="navicatGA.alphabet_solver.AlphabetGenAlgSolver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AlphabetGenAlgSolver</span></code></a></p></td>
+<td><p>Shared base for solvers whose chromosome genes are drawn from a</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="navicatGA.alphabet_solver.AlphabetGenAlgSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">navicatGA.alphabet_solver.</span></span><span class="sig-name descname"><span class="pre">AlphabetGenAlgSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_genes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitness_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assembler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_gen</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_conv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'roulette_wheel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excluded_genes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_crossover_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lru_cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prune_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_stdout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'output.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'base'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../base_solver/index.html#navicatGA.base_solver.GenAlgSolver" title="navicatGA.base_solver.GenAlgSolver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">navicatGA.base_solver.GenAlgSolver</span></code></a></p>
+<p>Shared base for solvers whose chromosome genes are drawn from a
+per-gene alphabet (SMILES fragments, SELFIES tokens, XYZ fragments).</p>
+<p>Factors out the alphabet/equivalences setup, population init/refill,
+crossover-point sampling, and mutation logic that
+SmilesGenAlgSolver/SelfiesGenAlgSolver/XYZGenAlgSolver used to each
+reimplement independently. Subclasses still own <cite>create_offspring</cite>
+(crossover behaviour genuinely differs between them) and
+<cite>write_population</cite> (different depiction backend per representation).</p>
+<p>Base solver class for the GA.
+Has the core methods and attributes that any GA run will require.
+However, it lacks a way to create new offspring
+evaluate fitness, and generate mutations.
+Those must be defined in a child class.</p>
+<p>Parameters:
+:param n_genes: number of genes (variables) to have in each chromosome
+:type n_genes: int
+:param fitness_function: a fitness function that takes assembler(chromosome) and returns one (or more) fitness scores
+:type fitness_function: object
+:param assembler: a function that takes a chromosome and returns an (ideally hashable) object to be evaluated
+:type assembler: object
+:param max_gen: maximum number of generations to perform the optimization
+:type max_gen: int
+:param max_conv: maximum number of generations with same max fitness until convergence is assumed
+:type max_conv : int
+:param pop_size: number of chromosomes in population
+:type pop_size: int
+:param mutation_rate: rate at which random mutations occur
+:type mutation_rate: float
+:param selection_rate: top percentage of the population to be selected for crossover
+:type selection_rate: float
+:param selection_strategy: strategy to use for selection, several available
+:type selection_strategy: string
+:param excluded_genes: indices of chromosomes that should not be changed during run
+:type excluded_genes: optional, array-like
+:param n_crossover_points: number of slices to make for the crossover
+:type n_crossover_points: int
+:param random_state: fixed the random seed for the run
+:type random_state: int, optional
+:param lru_cache: whether to use lru_cacheing, which is monkeypatched into the class. Requires that the fitness function is hashable.
+:type lru_cache: bool
+:param scalarizer: chimera scalarizer object initialized to work on the results of fitness function
+:type scalarizer: optional, object with a scalarize method that takes in a population fitness and rescales it
+:param prune_duplicates: whether to prune duplicates in each generation
+:type prune_duplicates: bool
+:param verbose: whether to print iterations status
+:type verbose: int
+:param show_stats: whether to print stats at the end
+:type show_stats: bool
+:param plot_results: whether to plot results of the run at the end
+:type plot_results: bool
+:param to_stdout: whether to write output to stdout
+:type to_stdout: bool
+:param to_file: whether to write output to file
+:type to_file: bool
+:param logger_file: name of the file where output will be written if to_file is True
+:type logger_file: string
+:param progess_bars: whether to monkeypatch progress bars for monitoring run
+:type progress_bars: bool
+:param problem_type: passing a simple flag from child class for some in built hashable fitness functions.
+:type problem_type: string</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.alphabet_solver.AlphabetGenAlgSolver.chromosomize">
+<span class="sig-name descname"><span class="pre">chromosomize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver.chromosomize" title="Link to this definition">¶</a></dt>
+<dd><p>Pad or truncate a starting-population entry to conform to n_genes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.alphabet_solver.AlphabetGenAlgSolver.get_crossover_points">
+<span class="sig-name descname"><span class="pre">get_crossover_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver.get_crossover_points" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves random crossover points.
+:return: a numpy array with the crossover points</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.alphabet_solver.AlphabetGenAlgSolver.initialize_population">
+<span class="sig-name descname"><span class="pre">initialize_population</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver.initialize_population" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes the population according to the population size and
+number of genes, seeding from self.starting_population and
+optionally randomizing per self.starting_random.</p>
+<p>Returns:
+:return: a numpy array with initialized population</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.alphabet_solver.AlphabetGenAlgSolver.mutate_population">
+<span class="sig-name descname"><span class="pre">mutate_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_mutations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver.mutate_population" title="Link to this definition">¶</a></dt>
+<dd><p>Mutates the population by randomizing specific positions of the
+population individuals, retrying until self.assembler accepts the
+result or self.max_counter attempts are exhausted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>population</strong> – the population at a given iteration</p></li>
+<li><p><strong>n_mutations</strong> – number of mutations to be performed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the mutated population</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="navicatGA.alphabet_solver.AlphabetGenAlgSolver.refill_population">
+<span class="sig-name descname"><span class="pre">refill_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nrefill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver.refill_population" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="navicatGA.alphabet_solver.logger">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.alphabet_solver.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#navicatGA.alphabet_solver.logger" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../base_solver/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">navicatGA.base_solver</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">navicatGA</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2021, rlaplaza, lcmd-epfl
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">navicatGA.alphabet_solver</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver"><code class="docutils literal notranslate"><span class="pre">AlphabetGenAlgSolver</span></code></a><ul>
+<li><a class="reference internal" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver.chromosomize"><code class="docutils literal notranslate"><span class="pre">AlphabetGenAlgSolver.chromosomize()</span></code></a></li>
+<li><a class="reference internal" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver.get_crossover_points"><code class="docutils literal notranslate"><span class="pre">AlphabetGenAlgSolver.get_crossover_points()</span></code></a></li>
+<li><a class="reference internal" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver.initialize_population"><code class="docutils literal notranslate"><span class="pre">AlphabetGenAlgSolver.initialize_population()</span></code></a></li>
+<li><a class="reference internal" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver.mutate_population"><code class="docutils literal notranslate"><span class="pre">AlphabetGenAlgSolver.mutate_population()</span></code></a></li>
+<li><a class="reference internal" href="#navicatGA.alphabet_solver.AlphabetGenAlgSolver.refill_population"><code class="docutils literal notranslate"><span class="pre">AlphabetGenAlgSolver.refill_population()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#navicatGA.alphabet_solver.logger"><code class="docutils literal notranslate"><span class="pre">logger</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>

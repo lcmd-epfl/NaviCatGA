@@ -1,0 +1,35 @@
+navicatGA.fitness_functions_selfies
+===================================
+
+.. py:module:: navicatGA.fitness_functions_selfies
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.fitness_functions_selfies.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.fitness_functions_selfies.fitness_function_selfies
+   navicatGA.fitness_functions_selfies.fitness_function_target_property
+   navicatGA.fitness_functions_selfies.fitness_function_target_selfies
+
+
+Module Contents
+---------------
+
+.. py:function:: fitness_function_selfies(function_number=1)
+
+.. py:function:: fitness_function_target_property(target, function_number=1, score_modifier_number=1, parameter=1)
+
+.. py:function:: fitness_function_target_selfies(target_selfie, function_number=1)
+
+.. py:data:: logger
+

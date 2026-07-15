@@ -1,0 +1,177 @@
+navicatGA.chemistry_selfies
+===========================
+
+.. py:module:: navicatGA.chemistry_selfies
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.chemistry_selfies.lg
+   navicatGA.chemistry_selfies.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.chemistry_selfies.check_selfie_chars
+   navicatGA.chemistry_selfies.count_selfie_chars
+   navicatGA.chemistry_selfies.decode_selfies_list
+   navicatGA.chemistry_selfies.diagnose_mol
+   navicatGA.chemistry_selfies.draw_selfies
+   navicatGA.chemistry_selfies.encode_smiles_list
+   navicatGA.chemistry_selfies.get_ECFP4
+   navicatGA.chemistry_selfies.get_conformer_rmsd
+   navicatGA.chemistry_selfies.get_confs_ff
+   navicatGA.chemistry_selfies.get_interatomic_distances
+   navicatGA.chemistry_selfies.get_selfie_chars
+   navicatGA.chemistry_selfies.get_structure_ff
+   navicatGA.chemistry_selfies.has_transition_metals
+   navicatGA.chemistry_selfies.is_transition_metal
+   navicatGA.chemistry_selfies.prune_mol_conformers
+   navicatGA.chemistry_selfies.randomize_selfies
+   navicatGA.chemistry_selfies.randomize_smiles
+   navicatGA.chemistry_selfies.sanitize_multiple_smiles
+   navicatGA.chemistry_selfies.sanitize_smiles
+   navicatGA.chemistry_selfies.set_dative_bonds
+   navicatGA.chemistry_selfies.timed_decoder
+   navicatGA.chemistry_selfies.timed_sanitizer
+
+
+Module Contents
+---------------
+
+.. py:function:: check_selfie_chars(chromosome)
+
+   Check if a list of selfies characters leads to a valid smiles string. Uses sanitize_smiles to check the smiles string from selfies.decoder.
+
+   Parameters:
+   :param chromosome: list of selfie characters
+
+   Returns:
+   :return: True if the smiles string is deemed valid by sanitize_smiles, False otherwise
+
+
+.. py:function:: count_selfie_chars(selfie)
+
+   Count the number of selfie characters in a selfie string. Returns the number.
+
+
+.. py:function:: decode_selfies_list(selfies_list)
+
+   Decode a list of smiles to a list of selfies using timed_decoder.
+
+
+.. py:function:: diagnose_mol(mol)
+
+   Tries to identify and print to logger whatever was or is wrong with the chemistry_selfies of an rdkit.mol object.
+
+
+.. py:function:: draw_selfies(selfies, root_name)
+
+.. py:function:: encode_smiles_list(smiles_list)
+
+   Encode a list of smiles to a list of selfies using selfies.encoder.
+
+
+.. py:function:: get_ECFP4(mol)
+
+.. py:function:: get_conformer_rmsd(mol)
+
+.. py:function:: get_confs_ff(mol, maxiters=250)
+
+.. py:function:: get_interatomic_distances(conf)
+
+.. py:function:: get_selfie_chars(selfie, maxchars=25)
+
+   Obtain an ordered list of all selfie characters in string selfie
+   padded to maxchars with [nop]s.
+
+   Parameters:
+   :param selfie: a selfie string representing a molecule
+   :param maxchars: maximum number of elements in the list
+
+   Returns:
+   :return chars_selfie: list of selfie characters present in molecule selfie
+
+
+.. py:function:: get_structure_ff(mol, n_confs=5)
+
+   Generates a reasonable set of 3D structures
+   using forcefields for a given rdkit.mol object.
+   It will try several 3D generation approaches in rdkit.
+   It will try to sample several conformations and get the minima.
+
+   Parameters:
+   :type mol: a rdkit.mol object
+   :type n_confs: the number of conformations to sample
+
+   Returns:
+   :return mol_structure: the same rdkit mol with 3D coordinates
+
+
+.. py:function:: has_transition_metals(mol)
+
+   Returns True if the rdkit.mol object passed as argument has a (transition)-metal atom, False if else.
+
+
+.. py:function:: is_transition_metal(at)
+
+   Returns True if the rdkit.Atom object passed as argument is a transition metal, False if else.
+
+
+.. py:function:: prune_mol_conformers(mol, energies_list)
+
+.. py:function:: randomize_selfies(selfies, num_random=1)
+
+.. py:function:: randomize_smiles(mol)
+
+.. py:function:: sanitize_multiple_smiles(smiles_list)
+
+   Calls sanitize_smiles for every item in a list.
+
+   Parameters:
+   :param smiles_list list of smiles strings to be sanitized
+
+   Returns:
+   :return sanitized_smiles: list of sanitized smile strings with None in errors
+
+
+.. py:function:: sanitize_smiles(smiles)
+
+   Return a canonical smile representation of smi.
+   If there are metals, it will try to fix the bonds as dative.
+
+   Parameters:
+   :param smi: smiles string to be sanitized
+   :type smi: smiles string
+
+   Returns:
+   :return mol: corresponding rdkit.mol object, None if exception caught
+   :return smi_canon: canonicalized smile representation of smi, None if exception caught
+   :return conversion_successful: True if no exception caught, False if exception caught
+
+
+.. py:function:: set_dative_bonds(mol, fromAtoms=(7, 8, 15, 16))
+
+   Tries to replace bonds with metal atoms by dative bonds, while keeping valence rules enforced. Adapted from G. Landrum.
+
+
+.. py:function:: timed_decoder(selfie)
+
+   Decode a selfies string to smiles using selfies.decoder, call exception and return None if decoder takes more than 10 seconds to run.
+
+
+.. py:function:: timed_sanitizer(smiles)
+
+   Convert smiles string to rdkit.mol, call exception and return None if it takes more than 10 seconds to run.
+
+
+.. py:data:: lg
+
+.. py:data:: logger
+

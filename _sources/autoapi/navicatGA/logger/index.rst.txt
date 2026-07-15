@@ -1,0 +1,29 @@
+navicatGA.logger
+================
+
+.. py:module:: navicatGA.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.logger.addLoggingLevel
+   navicatGA.logger.close_logger
+   navicatGA.logger.configure_logger
+
+
+Module Contents
+---------------
+
+.. py:function:: addLoggingLevel(levelName, levelNum, methodName=None)
+
+   Adds a new logging level to the logging module and the
+   currently configured logging class.
+
+
+.. py:function:: close_logger(logger)
+
+.. py:function:: configure_logger(logger_file='output.log', logger_level='INFO', to_stdout=True, to_file=True, libraries_level=None)
+

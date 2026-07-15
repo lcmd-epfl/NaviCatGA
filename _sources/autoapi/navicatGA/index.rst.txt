@@ -1,0 +1,41 @@
+navicatGA
+=========
+
+.. py:module:: navicatGA
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/navicatGA/alphabet_solver/index
+   /autoapi/navicatGA/base_solver/index
+   /autoapi/navicatGA/cache/index
+   /autoapi/navicatGA/chemistry_selfies/index
+   /autoapi/navicatGA/chemistry_smiles/index
+   /autoapi/navicatGA/chemistry_xyz/index
+   /autoapi/navicatGA/config/index
+   /autoapi/navicatGA/exception_messages/index
+   /autoapi/navicatGA/exceptions/index
+   /autoapi/navicatGA/fitness_functions_float/index
+   /autoapi/navicatGA/fitness_functions_selfies/index
+   /autoapi/navicatGA/fitness_functions_xyz/index
+   /autoapi/navicatGA/float_solver/index
+   /autoapi/navicatGA/helpers/index
+   /autoapi/navicatGA/logger/index
+   /autoapi/navicatGA/progress_bars/index
+   /autoapi/navicatGA/quantum_wrappers_selfies/index
+   /autoapi/navicatGA/quantum_wrappers_xyz/index
+   /autoapi/navicatGA/queue_wrappers_xyz/index
+   /autoapi/navicatGA/score_modifiers/index
+   /autoapi/navicatGA/selfies_solver/index
+   /autoapi/navicatGA/smiles_solver/index
+   /autoapi/navicatGA/timeout/index
+   /autoapi/navicatGA/wrappers_selfies/index
+   /autoapi/navicatGA/wrappers_smiles/index
+   /autoapi/navicatGA/wrappers_xyz/index
+   /autoapi/navicatGA/xyz_solver/index
+
+

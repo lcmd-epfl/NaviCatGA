@@ -1,0 +1,80 @@
+navicatGA.wrappers_xyz
+======================
+
+.. py:module:: navicatGA.wrappers_xyz
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   navicatGA.wrappers_xyz.COORD_THRESHOLD
+   navicatGA.wrappers_xyz.QUEUE_TYPE
+   navicatGA.wrappers_xyz.USER
+   navicatGA.wrappers_xyz.logger
+   navicatGA.wrappers_xyz.queue_env_var
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   navicatGA.wrappers_xyz.Hashable_Geometry
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   navicatGA.wrappers_xyz.chromosome_to_xyz
+   navicatGA.wrappers_xyz.geom2angle
+   navicatGA.wrappers_xyz.geom2bond
+   navicatGA.wrappers_xyz.geom2dihedral
+   navicatGA.wrappers_xyz.geom2sub_sterimol
+   navicatGA.wrappers_xyz.gl2geom
+
+
+Module Contents
+---------------
+
+.. py:class:: Hashable_Geometry(*args, **kw)
+
+   Bases: :py:obj:`AaronTools.geometry.Geometry`
+
+
+   This is a modified version of the Geometry class in AaronTools.py, which is identical but hashable.
+
+
+.. py:function:: chromosome_to_xyz()
+
+   Wrapper function for simplicity.
+
+
+.. py:function:: geom2angle(geom, a1, a2, a3)
+
+.. py:function:: geom2bond(geom, a1, a2)
+
+.. py:function:: geom2dihedral(geom, a1, a2, a3, a4)
+
+.. py:function:: geom2sub_sterimol(geom, pos, parameter)
+
+.. py:function:: gl2geom(chromosome, h_positions='19-20')
+
+   Check if a chromosome (list of geometries) can lead to a valid structure.
+
+
+.. py:data:: COORD_THRESHOLD
+   :value: 0.2
+
+
+.. py:data:: QUEUE_TYPE
+
+.. py:data:: USER
+
+.. py:data:: logger
+
+.. py:data:: queue_env_var
+
