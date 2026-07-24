@@ -235,7 +235,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../float_solver/index.html">navicatGA.float_solver</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">navicatGA.helpers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../logger/index.html">navicatGA.logger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../progress_bars/index.html">navicatGA.progress_bars</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../quantum_wrappers_selfies/index.html">navicatGA.quantum_wrappers_selfies</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../quantum_wrappers_xyz/index.html">navicatGA.quantum_wrappers_xyz</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../queue_wrappers_xyz/index.html">navicatGA.queue_wrappers_xyz</a></li>
@@ -327,6 +326,9 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#navicatGA.helpers.make_array" title="navicatGA.helpers.make_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_array</span></code></a>()</p></td>
 <td><p>Default chromosome manipulator: turns list into array.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#navicatGA.helpers.track_evaluations" title="navicatGA.helpers.track_evaluations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">track_evaluations</span></code></a>(iterable, total, desc, enabled)</p></td>
+<td><p>Wraps the per-individual fitness loop in a tqdm bar when progress_bars is on.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -399,6 +401,22 @@
 <dt class="sig sig-object py" id="navicatGA.helpers.make_array">
 <span class="sig-prename descclassname"><span class="pre">navicatGA.helpers.</span></span><span class="sig-name descname"><span class="pre">make_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.helpers.make_array" title="Link to this definition">¶</a></dt>
 <dd><p>Default chromosome manipulator: turns list into array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navicatGA.helpers.track_evaluations">
+<span class="sig-prename descclassname"><span class="pre">navicatGA.helpers.</span></span><span class="sig-name descname"><span class="pre">track_evaluations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enabled</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navicatGA.helpers.track_evaluations" title="Link to this definition">¶</a></dt>
+<dd><p>Wraps the per-individual fitness loop in a tqdm bar when progress_bars is on.</p>
+<p>Fitness evaluation is the slow part of a generation (an external QM call can
+take minutes per individual), so the bar counts individuals, not generations.
+tqdm writes to stderr, leaving the stdout/file logs clean.</p>
+<p>Parameters:
+:param iterable: the iterable driving the fitness loop
+:param total: number of individuals to be evaluated
+:param desc: label shown to the left of the bar
+:param enabled: whether to show the bar at all</p>
+<p>Returns:
+:return: iterable, wrapped in a tqdm bar if enabled</p>
 </dd></dl>
 
 </section>
@@ -478,6 +496,7 @@
 <li><a class="reference internal" href="#navicatGA.helpers.get_elapsed_time"><code class="docutils literal notranslate"><span class="pre">get_elapsed_time()</span></code></a></li>
 <li><a class="reference internal" href="#navicatGA.helpers.get_input_dimensions"><code class="docutils literal notranslate"><span class="pre">get_input_dimensions()</span></code></a></li>
 <li><a class="reference internal" href="#navicatGA.helpers.make_array"><code class="docutils literal notranslate"><span class="pre">make_array()</span></code></a></li>
+<li><a class="reference internal" href="#navicatGA.helpers.track_evaluations"><code class="docutils literal notranslate"><span class="pre">track_evaluations()</span></code></a></li>
 </ul>
 </li>
 </ul>

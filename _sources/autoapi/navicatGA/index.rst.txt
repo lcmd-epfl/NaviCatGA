@@ -25,7 +25,6 @@ Submodules
    /autoapi/navicatGA/float_solver/index
    /autoapi/navicatGA/helpers/index
    /autoapi/navicatGA/logger/index
-   /autoapi/navicatGA/progress_bars/index
    /autoapi/navicatGA/quantum_wrappers_selfies/index
    /autoapi/navicatGA/quantum_wrappers_xyz/index
    /autoapi/navicatGA/queue_wrappers_xyz/index

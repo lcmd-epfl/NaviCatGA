@@ -22,6 +22,7 @@ Functions
    navicatGA.helpers.get_elapsed_time
    navicatGA.helpers.get_input_dimensions
    navicatGA.helpers.make_array
+   navicatGA.helpers.track_evaluations
 
 
 Module Contents
@@ -67,5 +68,23 @@ Module Contents
 .. py:function:: make_array()
 
    Default chromosome manipulator: turns list into array.
+
+
+.. py:function:: track_evaluations(iterable, total, desc, enabled)
+
+   Wraps the per-individual fitness loop in a tqdm bar when progress_bars is on.
+
+   Fitness evaluation is the slow part of a generation (an external QM call can
+   take minutes per individual), so the bar counts individuals, not generations.
+   tqdm writes to stderr, leaving the stdout/file logs clean.
+
+   Parameters:
+   :param iterable: the iterable driving the fitness loop
+   :param total: number of individuals to be evaluated
+   :param desc: label shown to the left of the bar
+   :param enabled: whether to show the bar at all
+
+   Returns:
+   :return: iterable, wrapped in a tqdm bar if enabled
 
 

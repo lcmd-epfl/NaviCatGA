@@ -360,6 +360,11 @@ Module Contents
 
 
 
+   .. py:attribute:: progress_bars
+      :value: False
+
+
+
    .. py:attribute:: prune_duplicates
       :value: False
 

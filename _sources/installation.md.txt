@@ -23,7 +23,7 @@ Optional, feature-scoped extras:
 
 - `pyscf`: only needed by the `quantum_wrappers_{selfies,xyz}.py` electronic-structure fitness functions (exemplary, not core functionality); these imports are lazy, so plain SMILES/SELFIES runs (e.g. logP) don't require it.
 - [`matter-chimera`](https://github.com/aspuru-guzik-group/chimera): recommended for multi-objective scalarization; any object with a `.scalarize()` method works instead.
-- [`alive-progress`](https://github.com/rsalmei/alive-progress): CLI progress bars via `progress_bars=True`; the import is lazy, so nothing is lost without it.
+- [`tqdm`](https://github.com/tqdm/tqdm): progress bar over fitness evaluations via `progress_bars=True`; the import is lazy, so nothing is lost without it.
 - `pyyaml`: needed by `navicatGA.config` for YAML-driven solver construction.
 
 ## Full pinned environment
