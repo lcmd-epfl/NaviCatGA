@@ -4,6 +4,8 @@ NaviCatGA: A flexible Genetic Algorithm Optimizer for the NaviCat project
 ![NaviCatGA logo](./images/navicatga_logo.png)
 [![DOI](https://zenodo.org/badge/322634265.svg)](https://zenodo.org/badge/latestdoi/322634265)
 
+**Docs & tutorials: https://lcmd-epfl.github.io/NaviCatGA/**
+
 
 ## Contents
 * [About](#about-)
@@ -37,7 +39,7 @@ The child classes and some functionalities have additional dependencies:
 - Wrappers and chemistry modules contain functions that depend on `pyscf` to solve the electronic structure problem. However, these are provided for exemplary purposes and not a core functionality.
 - `matter-chimera` (https://github.com/aspuru-guzik-group/chimera) is recommended for scalarization. Alternatively, a scalarizer object with a scalarize method can be passed to the solver.
 
-Additional features require `alive-progress` (for progress bars, very useful for CLI usage). However, these are implemented by monkeypatching the base class, and thus no functionality is lost without them.
+Progress bars over fitness evaluation (`progress_bars=True`, very useful for CLI usage) require `tqdm`. The import is lazy, so no functionality is lost without it.
 
 
 ## Install [↑](#install)
@@ -54,7 +56,7 @@ rm $(cat files.txt)
 
 ## Documentation [↑](#documentation)
 
-The documentation is available [here](https://navicatga.readthedocs.io/).
+Full documentation, including a step-by-step tutorial series, is available at **[lcmd-epfl.github.io/NaviCatGA](https://lcmd-epfl.github.io/NaviCatGA/)** (tutorials: [lcmd-epfl.github.io/NaviCatGA/tutorials](https://lcmd-epfl.github.io/NaviCatGA/tutorials/index.html)). Also mirrored at [navicatga.readthedocs.io](https://navicatga.readthedocs.io/).
 
 Built with Sphinx + [Furo](https://github.com/pradyunsg/furo) + [MyST](https://myst-parser.readthedocs.io/) + [sphinx-autoapi](https://github.com/readthedocs/sphinx-autoapi) (auto-generated API reference, no hand-maintained `.rst` module list). To build locally:
 

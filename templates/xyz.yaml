@@ -51,4 +51,4 @@ solver:
     to_file: true
     logger_file: output.log
     logger_level: INFO
-    progress_bars: false           # needs alive-progress installed
+    progress_bars: false           # tqdm bar over fitness evaluations

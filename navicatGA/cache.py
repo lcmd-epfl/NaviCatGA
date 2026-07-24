@@ -3,6 +3,8 @@ import types
 import logging
 from functools import lru_cache
 
+from navicatGA.helpers import track_evaluations
+
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
@@ -27,7 +29,13 @@ def calculate_fitness_cache(self, population):
     else:
         nvals = len(self.scalarizer.goals)
     fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
-    for i in range(population.shape[0]):
+    tracked = track_evaluations(
+        range(population.shape[0]),
+        population.shape[0],
+        "gen {0} fitness".format(self.generations_ + 1),
+        getattr(self, "progress_bars", False),
+    )
+    for i in tracked:
         chromosome = population[i][0 : self.n_genes]
         hashable = self.assembler(chromosome)
         fitness[i, :] = calculate_one_fitness_cache(hashable, self.fitness_function)

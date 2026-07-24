@@ -8,9 +8,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from navicatGA.exceptions import NoFitnessFunction, InvalidInput
 from navicatGA.exception_messages import exception_messages
-from navicatGA.progress_bars import set_progress_bars
 from navicatGA.cache import set_lru_cache
-from navicatGA.helpers import get_elapsed_time, GAResult
+from navicatGA.helpers import get_elapsed_time, track_evaluations, GAResult
 from navicatGA.logger import configure_logger, close_logger
 
 
@@ -152,9 +151,7 @@ class GenAlgSolver:
         self.prune_duplicates = prune_duplicates
         self.temperature = 100
 
-        if progress_bars:
-            self.logger.info("Setting up progress bars through monkeypatching.")
-            set_progress_bars(self)
+        self.progress_bars = progress_bars
         if lru_cache:
             self.logger.info("Setting up lru cache through monkeypatching.")
             set_lru_cache(self)
@@ -354,17 +351,24 @@ class GenAlgSolver:
         :return fitness: scalarized fitness of the current population, will be used
         :return pfitness: not-scalarized fitness of the current population, for printing
         """
+        npop = population.shape[0]
+        tracked = track_evaluations(
+            range(npop),
+            npop,
+            "gen {0} fitness".format(self.generations_ + 1),
+            self.progress_bars,
+        )
         if self.scalarizer is None:
             nvals = 1
-            fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
-            for i in range(population.shape[0]):
+            fitness = np.zeros(shape=(npop, nvals), dtype=float)
+            for i in tracked:
                 fitness[i, :] = self.fitness_function(self.assembler(population[i]))
             fitness = np.squeeze(fitness)
             pfitness = fitness
         else:
             nvals = len(self.scalarizer.goals)
-            fitness = np.zeros(shape=(population.shape[0], nvals), dtype=float)
-            for i in range(population.shape[0]):
+            fitness = np.zeros(shape=(npop, nvals), dtype=float)
+            for i in tracked:
                 fitness[i, :] = self.fitness_function(self.assembler(population[i]))
             pfitness = fitness
             fitness = np.ones((population.shape[0])) - self.scalarizer.scalarize(

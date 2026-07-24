@@ -1,4 +1,25 @@
 __pycache__/
-*.pyc
+*.py[cod]
 *.egg-info/
+.eggs/
+/dist/
 docs/_build/
+/build/
+/files.txt
+
+# test/example run artifacts (see cleaner.sh)
+*.log
+*.pdb
+*.xyz
+*.png
+*.pkl
+
+.pytest_cache/
+.coverage
+.mypy_cache/
+.venv/
+venv/
+.vscode/
+.idea/
+*.swp
+.DS_Store

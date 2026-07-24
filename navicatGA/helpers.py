@@ -75,3 +75,27 @@ def get_elapsed_time(start_time, end_time):
         time_str += f"{seconds} seconds"
 
     return runtime, time_str
+
+
+def track_evaluations(iterable, total, desc, enabled):
+    """
+    Wraps the per-individual fitness loop in a tqdm bar when progress_bars is on.
+
+    Fitness evaluation is the slow part of a generation (an external QM call can
+    take minutes per individual), so the bar counts individuals, not generations.
+    tqdm writes to stderr, leaving the stdout/file logs clean.
+
+    Parameters:
+    :param iterable: the iterable driving the fitness loop
+    :param total: number of individuals to be evaluated
+    :param desc: label shown to the left of the bar
+    :param enabled: whether to show the bar at all
+
+    Returns:
+    :return: iterable, wrapped in a tqdm bar if enabled
+    """
+    if not enabled:
+        return iterable
+    from tqdm import tqdm
+
+    return tqdm(iterable, total=total, desc=desc, unit="ind", leave=False)

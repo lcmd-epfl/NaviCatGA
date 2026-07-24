@@ -23,12 +23,18 @@ def configure_logger(
     for library, level in libraries_level:
         logging.getLogger(library).setLevel(getattr(logging, level))
 
+    # Bare messages are unreadable once solver output, warnings and third-party
+    # chatter interleave; a level/time prefix is enough to tell them apart.
+    formatter = logging.Formatter("%(asctime)s %(levelname)-8s %(message)s", "%H:%M:%S")
+
     if to_stdout:
         handler_2 = logging.StreamHandler(sys.stdout)
+        handler_2.setFormatter(formatter)
         logger.addHandler(handler_2)
 
     if to_file and logger_file != "":
         handler_1 = logging.FileHandler(logger_file, "w", "utf-8")
+        handler_1.setFormatter(formatter)
         logger.addHandler(handler_1)
 
     return logger
